@@ -1,0 +1,17 @@
+[
+    {
+        "_id":"<ObjetID3>",
+        "tipo":"Essentiel",
+        "precio":0
+    },
+    {
+        "_id":"<ObjetID4>",
+        "tipo":"Élite",
+        "precio":0
+    },
+    {
+        "_id":"<ObjetID5>",
+        "tipo":"Luxueux",
+        "precio":0 
+    }
+]
