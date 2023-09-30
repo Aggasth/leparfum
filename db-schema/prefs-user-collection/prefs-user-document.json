@@ -1,0 +1,33 @@
+[
+    {
+        "_id":"<PrefsId1>",
+        "user_Id":"<ObjetID1>",
+        "respuestas":[
+            {
+                "_id":1, 
+                "pregunta":"¿Cual es tu sexo?",
+                "respuesta":"Femenino"
+            },
+            {
+                "_id":2, 
+                "pregunta":"¿¿Qué actividad disfrutas más en tu tiempo libre??",
+                "respuesta":"Salir a cenar y socializar."
+            },
+            {
+                "_id":3, 
+                "pregunta":"¿Cuál es tu estación del año favorita?",
+                "respuesta":"Otoño"
+            },
+            {
+                "_id":4, 
+                "pregunta":"¿Qué tipo de eventos sociales sueles asistir con frecuencia?",
+                "respuesta":"Reuniones informales con amigos."
+            },
+            {
+                "_id":5, 
+                "pregunta":"¿Cuál es tu color favorito?",
+                "respuesta":"Negro"
+            }
+        ]
+    }
+]

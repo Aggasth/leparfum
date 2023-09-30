@@ -1,0 +1,11 @@
+{
+    "_id":"<ProductId1>",
+    "nombreProducto":"item",
+    "cantidad":0,
+    "precio":0,
+    "disponibilidad":false,
+    "tamaño":100,
+    "descripcion":"",
+    "sexo":"Hombre",
+    "tags":["Amanerado","Dulce","Citrico"]
+}

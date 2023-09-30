@@ -1,6 +1,6 @@
 [
     {
-        "_id":"<ObjetID2>",
+        "_id":"<ContactID1>",
         "user_Id":"<ObjetID1>",
         "nombre":"nombre apellido",
         "email":"email@domain.com",
@@ -10,13 +10,15 @@
                 "calle":"Calle 1",
                 "ciudad":"Ciudad-1",
                 "numero":0,
-                "referencias":" "  
+                "referencias":" ",
+                "predeterminada":true  
             },
             {
                 "calle":"Calle 1",
                 "ciudad":"Ciudad-1",
                 "numero":0,
-                "referencias":" "  
+                "referencias":" ",
+                "predeterminada":false  
             }
         ]
     }
