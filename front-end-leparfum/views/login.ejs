@@ -1,0 +1,37 @@
+<!-- Mostrar mensajes flash de éxito (por ejemplo, al registrarse correctamente) -->
+<% if (typeof successFlash !== 'undefined') { %>
+  <div class="alert alert-success">
+    <%= successFlash %>
+  </div>
+<% } %>
+
+<!-- Mostrar mensajes flash de error (por ejemplo, al ingresar credenciales incorrectas) -->
+<% if (typeof errorFlash !== 'undefined') { %>
+  <div class="alert alert-danger">
+    <%= errorFlash %>
+  </div>
+<% } %>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Iniciar sesión</title>
+</head>
+<body>
+  <h1>Iniciar sesión</h1>
+  <form action="/login" method="POST">
+    <div>
+      <label for="email">Correo electrónico:</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div>
+      <label for="password">Contraseña:</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+    <div>
+      <button type="submit">Iniciar sesión</button>
+    </div>
+  </form>
+  <p>¿No tienes una cuenta? <a href="/register">Regístrate aquí</a></p>
+</body>
+</html>
