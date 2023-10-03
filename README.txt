@@ -10,7 +10,7 @@ Build:
 - npm init -y
 - npm install
 #Dependencias
-- npm install express mongoose@latest express-session passport passport-local bcrypt connect-flash
+- npm install express mongoose@latest express-session passport passport-local bcrypt connect-flash ejs
 - node App.js
 
 #Comentarios
