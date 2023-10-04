@@ -11,7 +11,9 @@ Build:
 - npm install
 #Dependencias
 - npm install express mongoose@latest express-session passport passport-local bcrypt connect-flash ejs
+- npm install bootstrap@5.3.2
 - node App.js
+
 
 #Comentarios
 - De momento la URI de Mongo está explicita en el archivo config.js, posteriormente se usará como variable de entorno.

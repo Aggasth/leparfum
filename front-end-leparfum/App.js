@@ -11,6 +11,8 @@ const flash = require('connect-flash');
 
 const app = express();
 app.use(flash());
+// Define las rutas de archivo estaticos para utilizarlos
+app.use(express.static('views'));
 
 
 // Conecta a la base de datos MongoDB

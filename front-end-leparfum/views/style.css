@@ -1,0 +1,18 @@
+:root{
+    /*Fuentes*/
+    --nav-text: 'Nunito'; 
+    --body-text: 'Nunito';
+}
+
+
+
+/*Asignación de fuentes*/
+a{
+    font-family: var(--nav-text);
+}
+p{
+    font-family: var(--body-text);
+}
+label{
+    font-family: var(--body-text);
+}
