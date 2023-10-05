@@ -70,6 +70,9 @@ app.get('/', (req, res) => {
 app.get('/register', (req, res) => {
   res.render('register');
 });
+app.get('/landing', (req, res) => {
+  res.render('landing');
+});
 
 // Registrarse
 app.post('/register', (req, res) => {
