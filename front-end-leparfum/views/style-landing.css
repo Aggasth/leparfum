@@ -1,0 +1,55 @@
+:root{
+    /*Fuentes*/
+    --nav-text: 'Nunito'; 
+    --body-text: 'Nunito';
+
+    /*Colores*/
+    --gris-oscuro: #808080;
+    --gris-claro: #999999;
+    --azul-oscuro: #8DB5D8;
+    --azul-claro: #B2CDE6;
+    --azul-fondos: #D8E6F3;
+}
+
+
+
+/*Asignación de fuentes*/
+a{
+    font-family: var(--nav-text);
+    text-decoration: none;
+}
+p{
+    font-family: var(--body-text);
+}
+label{
+    font-family: var(--body-text);
+}
+
+/*Configuraciones*/
+body{
+    background-image: url(https://images.unsplash.com/photo-1636955792912-de44a3ba46cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+#loginForm{
+    max-width: 300px;
+    margin-top: 3rem;
+    margin: 0 auto;
+}
+
+.login-button{
+    background: rgb(113,147,229);
+    background: linear-gradient(90deg, rgba(113,147,229,1) 100%, rgba(255,255,255,1) 100%); 
+}
+.img-fluid{
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+.products{
+    background: white;
+}
+footer{
+    background-color: white;
+    background: white;
+}
