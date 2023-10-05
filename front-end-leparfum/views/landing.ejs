@@ -23,9 +23,9 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
-<body style="background-color: #8DB5D8;">
-  <header>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
+<body>
+  <header >
+    <nav class="navbar navbar-expand-lg navbar-expand-sm bg-body-tertiary shadow-sm">
       <div class="container">
         <a class="navbar-brand" href="#">
           <span class="navbar-img">
@@ -37,20 +37,19 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+              <a class="nav-link active" aria-current="page" href="/landing">Inicio</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Perfumería</a>
+              <a class="nav-link" href="/landing">Perfumería</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Suscripción</a>
+              <a class="nav-link" href="landing">Suscripcion</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Nosotros</a>
             </li>
           </ul>
-          <button class="btn btn-outline-danger me-2"><a class="nav-link" href="#">Login</a></button>
-          <button class="btn btn-outline-success"><a class="nav-link" href="#">Sign in</a></button>
+          <a href="/login" class="btn btn-outline-danger">Iniciar Sesión</a>
         </div>
       </div>
     </nav>
@@ -86,9 +85,44 @@
   </div>
 
   <!-- Pie de Página -->
-  <footer class="bg-body-tertiary py-3">
-    <div class="container text-center">
-      <p>LeParfum &copy; 2023. Todos los derechos reservados.</p>
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-sm-6 mt-3">
+          <p class="fw-semibold">INFORMACIÓN</p>
+          <ul class="">
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Cómo comprar</a></li>
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Métodos de pago</a></li>
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Seguridad</a></li>
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Envíos</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-sm-6 mt-3">
+          <p class="fw-semibold">EMPRESA</p>
+          <ul class="">
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Sobre Nosotros</a></li>
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Términos y Condiciones</a></li>
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Contacto</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-sm-12 mt-3">
+          <p class="fw-semibold">SIGUENOS</p>
+          <ul class="list-inline">
+            <li class="list-inline-item"><a class="nav-link" href=""><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 24 24">
+              <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
+            </svg></a></li>
+            <li class="list-inline-item"><a class="nav-link" href=""><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 30 30">
+              <path d="M24,4H6C4.895,4,4,4.895,4,6v18c0,1.105,0.895,2,2,2h10v-9h-3v-3h3v-1.611C16,9.339,17.486,8,20.021,8 c1.214,0,1.856,0.09,2.16,0.131V11h-1.729C19.376,11,19,11.568,19,12.718V14h3.154l-0.428,3H19v9h5c1.105,0,2-0.895,2-2V6 C26,4.895,25.104,4,24,4z"></path>
+            </svg></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="row mt-3 mb-3">
+        <div class="col">
+          <p>Propiedad artística © 2023 LeParfum. <br>
+            Todos los derechos reservados por LeParfum Chile</p>
+        </div>
+      </div>
     </div>
   </footer>
 
