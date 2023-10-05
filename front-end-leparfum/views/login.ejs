@@ -23,9 +23,9 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
-<body style="background-color: #8DB5D8;">
+<body>
   <header >
-    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-expand-sm bg-body-tertiary shadow-sm">
       <div class="container">
         <a class="navbar-brand" href="#">
           <span class="navbar-img">
@@ -49,38 +49,103 @@
               <a class="nav-link" href="#">Nosotros</a>
             </li>
           </ul>
-          <button class="btn btn-outline-danger me-2"><a class="nav-link" href="#">Login</a></button>
-          <button class="btn btn-outline-success"><a class="nav-link" href="#">Sign in</a></button>
+          <a href="/login" class="btn btn-outline-danger">Iniciar Sesión</a>
         </div>
       </div>
     </nav>
   </header>
-  <div class="container text-center rounded shadow" style="background-color: #D8E6F3;">
-      <div class="row mt-5">
-        <div class="col-5 rounded-1 align-self-center">
-          <img class="img w-100 rounded m-4" src="https://images.unsplash.com/photo-1591892204579-530edbd4724d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1160&q=80" alt="loginside">
-        </div>
-        <div class="col-6 mb-3 mt-5 ms-3 text-center">
-          <div class="mb-3 ms-5">
-            <p class="fs-4 fw-semibold">Iniciar sesión</p>
+  
+  <section class="h-100 gradient-form" style="background-color: #eee;">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-xl-10">
+          <div class="card rounded-3 text-black">
+            <div class="row g-0">
+              <div class="col-lg-6">
+                <div class="card-body p-md-5 mx-md-4">
+  
+                  <div class="text-center">
+                    <img src="https://i.ibb.co/ZNG7Xmj/P-1-removebg-preview.png"
+                      style="width: 185px;" alt="logo">
+                    <h4 class="mt-1 mb-5 pb-1">Bienvenido a LeParfum</h4>
+                  </div>
+  
+                  <form action="/login" method="POST">
+                    <p>Por favor, ingrese sus datos</p>
+  
+                    <div class="form-outline mb-4">
+                      <input type="email" id="email" name="email" class="form-control" placeholder="Ingrese su correo electrónico" required/>
+                      <label class="form-label" for="EmailForm">Correo</label>
+                    </div>
+  
+                    <div class="form-outline mb-4">
+                      <input id="password" name="password" type="password" id="Ingrese su contraseña" class="form-control" required />
+                      <label class="form-label" for="PassForm">Contraseña</label>
+                    </div>
+  
+                    <div class="text-center pt-1 mb-5 pb-1">
+                      <button class="btn btn-primary btn-block fa-lg login-button mb-3 border-0" type="submit">Ingresar</button>
+                      <a class="text-muted" href="#!">¿Olvidó su contraseña?</a>
+                    </div>
+  
+                    <div class="d-flex align-items-center justify-content-center pb-4">
+                      <p class="mb-0 me-2">Aún no tienes cuenta?</p>
+                      <a href="/register" class="btn btn-outline-danger">Registrarse</a>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="col-lg-6 d-none d-lg-block">
+                <img src="https://images.unsplash.com/photo-1613521140785-e85e427f8002?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Login Side" class="img-fluid h-100" />
+              </div>
+            </div>
           </div>
-          <form action="/login" method="POST">
-            <div class="mb-3 ms-5">
-              <label class="form-label" for="email">Correo electrónico:</label>
-              <input class="form-control shadow-sm" type="email" id="email" name="email" required>
-            </div>
-            <div class="mb-3 ms-5">
-              <label class="form-label" for="password">Contraseña:</label>
-              <input class="form-control shadow-sm" type="password" id="password" name="password" required>
-            </div>
-            <div class="mb-3 ms-5">
-              <button class="btn btn-success" type="submit">Iniciar sesión</button>
-            </div>
-          </form>
-          <p class="fs-6">¿No tienes una cuenta? <a class="link-success link-offset-2 link-underline link-underline-opacity-0" href="/register">Regístrate aquí</a></p>
         </div>
-        
+      </div>
     </div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script></body>
+  </section>
+  
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-sm-6 mt-3">
+          <p class="fw-semibold">INFORMACIÓN</p>
+          <ul class="">
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Cómo comprar</a></li>
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Métodos de pago</a></li>
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Seguridad</a></li>
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Envíos</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-sm-6 mt-3">
+          <p class="fw-semibold">EMPRESA</p>
+          <ul class="">
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Sobre Nosotros</a></li>
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Términos y Condiciones</a></li>
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Contacto</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-sm-12 mt-3">
+          <p class="fw-semibold">SIGUENOS</p>
+          <ul class="list-inline">
+            <li class="list-inline-item"><a class="nav-link" href=""><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 24 24">
+              <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
+            </svg></a></li>
+            <li class="list-inline-item"><a class="nav-link" href=""><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 30 30">
+              <path d="M24,4H6C4.895,4,4,4.895,4,6v18c0,1.105,0.895,2,2,2h10v-9h-3v-3h3v-1.611C16,9.339,17.486,8,20.021,8 c1.214,0,1.856,0.09,2.16,0.131V11h-1.729C19.376,11,19,11.568,19,12.718V14h3.154l-0.428,3H19v9h5c1.105,0,2-0.895,2-2V6 C26,4.895,25.104,4,24,4z"></path>
+            </svg></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="row mt-3 mb-3">
+        <div class="col">
+          <p>Propiedad artística © 2023 LeParfum. <br>
+            Todos los derechos reservados por LeParfum Chile</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
 </html>
