@@ -1,7 +1,10 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css");
+
 :root{
     /*Fuentes*/
     --nav-text: 'Nunito'; 
     --body-text: 'Nunito';
+    --titulos: 'Merriweather Sans';
 
     /*Colores*/
     --gris-oscuro: #808080;
@@ -15,8 +18,11 @@
 
 /*Asignación de fuentes*/
 a{
-    font-family: var(--nav-text);
+    font-family: var(--titulos);
     text-decoration: none;
+}
+.titulos{
+    font-family: var(--titulos);
 }
 p{
     font-family: var(--body-text);
@@ -24,13 +30,17 @@ p{
 label{
     font-family: var(--body-text);
 }
+.tab-products{
+    background-color: var(--gris-oscuro);
+    background:var(--gris-oscuro);
+}
 
 /*Configuraciones*/
 body{
-    background-image: url(https://images.unsplash.com/photo-1636955792912-de44a3ba46cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    min-width: 1300px;
+}
+.container{
+    min-width: 1300px;
 }
 #loginForm{
     max-width: 300px;
@@ -52,4 +62,46 @@ body{
 footer{
     background-color: white;
     background: white;
+}
+.landing-page{
+    background-image: url(https://images.unsplash.com/photo-1636955792912-de44a3ba46cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.info-bar{
+    background: white;
+}
+/* Estilo normal para los enlaces */
+.nav-link {
+    transition: transform 0.2s ease-in-out;
+}
+  
+  /* Estilo al pasar el mouse sobre los enlaces */
+.nav-link:hover {
+    transform: scale(1.05); /* Aumenta el tamaño al 105% del tamaño original */
+}
+
+
+/*Config de las cards de productos*/
+.img-product{
+    max-width: 250px;
+    max-height: 250px;
+}
+.card-product{
+    max-width: 250px;
+}
+
+
+.img-info{
+    max-width: 80px;
+}
+
+/* Estilo para los logos de las marcas */
+.brand-logo {
+    width: 200px; /* Tamaño de los logos */
+    height: 200px;
+    border-radius: 50%; /* Formato circular */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5); /* Sombreado */
+    margin: 0 10px; /* Espacio entre los logos */
 }

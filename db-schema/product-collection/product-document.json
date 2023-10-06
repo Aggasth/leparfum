@@ -1,6 +1,7 @@
 {
     "_id":"<ProductId1>",
     "nombreProducto":"item",
+    "imagen":"",
     "cantidad":0,
     "precio":0,
     "disponibilidad":false,

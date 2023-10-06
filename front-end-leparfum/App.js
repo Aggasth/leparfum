@@ -66,12 +66,17 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => {
   res.render('login');
 });
-
+app.get('/login', (req, res) => {
+  res.render('login');
+});
 app.get('/register', (req, res) => {
   res.render('register');
 });
 app.get('/landing', (req, res) => {
   res.render('landing');
+});
+app.get('/forget-password', (req, res) => {
+  res.render('forget-password');
 });
 
 // Registrarse
@@ -102,6 +107,7 @@ app.post('/register', (req, res) => {
     })
     .catch(err => console.error(err));
 });
+
 // Cerrar sesión
 app.get('/logout', (req, res) => {
 req.logout();
@@ -128,11 +134,19 @@ app.get('/login', (req, res) => {
 // Iniciar sesión
 app.post('/login', (req, res, next) => {
   passport.authenticate('local', {
-    successRedirect: '/dashboard',
+    successRedirect: '/landing',
     failureRedirect: '/',
     failureFlash: true
   })(req, res, next);
 });
+
+// Iniciar el servidor
+const port = 3000;
+app.listen(port, () => {
+  console.log(`Servidor Node.js en ejecución en el puerto ${port}`);
+});
+
+
 
 
 
