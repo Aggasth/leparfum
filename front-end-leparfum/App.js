@@ -85,6 +85,10 @@ app.get('/admin', (req, res) => {
 app.get('/adminCliente', (req, res) => {
   res.render('adminCliente');
 });
+app.get('/formularioProducto', (req, res) => {
+  res.render('formularioProducto'); 
+});
+
 app.get('/adminProductos', (req, res) => {
   res.render('adminProductos');
 });
