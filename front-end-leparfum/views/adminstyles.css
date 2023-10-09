@@ -1,0 +1,17 @@
+/* Estilo para el panel fijo a la izquierda */
+.sidebar {
+    position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 200px; /* Reduce el ancho del panel lateral */
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+}
+.table-container {
+    margin-left: 350px; /* Ajusta este margen según tu diseño */
+    margin-top: 20px; /* Agrega un margen superior */
+    padding: 20px;
+    text-align: center; /* Centra el contenido horizontalmente */
+}

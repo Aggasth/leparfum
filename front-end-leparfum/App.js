@@ -79,6 +79,19 @@ app.get('/forget-password', (req, res) => {
   res.render('forget-password');
 });
 
+app.get('/admin', (req, res) => {
+  res.render('admin');
+});
+app.get('/adminCliente', (req, res) => {
+  res.render('adminCliente');
+});
+app.get('/adminProductos', (req, res) => {
+  res.render('adminProductos');
+});
+app.get('/adminPedidos', (req, res) => {
+  res.render('adminPedidos');
+});
+
 // Registrarse
 app.post('/register', (req, res) => {
   const { email, password } = req.body;
@@ -141,7 +154,7 @@ app.post('/login', (req, res, next) => {
 });
 
 // Iniciar el servidor
-const port = 3000;
+const port = 3001;
 app.listen(port, () => {
   console.log(`Servidor Node.js en ejecución en el puerto ${port}`);
 });
