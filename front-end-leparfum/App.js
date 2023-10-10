@@ -141,7 +141,7 @@ app.post('/login', (req, res, next) => {
 });
 
 // Iniciar el servidor
-const port = 3000;
+const port = 3001;
 app.listen(port, () => {
   console.log(`Servidor Node.js en ejecución en el puerto ${port}`);
 });
