@@ -5,6 +5,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const User = require('./models/User');
+const Product = require('./models/Product');
 const config = require('./config');
 const path = require('path');
 const flash = require('connect-flash');
@@ -13,6 +14,8 @@ const app = express();
 app.use(flash());
 // Define las rutas de archivo estaticos para utilizarlos
 app.use(express.static('views'));
+app.use('/public', express.static('public', { 'Content-Type': 'text/javascript' }));
+
 
 
 // Conecta a la base de datos MongoDB
@@ -72,15 +75,38 @@ app.get('/login', (req, res) => {
 app.get('/register', (req, res) => {
   res.render('register');
 });
+
+
+
 app.get('/landing', (req, res) => {
-  res.render('landing');
+  // Cargar 4 productos en la variable "oferta"
+  Product.find().limit(4)
+    .then(oferta => {
+      // Luego, carga 10 productos en la variable "listado"
+      Product.find().limit(10)
+        .then(listado => {
+          res.render('landing', { oferta, listado });
+        })
+        .catch(err => {
+          console.error(err);
+          res.status(500).send('Error interno del servidor');
+        });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).send('Error interno del servidor');
+    });
 });
+
 app.get('/forget-password', (req, res) => {
   res.render('forget-password');
 });
 
 app.get('/admin', (req, res) => {
   res.render('admin');
+});
+app.get('/perfumeria', (req, res) => {
+  res.render('perfumeria');
 });
 app.get('/adminCliente', (req, res) => {
   res.render('adminCliente');
@@ -95,6 +121,7 @@ app.get('/adminProductos', (req, res) => {
 app.get('/adminPedidos', (req, res) => {
   res.render('adminPedidos');
 });
+
 
 // Registrarse
 app.post('/register', (req, res) => {

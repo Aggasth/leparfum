@@ -41,7 +41,7 @@
               <a class="nav-link active fs-5" aria-current="page" href="/landing">Inicio</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link fs-5" href="/landing">Perfumería</a>
+              <a class="nav-link fs-5" href="/perfumeria">Perfumería</a>
             </li>
             <li class="nav-item">
               <a class="nav-link fs-5" href="landing">Suscripcion</a>
@@ -132,29 +132,29 @@
     <div class="container py-3 h-100 products">
       <div class="container mt-3 mb-3">
         <div class="row">
-            <div class="col">
-                <ul class="list-unstyled list-inline d-flex justify-content-between align-items-center">
-                    <li class="list-inline-item">
+            <div class="col d-none d-xl-block">
+                <ul class="list-unstyled list-inline d-flex justify-content-center align-items-center row d-none d-xl-block">
+                    <li class="list-inline-item col-xl-2 mt-2">
                         <a href="#">
                             <img src="img/logos/tommy-logo.jpg" alt="Marca 1" class="brand-logo">
                         </a>
                     </li>
-                    <li class="list-inline-item">
+                    <li class="list-inline-item col-xl-2 mt-2">
                         <a href="#">
                             <img src="img/logos/ck-logo.jpg" alt="Marca 2" class="brand-logo">
                         </a>
                     </li>
-                    <li class="list-inline-item">
+                    <li class="list-inline-item col-xl-2 mt-2">
                         <a href="#">
                             <img src="img/logos/hugo-logo.jpg" alt="Marca 3" class="brand-logo">
                         </a>
                     </li>
-                    <li class="list-inline-item">
+                    <li class="list-inline-item col-xl-2 mt-2">
                         <a href="#">
                             <img src="img/logos/vic-logo.jpg" alt="Marca 4" class="brand-logo">
                         </a>
                     </li>
-                    <li class="list-inline-item">
+                    <li class="list-inline-item col-xl-2 mt-2">
                         <a href="#">
                             <img src="img/logos/giorgio-logo.jpg" alt="Marca 5" class="brand-logo">
                         </a>
@@ -168,9 +168,38 @@
         <div class="col-12 text-start  mb-3">
           <p class="fs-3 titulos border-bottom ms-3">Productos Destacados</p>
         </div>
-
-         <!--QUIERO QUE AQUI SE CARGUEN LAS CARDS QUE GENEREN EN EL METODO DE JAVASCRIPT-->
-         
+        <!--Método para cargar los productos más vendidos-->
+        <% oferta.forEach(producto => { %>
+          <div class="col-lg-3 col-md-6 col-sm-6 d-grid justify-content-center align-content-between">
+            <div class="card card-product border-0">
+              <a href=""><img class="img img-product" src="<%= producto.imagen %>" alt="<%= producto.nombre %>"></a>
+              <div class="card-header fw-bold" style="color: rgb(138, 22, 22)">
+                $<%= producto.precio %>
+              </div>
+              <div class="card-body">
+                <p class="card-text"><%= producto.nombreProducto %></p>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+        
+        <div class="col-12 text-center">
+          <img class="img img-fluid" src="img/banners/banner-mid-1.jpg" alt="">
+        </div>
+        <!--Productos-->
+        <% listado.forEach(producto => { %>
+          <div class="col-lg-3 col-md-6 col-sm-6 d-grid justify-content-center align-content-between">
+            <div class="card card-product border-0">
+              <a href=""><img class="img img-product" src="<%= producto.imagen %>" alt="<%= producto.nombre %>"></a>
+              <div class="card-header fw-bold" style="color: rgb(138, 22, 22)">
+                $<%= producto.precio %>
+              </div>
+              <div class="card-body">
+                <p class="card-text"><%= producto.nombreProducto %></p>
+              </div>
+            </div>
+          </div>
+        <% }); %>
       </div>
     </div>
 
