@@ -18,7 +18,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inicio</title>
-  <link rel="stylesheet" type="text/css" href="style-landing.css">
+  <script src="../public/filtro.js"></script>
+  <link rel="stylesheet" type="text/css" href="style-perfumeria.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather+Sans&display=swap">
@@ -59,8 +60,81 @@
   </header>
   
   
-  <section>
+  <section class="h-100 gradient-form">
 
+    <div class="container perfumeria">
+      <div class="text-center">
+        <img class="img img-fluid border-1" src="img/banners/banner-mid-2.jpg" alt="">
+      </div>
+      <div class="row">
+        <!--Filtro de busqueda-->
+        <div class="filtro-horizontal mt-2 col-lg-3 d-none d-md-block">
+          <p class="fs-6 mt-1 ms-3 fw-medium text-body-secondary border-bottom">Filtrar por categoría</p>
+          <ul class="list-group border-0">
+            <li class="list-group-item">
+              <p class="fs-6 mt-1 ms-3 fw-bold text-body-secondary border-bottom">Marca</p>
+              <div class="form-check ms-3">
+                <input class="form-check-input" type="checkbox" id="marca1">
+                <label class="form-check-label" for="marca1">
+                  Marca 1
+                </label>
+              </div>
+              <div class="form-check ms-3">
+                <input class="form-check-input" type="checkbox" id="marca2">
+                <label class="form-check-label" for="marca2">
+                  Marca 2
+                </label>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <p class="fs-6 mt-1 ms-3 fw-bold text-body-secondary border-bottom">Tipo</p>
+              <div id="tipoContainer" class="ms-3 checkbox-container">
+                <!-- Los checkboxes se generarán aquí dinámicamente -->
+              </div>
+            </li>
+            <li class="list-group-item">
+              <p class="fs-6 mt-1 ms-3 fw-bold text-body-secondary border-bottom">Colección</p>
+              <div class="form-check ms-3">
+                <input class="form-check-input" type="checkbox" id="hombre">
+                <label class="form-check-label" for="hombre">
+                  Perfumes para Hombre
+                </label>
+              </div>
+              <div class="form-check ms-3">
+                <input class="form-check-input" type="checkbox" id="mujer">
+                <label class="form-check-label" for="mujer">
+                  Perfumes para Mujer
+                </label>
+              </div>
+              <!-- Agrega más checkboxes para los tipos de sexo que desees -->
+            </li>
+          </ul>
+        </div>
+        
+        <!--Espacio para la carga de productos-->
+        <div class="col-xl-9 col-lg-9">
+          <div class="row">
+            <!--Se cargan todos los productos hacia abajo-->
+            <% productos.forEach(producto => { %>
+              <div class="col-lg-3 col-md-6 col-sm-6 d-grid justify-content-center align-content-between">
+                <div class="card card-product border-0">
+                  <a href=""><img class="img img-product" src="<%= producto.imagen %>" alt="<%= producto.nombre %>"></a>
+                  <div class="card-header fw-bold" style="color: rgb(138, 22, 22)">
+                    $<%= producto.precio %>
+                  </div>
+                  <div class="card-body">
+                    <p class="card-text"><%= producto.nombreProducto %></p>
+                  </div>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+          
+        </div>
+        
+        
+      </div>
+    </div>
   </section>
   
   

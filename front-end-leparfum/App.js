@@ -66,19 +66,34 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // Rutas
-app.get('/', (req, res) => {
-  res.render('login');
-});
 app.get('/login', (req, res) => {
   res.render('login');
 });
+
 app.get('/register', (req, res) => {
   res.render('register');
 });
 
+app.get('/perfumeria', (req, res) => {
+  // Cargar 4 productos en la variable "oferta"
+  const categories = ['Dulce', 'Citrico', 'Madera', 'Frutales'];
+  Product.find()
+    .then(productos => {
+      res.render('perfumeria', { productos, categories });
+    })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Error interno del servidor');
+  });
+});
+
+app.get('/nosotros', (req, res) => {
+  res.render('nosotros');
+});
 
 
-app.get('/landing', (req, res) => {
+
+app.get('/', (req, res) => {
   // Cargar 4 productos en la variable "oferta"
   Product.find().limit(4)
     .then(oferta => {
@@ -96,30 +111,6 @@ app.get('/landing', (req, res) => {
       console.error(err);
       res.status(500).send('Error interno del servidor');
     });
-});
-
-app.get('/forget-password', (req, res) => {
-  res.render('forget-password');
-});
-
-app.get('/admin', (req, res) => {
-  res.render('admin');
-});
-app.get('/perfumeria', (req, res) => {
-  res.render('perfumeria');
-});
-app.get('/adminCliente', (req, res) => {
-  res.render('adminCliente');
-});
-app.get('/formularioProducto', (req, res) => {
-  res.render('formularioProducto'); 
-});
-
-app.get('/adminProductos', (req, res) => {
-  res.render('adminProductos');
-});
-app.get('/adminPedidos', (req, res) => {
-  res.render('adminPedidos');
 });
 
 
@@ -183,8 +174,6 @@ app.post('/login', (req, res, next) => {
     failureFlash: true
   })(req, res, next);
 });
-
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor en ejecución en el puerto ${PORT}`));
