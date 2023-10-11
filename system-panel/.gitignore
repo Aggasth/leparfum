@@ -1,0 +1,21 @@
+# Directorios generados por npm y yarn
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Archivos de configuración locales
+.env
+
+# Archivos generados por herramientas de desarrollo
+/dist
+/build
+
+# Logs y archivos temporales
+logs/
+*.log
+*.swp
+.DS_Store
+
+# Constructores
+package-lock.json
+package.json

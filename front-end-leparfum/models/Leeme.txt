@@ -1,0 +1,18 @@
+** Uso de la carpeta models
+Carpeta de uso exclusivo para modelos de objetos (User - Product - Item - ShoppingCart)
+
+Se define la estructura con formato js para este proyecto.
+
+Ejemplo:
+
+
+const mongoose = require('mongoose');
+
+const nombreSchema = new mongoose.Schema({
+  atributo: String,
+  atributo: Number,
+  atributo: Boolean,
+  atributo: Array
+});
+
+module.exports = mongoose.model('Object', nombreSchema);

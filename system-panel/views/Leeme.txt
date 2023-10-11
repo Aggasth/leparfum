@@ -1,0 +1,5 @@
+** Uso de la carpeta views
+Esta carpeta contiene todas las vistas de la página en formato .ejs y .css
+
+Lo ideal es mantener el orden de programación:
+Ejemplo: nombre-vista.ejs -> nombre-vista-style.css

@@ -4,18 +4,16 @@ const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-const User = require('./models/User');
-const Product = require('./models/Product');
 const config = require('./config');
 const path = require('path');
 const flash = require('connect-flash');
 
 const app = express();
 app.use(flash());
+
 // Define las rutas de archivo estaticos para utilizarlos
 app.use(express.static('views'));
 app.use('/public', express.static('public', { 'Content-Type': 'text/javascript' }));
-
 
 
 // Conecta a la base de datos MongoDB
@@ -62,6 +60,7 @@ passport.deserializeUser((id, done) => {
     });
 });
 
+//Seteo el uso de las vistas segun path
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -69,48 +68,15 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => {
   res.render('login');
 });
-app.get('/login', (req, res) => {
-  res.render('login');
-});
-app.get('/register', (req, res) => {
-  res.render('register');
-});
-
-
-
-app.get('/landing', (req, res) => {
-  // Cargar 4 productos en la variable "oferta"
-  Product.find().limit(4)
-    .then(oferta => {
-      // Luego, carga 10 productos en la variable "listado"
-      Product.find().limit(10)
-        .then(listado => {
-          res.render('landing', { oferta, listado });
-        })
-        .catch(err => {
-          console.error(err);
-          res.status(500).send('Error interno del servidor');
-        });
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error interno del servidor');
-    });
-});
-
-app.get('/forget-password', (req, res) => {
-  res.render('forget-password');
-});
 
 app.get('/admin', (req, res) => {
   res.render('admin');
 });
-app.get('/perfumeria', (req, res) => {
-  res.render('perfumeria');
-});
+
 app.get('/adminCliente', (req, res) => {
   res.render('adminCliente');
 });
+
 app.get('/formularioProducto', (req, res) => {
   res.render('formularioProducto'); 
 });
@@ -118,38 +84,13 @@ app.get('/formularioProducto', (req, res) => {
 app.get('/adminProductos', (req, res) => {
   res.render('adminProductos');
 });
+
 app.get('/adminPedidos', (req, res) => {
   res.render('adminPedidos');
 });
 
-
-// Registrarse
-app.post('/register', (req, res) => {
-  const { email, password } = req.body;
-
-  // Verificar si el correo electrónico ya está registrado
-  User.findOne({ email: email })
-    .then(user => {
-      if (user) {
-        // El correo electrónico ya está registrado
-        res.render('register', { message: 'El correo electrónico ya está registrado' });
-      } else {
-        // Crear un nuevo usuario
-        bcrypt.hash(password, 10, (err, hash) => {
-          if (err) throw err;
-          const newUser = new User({
-            email: email,
-            password: hash
-          });
-          newUser.save()
-            .then(() => {
-              res.redirect('/login');
-            })
-            .catch(err => console.error(err));
-        });
-      }
-    })
-    .catch(err => console.error(err));
+app.get('/login', (req, res) => {
+  res.render('login');
 });
 
 // Cerrar sesión
@@ -159,8 +100,8 @@ res.redirect('/');
 });
 
 // Dashboard protegido
-app.get('/dashboard', isAuthenticated, (req, res) => {
-  res.send('Dashboard - Usuario autenticado');
+app.get('/admin', isAuthenticated, (req, res) => {
+  res.send('admin');
 });
 
 // Middleware para verificar la autenticación
@@ -171,14 +112,11 @@ if (req.isAuthenticated()) {
 res.redirect('/');
 }
 
-app.get('/login', (req, res) => {
-  res.render('login');
-});
   
 // Iniciar sesión
 app.post('/login', (req, res, next) => {
   passport.authenticate('local', {
-    successRedirect: '/landing',
+    successRedirect: '/admin',
     failureRedirect: '/',
     failureFlash: true
   })(req, res, next);
@@ -186,5 +124,6 @@ app.post('/login', (req, res, next) => {
 
 
 
-const PORT = process.env.PORT || 3000;
+
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => console.log(`Servidor en ejecución en el puerto ${PORT}`));

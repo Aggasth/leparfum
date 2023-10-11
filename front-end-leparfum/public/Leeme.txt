@@ -1,0 +1,4 @@
+** Uso de la carpeta public
+Esta carpeta debe contener archivos de tipo general:
+- script de Javascript de uso común
+- triggers para llamado de variables
