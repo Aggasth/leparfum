@@ -75,20 +75,14 @@ app.get('/register', (req, res) => {
 });
 
 app.get('/perfumeria', (req, res) => {
-  // Cargar 4 productos en la variable "oferta"
-  const categories = ['Dulce', 'Citrico', 'Madera', 'Frutales'];
   Product.find()
     .then(productos => {
-      res.render('perfumeria', { productos, categories });
+      res.render('perfumeria', { productos });
     })
   .catch(err => {
       console.error(err);
       res.status(500).send('Error interno del servidor');
   });
-});
-
-app.get('/nosotros', (req, res) => {
-  res.render('nosotros');
 });
 
 
@@ -165,11 +159,14 @@ res.redirect('/');
 app.get('/login', (req, res) => {
   res.render('login');
 });
+app.get('/suscripcion', (req, res) => {
+  res.render('suscripcion');
+});
   
 // Iniciar sesión
 app.post('/login', (req, res, next) => {
   passport.authenticate('local', {
-    successRedirect: '/landing',
+    successRedirect: '/',
     failureRedirect: '/',
     failureFlash: true
   })(req, res, next);

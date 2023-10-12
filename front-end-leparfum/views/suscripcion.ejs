@@ -39,16 +39,16 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active fs-5" aria-current="page" href="/">Inicio</a>
+              <a class="nav-link active fs-6" aria-current="page" href="/">Inicio</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link fs-5" href="/perfumeria">Perfumería</a>
+              <a class="nav-link fs-6" href="/perfumeria">Perfumería</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link fs-5" href="/suscripcion">Suscripcion</a>
+              <a class="nav-link fs-6" href="/suscripcion">Suscripcion</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link fs-5" href="/nosotros">Nosotros</a>
+              <a class="nav-link fs-6" href="/nosotros">Nosotros</a>
             </li>
           </ul>
           <a href="/login" class="navbar-brand"><span class="navbar-img">
@@ -60,76 +60,72 @@
   </header>
   
   
-  <section class="h-100 gradient-form">
-
-    <div class="container perfumeria">
-      <div class="text-center">
-        <img class="img img-fluid border-1" src="img/banners/banner-mid-2.jpg" alt="">
-      </div>
-      <div class="row mt-4">
-        <!--Filtro de busqueda-->
-        <div class="filtro-horizontal mt-2 mb-2 col-lg-3 d-none d-md-block rounded">
-          <p class="fs-6 mt-1 ms-3 fw-medium text-body-secondary border-bottom">Filtrar por categoría</p>
-          <ul class="list-group mb-2 list-group-flush">
-            <li class="list-group-item">
-              <p class="fs-6 mt-1 ms-3 fw-bold text-body-secondary border-bottom">Marca</p>
-              <div id="marcaContainer" class="ms-3 checkbox-container">
-                <!-- Los checkboxes se generarán aquí dinámicamente -->
-              </div>
-            </li>
-            <li class="list-group-item">
-              <p class="fs-6 mt-1 ms-3 fw-bold text-body-secondary border-bottom">Tipo</p>
-              <div id="tipoContainer" class="ms-3 checkbox-container">
-                <!-- Los checkboxes se generarán aquí dinámicamente -->
-              </div>
-            </li>
-            <li class="list-group-item">
-              <p class="fs-6 mt-1 ms-3 fw-bold text-body-secondary border-bottom">Colección</p>
-              <div class="form-check ms-3">
-                <input class="form-check-input" type="checkbox" id="Hombre">
-                <label class="form-check-label" for="Hombre">
-                  Perfumes para Hombre
-                </label>
-              </div>
-              <div class="form-check ms-3">
-                <input class="form-check-input" type="checkbox" id="Mujer">
-                <label class="form-check-label" for="Mujer">
-                  Perfumes para Mujer
-                </label>
-              </div>
-              <div class="form-check ms-3">
-                <input class="form-check-input" type="checkbox" id="Niño">
-                <label class="form-check-label" for="Niño">
-                  Perfumes para Niño
-                </label>
-              </div>
-              <!-- Agrega más checkboxes para los tipos de sexo que desees -->
-            </li>
-          </ul>
-        </div>
-        
-        <!--Espacio para la carga de productos-->
-        <div class="col-xl-9 col-lg-9">
-          <div class="row">
-            <!--Se cargan todos los productos hacia abajo-->
-            <% productos.forEach(producto => { %>
-              <div class="col-lg-3 col-md-6 col-sm-6 d-grid justify-content-center align-content-between">
-                <div class="card card-product border-0">
-                  <a href=""><img class="img img-product" src="<%= producto.imagen %>" alt="<%= producto.nombre %>"></a>
-                  <div class="card-header fw-bold" style="color: rgb(138, 22, 22)">
-                    $<%= producto.precio %>
-                  </div>
-                  <div class="card-body">
-                    <p class="card-text"><%= producto.nombreProducto %></p>
-                  </div>
+  <section class="h-100 gradient-form" style="background-color: #eee;">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-xl-10">
+          <div class="card rounded-3 text-black">
+            <div class="row g-0">
+                <div class="col-12 text-center mt-3">
+                    <p class="fs-3 fw-medium"> Suscripciones LeParfum</p>
                 </div>
-              </div>
-            <% }); %>
+                <div class="col-12 text-center mt-3 ms-3">
+                    <p class="fs-5 fw-medium me-5">
+                        Suscríbete para recibir mensualmente una muestra de perfumes según tus preferencias en la puerta de tu casa. Dependiendo
+                        de la suscripcion podrás recibir drops exclusivos sorpresa, packaging limitado, fragancias únicas.
+                    </p>
+                </div>
+                <div class="col-4">
+                    <div class="card border-0" style="min-height: 400px;">
+                        <div class="card-body text-center d-grid justify-content-center align-items-center" >
+                          <h5 class="card-title mb-3">Essentiel</h5>
+                          <p class="card-text">
+                            <img class="card-img-top" src="img/icons/essentiel.png" alt="" style="height: 100px; width: 100px;"><br>
+                            - Entrega en 5 días hábiles. <br>
+                            - Atención al cliente en horario laboral.<br>
+                            - Perfume TravelSpray de 15ml.<br>
+                            - Rango de perfumes hasta los <b>$80.000</b><br>
+                          </p>
+                          <a href="#!" class="btn btn-success">Suscribeme</a>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-4 h-100">
+                    <div class="card border-0" style="min-height: 400px;">
+                        <div class="card-body text-center d-grid justify-content-center align-items-center">
+                          <h5 class="card-title mb-3">Elite</h5>
+                          <p class="card-text">
+                            <img class="card-img-top" src="img/icons/elite.png" alt="" style="height: 100px; width: 100px;"><br>
+                            - Entrega en 48 horas. <br>
+                            - Prioridad en Atencion al Cliente.<br>
+                            - Perfume TravelSpray de 15ml.<br>
+                            - Rango de perfumes hasta los <b>$150.000</b><br>
+                          </p>
+                          <a href="#!" class="btn btn-success">Suscribeme</a>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-4">
+                    <div class="card border-0" style="min-height: 400px;">
+                        <div class="card-body text-center d-grid justify-content-center align-items-center">
+                          <h5 class="card-title mb-3">Luxueux</h5>
+                          <p class="card-text">
+                            <img class="card-img-top" src="img/icons/luxueux.png" alt="" style="height: 100px; width: 100px;"><br>
+                            - Entrega en 24 horas. <br>
+                            - Atencion al Cliente Inmediata<br>
+                            - Resolucion de problemas en 24 horas.<br>
+                            - Perfume TravelSpray de 15ml.<br>
+                            - Mini Gel de Ducha de regalo cada 3 meses.<br>
+                            - Rango de perfumes hasta los <b>$200.000</b><br>
+                            - Packaging Edicion Limitada.
+                          </p>
+                          <a href="#!" class="btn btn-success">Suscribeme</a>
+                        </div>
+                      </div>
+                </div>
+            </div>
           </div>
-          
         </div>
-        
-        
       </div>
     </div>
   </section>
