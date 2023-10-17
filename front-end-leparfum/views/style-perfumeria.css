@@ -104,7 +104,12 @@ footer{
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5); /* Sombreado */
     margin: 0 10px; /* Espacio entre los logos */
 }
-
+.side-perfumeria{
+    background-image: url(https://images.unsplash.com/photo-1636955792912-de44a3ba46cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
 .perfumeria{
     background-color: white;
 }

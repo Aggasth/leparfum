@@ -1,0 +1,47 @@
+:root{
+    /*Fuentes*/
+    --nav-text: 'Nunito'; 
+    --body-text: 'Nunito';
+
+    /*Colores*/
+    --gris-oscuro: #808080;
+    --gris-claro: #999999;
+    --azul-oscuro: #8DB5D8;
+    --azul-claro: #B2CDE6;
+    --azul-fondos: #D8E6F3;
+}
+
+
+
+/*Asignación de fuentes*/
+a{
+    font-family: var(--nav-text);
+    text-decoration: none;
+}
+p{
+    font-family: var(--body-text);
+}
+label{
+    font-family: var(--body-text);
+}
+
+.link-account{
+    text-decoration: none; 
+    color: rgb(45, 45, 45);
+}
+
+/*Configuraciones*/
+#loginForm{
+    max-width: 300px;
+    margin-top: 3rem;
+    margin: 0 auto;
+}
+
+.login-button{
+    background: rgb(113,147,229);
+    background: linear-gradient(90deg, rgba(113,147,229,1) 100%, rgba(255,255,255,1) 100%); 
+}
+.img-fluid{
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}

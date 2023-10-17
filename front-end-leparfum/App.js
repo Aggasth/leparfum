@@ -66,12 +66,17 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // Rutas
+
 app.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login', { isLoggedIn: req.session.isLoggedIn });
 });
 
 app.get('/register', (req, res) => {
   res.render('register');
+});
+
+app.get('/login-error', (req, res) => {
+  res.render('login-error', { isLoggedIn: req.session.isLoggedIn });
 });
 
 app.get('/perfumeria', (req, res) => {
@@ -88,13 +93,14 @@ app.get('/perfumeria', (req, res) => {
 
 
 app.get('/', (req, res) => {
+  const errorMessage = req.flash('error')[0]; // Recupera el mensaje de error flash
   // Cargar 4 productos en la variable "oferta"
   Product.find().limit(4)
     .then(oferta => {
       // Luego, carga 10 productos en la variable "listado"
       Product.find().limit(10)
         .then(listado => {
-          res.render('landing', { oferta, listado });
+          res.render('landing', { oferta, listado, errorMessage, isLoggedIn: req.session.isLoggedIn }); // Pasa el mensaje de error a la vista
         })
         .catch(err => {
           console.error(err);
@@ -106,6 +112,11 @@ app.get('/', (req, res) => {
       res.status(500).send('Error interno del servidor');
     });
 });
+app.use((req, res, next) => {
+  res.locals.isLoggedIn = req.session.isLoggedIn || false;
+  next();
+});
+
 
 
 // Registrarse
@@ -144,33 +155,34 @@ res.redirect('/');
 });
 
 // Dashboard protegido
-app.get('/dashboard', isAuthenticated, (req, res) => {
-  res.send('Dashboard - Usuario autenticado');
+app.get('/account', (req, res) => {
+  res.render('account');
 });
 
-// Middleware para verificar la autenticación
-function isAuthenticated(req, res, next) {
-if (req.isAuthenticated()) {
-  return next();
-}
-res.redirect('/');
-}
-
-app.get('/login', (req, res) => {
-  res.render('login');
-});
 app.get('/suscripcion', (req, res) => {
   res.render('suscripcion');
 });
+app.get('/success-suscripcion', (req, res) => {
+  res.render('success-suscripcion');
+});
   
 // Iniciar sesión
-app.post('/login', (req, res, next) => {
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/',
-    failureFlash: true
-  })(req, res, next);
-});
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/login-error',
+  failureFlash: true
+}));
+
+
+
+// Middleware para verificar la autenticación
+function isAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/');
+  }
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor en ejecución en el puerto ${PORT}`));
