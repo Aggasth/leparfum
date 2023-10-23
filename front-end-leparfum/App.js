@@ -90,6 +90,9 @@ app.get('/perfumeria', (req, res) => {
   });
 });
 
+app.get('/info-page', (req, res) => {
+  res.render('info-page', { isLoggedIn: req.session.isLoggedIn });
+});
 
 
 app.get('/', (req, res) => {

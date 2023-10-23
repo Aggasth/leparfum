@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeParfum - Login</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-expand-sm bg-body-tertiary shadow-sm">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <span class="navbar-img">
+            <img class="ms-5" src="https://i.ibb.co/ZNG7Xmj/P-1-removebg-preview.png" alt="P-1-removebg-preview" border="0" width="80" height="80">
+          </span>
+        </a>
+      </div>
+      <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active fs-6" aria-current="page" href="/">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fs-6" href="/perfumeria">Perfumería</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fs-6" href="/suscripcion">Suscripcion</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fs-6" href="/nosotros">Nosotros</a>
+            </li>
+          </ul>
+          <% if (isLoggedIn) { %>
+            <a href="/logout" class="btn btn-outline-danger">Cerrar Sesión</a>
+          <% } else { %>
+            <a href="/login" class="btn btn-outline-danger">Iniciar Sesión</a>
+          <% } %>
+        </div>
+      </div>
+    </nav>
+  </header>
+  
+  <section class="h-100 gradient-form" style="background-color: #eee;">
+    <div class="container py-5 h-100" style="background-color: white;">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="accordion" id="accordionExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Cómo Comprar
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <strong>Instrucciones de compra:</strong><br>
+                <ol class="list-group list-group-numbered">
+                  <li class="list-group-item">Dirígete a la página del producto que desees comprar.</li>
+                  <li class="list-group-item">Selecciona todas las especificaciones del producto (tamaño - formato).</li>
+                  <li class="list-group-item"> Haz click en el botón "Añadir al carro".</li>
+                  <li class="list-group-item">Una vez tengas todo en el carrito, procede a realizar el pago.</li>
+                  <li class="list-group-item">Cuando se haya efectuado el pago, se te notificará mediante correo electrónico mas detalles de la compra.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Métodos de pago
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <strong>Métodos de pago aceptados:</strong><br>
+                Todos los métodos permitidos por MercadoPago. En caso de no contar con una tarjeta de crédito, débito o prepago, podrás hacer una transferencia bancaria solicitando los datos mediante correo electrónico <code>compras@leparfum.cl</code>
+                <p class="fs-6 fw-bold">Tarjeta de crédito</p>
+                <ul>
+                  <li>
+                    <span>Ofrece hasta 12 cuotas sin interés.</span>
+                  </li>
+                  <li>
+                    <span>Recibe la totalidad del pago el mismo día, incluso si el pago es en cuotas</span>
+                  </li>
+                  <li>
+                    <span>Aprobación inmediata</span>
+                  </li>
+                </ul>
+                <strong>Tarjetas aceptadas:</strong>
+                <ul class="list-group list-group-horizontal"> 
+                  <li class="list-group-item">
+                    <img src="img/logos/visa.png" alt="" width="50px">
+                  </li>
+                  <li class="list-group-item">
+                    <img src="img/logos/mastercard.png" alt="" width="50px">
+                  </li>
+                  <li class="list-group-item">
+                    <img src="img/logos/dinnersclub.svg" alt="" width="50px">
+                  </li>
+                  <li class="list-group-item">
+                    <img src="img/logos/cmr.png" alt="" width="50px">
+                  </li>
+                  <li class="list-group-item">
+                    <img src="img/logos/magna.png" alt="" width="50px">
+                  </li>
+                </ul>
+                <br>
+                <p class="fs-6 fw-bold">Tarjeta de débito o prepago</p>
+                <ul>
+                  <li>
+                    <span>WebPay</span>
+                  </li>
+                  <li>
+                    <span>Redirigiremos a tu comprador al sitio de Webpay y podrá pagar con su tarjeta de débito o prepago.</span>
+                  </li>
+                  <li>
+                    <span>Aprobación en hasta 4 horas</span>
+                  </li>
+                </ul>
+                <p class="fs-6 fw-bold">Dinero en cuenta de Mercado Pago</p>
+                <ul>
+                  <li>
+                    <span>Aprobación inmediata</span>
+                  </li>
+                </ul>
+                <p class="fs-6 mt-2 border-top">
+                  Tu cliente puede elegir el medio de pago que prefiera y una vez aprobado, el monto se acredita en tu cuenta de Mercado Pago, de acuerdo con los plazos que hayas elegido.
+                </p>
+                <p class="fs-6">
+                  Te avisaremos por e-mail siempre que recibas un pago en tu cuenta.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Seguridad
+              </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <strong>Políticas de seguridad de LeParfum</strong>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-sm-6 mt-3">
+          <p class="fw-semibold">INFORMACIÓN</p>
+          <ul class="">
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Cómo comprar</a></li>
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Métodos de pago</a></li>
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Seguridad</a></li>
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Envíos</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-sm-6 mt-3">
+          <p class="fw-semibold">EMPRESA</p>
+          <ul class="">
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Sobre Nosotros</a></li>
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Términos y Condiciones</a></li>
+            <li class="list-group-item"><a class="nav-link" href=""><span>&#10132;</span>Contacto</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-sm-12 mt-3">
+          <p class="fw-semibold">SIGUENOS</p>
+          <ul class="list-inline">
+            <li class="list-inline-item"><a class="nav-link" href=""><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 24 24">
+              <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
+            </svg></a></li>
+            <li class="list-inline-item"><a class="nav-link" href=""><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 30 30">
+              <path d="M24,4H6C4.895,4,4,4.895,4,6v18c0,1.105,0.895,2,2,2h10v-9h-3v-3h3v-1.611C16,9.339,17.486,8,20.021,8 c1.214,0,1.856,0.09,2.16,0.131V11h-1.729C19.376,11,19,11.568,19,12.718V14h3.154l-0.428,3H19v9h5c1.105,0,2-0.895,2-2V6 C26,4.895,25.104,4,24,4z"></path>
+            </svg></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="row mt-3 mb-3">
+        <div class="col">
+          <p>Propiedad artística © 2023 LeParfum. <br>
+            Todos los derechos reservados por LeParfum Chile</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
