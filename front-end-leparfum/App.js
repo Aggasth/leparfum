@@ -9,6 +9,7 @@ const Product = require('./models/Product');
 const config = require('./config');
 const path = require('path');
 const flash = require('connect-flash');
+const { name } = require('ejs');
 
 const app = express();
 app.use(flash());
@@ -121,7 +122,7 @@ app.use((req, res, next) => {
 
 // Registrarse
 app.post('/register', (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, celular, name } = req.body;
 
   // Verificar si el correo electrónico ya está registrado
   User.findOne({ email: email })
@@ -135,7 +136,9 @@ app.post('/register', (req, res) => {
           if (err) throw err;
           const newUser = new User({
             email: email,
-            password: hash
+            password: hash,
+            celular: celular,
+            name: name
           });
           newUser.save()
             .then(() => {

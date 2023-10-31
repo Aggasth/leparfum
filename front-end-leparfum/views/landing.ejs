@@ -37,10 +37,28 @@
             </li>
           </ul>
           <% if (isLoggedIn) { %>
-            <a href="/logout" class="btn btn-outline-danger">Cerrar Sesión</a>
+            <div class="dropdown">
+              <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Mi Perfil
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="/logout">Cerrar Sesión</a></li>
+                <li><a class="dropdown-item" href="/mi-perfil">Mi Perfil</a></li>
+              </ul>
+            </div>
           <% } else { %>
-            <a href="/login" class="btn btn-outline-danger">Iniciar Sesión</a>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Selecciona una opción
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="/account">Mi cuenta</a></li>
+                  <li><a class="dropdown-item" href="/register">Cerrar Sesion</a></li>
+              </ul>
+          </div>
           <% } %>
+          
+          
         </div>
       </div>
     </nav>
