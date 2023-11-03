@@ -1,0 +1,120 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css");
+
+:root{
+    /*Fuentes*/
+    --nav-text: 'Nunito'; 
+    --body-text: 'Nunito';
+    --titulos: 'Merriweather Sans';
+
+    /*Colores*/
+    --gris-oscuro: #808080;
+    --gris-claro: #999999;
+    --azul-oscuro: #8DB5D8;
+    --azul-claro: #B2CDE6;
+    --azul-fondos: #D8E6F3;
+}
+
+
+
+/*Asignación de fuentes*/
+a{
+    font-family: var(--titulos);
+    text-decoration: none;
+    color: inherit;
+}
+.titulos{
+    font-family: var(--titulos);
+}
+p{
+    font-family: var(--body-text);
+}
+label{
+    font-family: var(--body-text);
+}
+.tab-products{
+    background-color: var(--gris-oscuro);
+    background:var(--gris-oscuro);
+}
+.titulo{
+    font-family: var(--titulos);
+}
+
+/*Configuraciones*/
+body{
+    min-width: 600px;
+}
+#loginForm{
+    max-width: 300px;
+    margin-top: 3rem;
+    margin: 0 auto;
+}
+
+.login-button{
+    background: rgb(113,147,229);
+    background: linear-gradient(90deg, rgba(113,147,229,1) 100%, rgba(255,255,255,1) 100%); 
+}
+.img-fluid{
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+.products{
+    background: white;
+}
+footer{
+    background-color: white;
+    background: white;
+}
+.suscripcion-back{
+    background-image: url(https://images.unsplash.com/photo-1425421669292-0c3da3b8f529?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.info-bar{
+    background: white;
+}
+/* Estilo normal para los enlaces */
+.nav-link-2 {
+    transition: transform 0.2s ease-in-out;
+}
+  
+  /* Estilo al pasar el mouse sobre los enlaces */
+.nav-link-2:hover {
+    transform: scale(1.05); /* Aumenta el tamaño al 105% del tamaño original */
+}
+
+
+/*Config de las cards de productos*/
+.img-product{
+    max-width: 230px;
+    max-height: 230px;
+}
+.card-product{
+    max-width: 250px;
+}
+
+
+.img-info{
+    max-width: 80px;
+}
+
+/* Estilo para los logos de las marcas */
+.brand-logo {
+    width: 150px; /* Tamaño de los logos */
+    height: 150px;
+    border-radius: 50%; /* Formato circular */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5); /* Sombreado */
+    margin: 0 10px; /* Espacio entre los logos */
+}
+
+.perfumeria{
+    background-color: white;
+}
+.filtro-horizontal{
+    background-color: rgb(244, 244, 244);
+}
+
+.checkbox-container {
+    max-height: 200px; /* Establece la altura máxima que deseas mostrar sin desplazamiento */
+    overflow-y: auto;  /* Activa la barra de desplazamiento vertical cuando se excede la altura máxima */
+  }

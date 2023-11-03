@@ -17,9 +17,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Perfumeria - LeParfum</title>
-  <script src="../public/filtro-2.js"></script>
-  <link rel="stylesheet" type="text/css" href="/style-perfumeria.css">
+  <title><%= product.nombreProducto %> - LeParfum</title>
+  <link rel="shortcut icon" href="img/logos/logo.png">
+  <link rel="stylesheet" type="text/css" href="/style-template.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather+Sans&display=swap">
@@ -68,7 +68,7 @@
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <li><a class="dropdown-item" href="/account">Mi cuenta</a></li>
-                <li><a class="dropdown-item" href="/register">Cerrar Sesion</a></li>
+                  <li><a class="dropdown-item" href="/register">Cerrar Sesion</a></li>
               </ul>
           </div>
           <% } %>
@@ -83,56 +83,62 @@
   <section class="h-100 gradient-form side-perfumeria">
 
     <div class="container perfumeria">
-      <div class="text-center">
-        <img class="img img-fluid border-1" src="img/banners/banner-mid-2.jpg" alt="">
-      </div>
+      <nav class="mt-2" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+          <li class="breadcrumb-item"><a href="/perfumeria">Perfumería</a></li>
+          <li class="breadcrumb-item active" aria-current="page"><%= product.nombreProducto %></li>
+        </ol>
+      </nav>
+
       <div class="row mt-4">
-        <!--Filtro de busqueda-->
-        <div class="filtro-horizontal mt-2 mb-2 col-lg-3 d-none d-md-block h-100">
-          <p class="fs-6 mt-1 ms-3 fw-medium text-body-secondary border-bottom">Filtrar por categoría</p>
-          <ul class="list-group mb-2 list-group-flush">
-            <li class="list-group-item">
-              <p class="fs-6 mt-1 ms-3 fw-bold text-body-secondary border-bottom">Marca</p>
-              <div id="marcaContainer" class="ms-3 checkbox-container">
-                <!-- Los checkboxes se generarán aquí dinámicamente -->
-              </div>
-            </li>
-            <li class="list-group-item">
-              <p class="fs-6 mt-1 ms-3 fw-bold text-body-secondary border-bottom">Tipo</p>
-              <div id="tipoContainer" class="ms-3 checkbox-container">
-                <!-- Los checkboxes se generarán aquí dinámicamente -->
-              </div>
-            </li>
-            <li class="list-group-item">
-              <p class="fs-6 mt-1 ms-3 fw-bold text-body-secondary border-bottom">Colección</p>
-              <div class="form-check ms-3">
-                <input class="form-check-input" type="checkbox" id="Hombre">
-                <label class="form-check-label" for="Hombre">
-                  Perfumes para Hombre
-                </label>
-              </div>
-              <div class="form-check ms-3">
-                <input class="form-check-input" type="checkbox" id="Mujer">
-                <label class="form-check-label" for="Mujer">
-                  Perfumes para Mujer
-                </label>
-              </div>
-              <div class="form-check ms-3">
-                <input class="form-check-input" type="checkbox" id="Niño">
-                <label class="form-check-label" for="Niño">
-                  Perfumes para Niño
-                </label>
-              </div>
-              <!-- Agrega más checkboxes para los tipos de sexo que desees -->
-            </li>
-          </ul>
+        <div class="col-lg-6 col-sm-12">
+          <img src="<%= product.imagen %>" alt="" width="500">
         </div>
-        
-        <!--Espacio para la carga de productos-->
-        <div class="col-xl-9 col-lg-9">
-          <div class="row">
-            <!--Se cargan todos los productos hacia abajo-->
-            <% productos.forEach(producto => { %>
+        <div class="col-lg-6 col-sm-12">
+          <p class="fs-3 fw-bold">
+            <%= product.nombreProducto %>
+          </p>
+          <p class="fs-6 text-body-tertiary">
+            por: <%= product.marca %>
+          </p>
+          <p class="fs-5">
+            $<%= product.precio %>
+          </p>
+          <p class="fs-6">
+            <strong>Descripción:</strong>
+            <%= product.descripcion %>
+          </p>
+          <p class="fs-6">
+            <strong>Tamaño:</strong> 
+            <%= product.tamaño %> Ml
+          </p>
+          <p class="fs-6">
+            <strong>Género:</strong>
+            <%= product.sexo %>
+          </p>
+          <form action="">
+            <div class="row">
+              <div class="col-2">
+                <select class="form-select" name="cantidad" id="cantidad">
+                  <option value="1" selected>1</option>
+                  <option value="2" >2</option>
+                  <option value="3" >3</option>
+                  <option value="4" >4</option>
+                </select>
+              </div>
+              <div class="col-10">
+                <button onclick="" class="btn btn-danger w-100 rounded-0">Añadir al carrito</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row mt-5 container">
+        <div class="col-12">
+          <p class="fs-5">PRODUCTOS SIMILARES</p>
+          <div>
+            <% similarProducts.forEach(producto => { %>
               <div class="col-lg-3 col-md-6 col-sm-6 d-grid justify-content-center align-content-between">
                 <div class="card card-product border-0">
                   <a href="/template-product/<%= producto._id %>"><img class="img img-product" src="<%= producto.imagen %>" alt="<%= producto.nombre %>"></a>
@@ -146,10 +152,7 @@
               </div>
             <% }); %>
           </div>
-          
         </div>
-        
-        
       </div>
     </div>
   </section>

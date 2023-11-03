@@ -5,11 +5,12 @@ const userSchema = new mongoose.Schema({
   marca: String,
   imagen: String,
   cantidad:Number,
+  marca: String,
   precio:Number,
   disponibilidad:Boolean,
   tamaño:Number,
   descripcion:String,
-  coleccion:String, //Hombre - Mujer
+  sexo:String, //Hombre - Mujer
   tipo:Array
 });
 

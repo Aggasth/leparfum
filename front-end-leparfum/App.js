@@ -6,6 +6,8 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const User = require('./models/User');
 const Product = require('./models/Product');
+const Types = require('./models/Types');
+const Brand = require('./models/Brand');
 const config = require('./config');
 const path = require('path');
 const flash = require('connect-flash');
@@ -67,6 +69,36 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // Rutas
+app.get('/template-product/:productId', (req, res) => {
+  const productId = req.params.productId; // Captura el ID del producto desde la URL
+
+  Product.findById(productId)
+    .then(product => {
+      if (!product) {
+        // Manejar el caso en que el producto no se encuentra
+        res.status(404).send('Producto no encontrado');
+      } else {
+    
+        const tagsArray = Array.isArray(product.tags) ? product.tags : [product.tags];
+
+        // Encuentra productos similares por etiquetas
+        Product.find({ tags: { $in: tagsArray }, _id: { $ne: productId } }) // Encuentra productos con etiquetas similares, excluyendo el producto actual
+          .then(similarProducts => {
+            // Renderiza la vista "template-product" y pasa los detalles del producto y productos similares
+            res.render('template-product', { product, similarProducts, isLoggedIn: req.session.isLoggedIn });
+          })
+          .catch(err => {
+            console.error(err);
+            res.status(500).send('Error al buscar productos similares');
+          });
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).send('Error interno del servidor');
+    });
+});
+
 
 app.get('/login', (req, res) => {
   res.render('login', { isLoggedIn: req.session.isLoggedIn });
@@ -83,7 +115,7 @@ app.get('/login-error', (req, res) => {
 app.get('/perfumeria', (req, res) => {
   Product.find()
     .then(productos => {
-      res.render('perfumeria', { productos });
+      res.render('perfumeria', { productos, isLoggedIn: req.session.isLoggedIn });
     })
   .catch(err => {
       console.error(err);
@@ -180,6 +212,29 @@ app.post('/login', passport.authenticate('local', {
 }));
 
 
+// Ruta para cargar tipos
+app.get('/api/tipos', async (req, res) => {
+  Types.find();
+  try {
+    const tipos = await Types.distinct('tipo'); // 'tipo' es el atributo correcto en la colección Types
+    res.json({ tipos });
+  } catch (error) {
+    console.error('Error al cargar tipos desde la base de datos:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// Ruta para cargar marcas
+app.get('/api/marcas', async (req, res) => {
+  Brand.find();
+  try {
+    const marcas = await Brand.distinct('nombre'); // 'nombre' es el atributo correcto en la colección Brand
+    res.json({ marcas });
+  } catch (error) {
+    console.error('Error al cargar marcas desde la base de datos:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
 
 // Middleware para verificar la autenticación
 function isAuthenticated(req, res, next) {

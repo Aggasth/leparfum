@@ -27,7 +27,7 @@
   <header >
     <nav class="navbar navbar-expand-lg navbar-expand-sm bg-body-tertiary shadow-sm">
       <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
           <span class="navbar-img">
             <img class="ms-5" src="https://i.ibb.co/ZNG7Xmj/P-1-removebg-preview.png" alt="P-1-removebg-preview" border="0" width="80" height="80">
           </span>
@@ -37,16 +37,16 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+              <a class="nav-link active" aria-current="page" href="/">Inicio</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Perfumería</a>
+              <a class="nav-link" href="/perfumeria">Perfumería</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Suscripcion</a>
+              <a class="nav-link" href="/suscripcion">Suscripcion</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Nosotros</a>
+              <a class="nav-link" href="/nosotros">Nosotros</a>
             </li>
           </ul>
           <a href="/login" class="btn btn-outline-danger">Iniciar Sesión</a>
@@ -93,10 +93,59 @@
                       <label class="form-label" for="password">Contraseña</label>
                     </div>
 
+                    <p class="border-top">Por favor, seleccione  sus preferencias</p>
+                    <div class="form-outline mb-3">
+                      <label for="q1">¿Cual es tu sexo?</label>
+                      <select class="form-select" name="sexo" id="q1" required>
+                        <option value="masculino">Masculino</option>
+                        <option value="femenino">Femenino</option>
+                      </select>
+                    </div>
+
+                    <div class="form-outline mb-3">
+                      <label for="q2">¿Qué actividad disfrutas más en tu tiempo libre?</label>
+                      <select class="form-select" name="sexo" id="q2" required>
+                        <option value="1">Salir a cenar y socializar</option>
+                        <option value="2">Salir ocacionalmente a tomar algo</option>
+                        <option value="3">Juntas con amigos</option>
+                      </select>
+                    </div>
+
+                    <div class="form-outline mb-3">
+                      <label for="q3">¿Cuál es tu estación del año favorita?</label>
+                      <select class="form-select" name="sexo" id="q3" required>
+                        <option value="1">Otoño</option>
+                        <option value="2">Verano</option>
+                        <option value="3">Primavera</option>
+                        <option value="4">Invierno</option>
+                      </select>
+                    </div>
+
+                    <div class="form-outline mb-3">
+                      <label for="q4">¿Qué tipo de eventos sociales sueles asistir con frecuencia?</label>
+                      <select class="form-select" name="sexo" id="q4" required>
+                        <option value="1">Reuniones informales con amigos</option>
+                        <option value="2">Reuniones de negocios</option>
+                        <option value="3">Citas a ciegas</option>
+                        <option value="4">Reuniones en ambientes cerrados</option>
+                      </select>
+                    </div>
+
+                    <div class="form-outline mb-3">
+                      <label for="q5">¿Gama de colores favoritos?</label>
+                      <select class="form-select" name="sexo" id="q5" required>
+                        <option value="1">Grises</option>
+                        <option value="2">Pasteles</option>
+                        <option value="3">Cálidos</option>
+                        <option value="4">Fríos</option>
+                        <option value="4">Neón</option>
+                      </select>
+                    </div>
+                    <p class="fw-medium">Todas las respuestas serán confidenciales y utilizadas para generar promociones o recomendaciones</p>
                     <div class="d-flex align-items-center justify-content-center pb-4">
                       <button type="submit" class="btn btn-outline-danger">Registrarse</button>
                     </div>
-  
+                    
                     <div class="d-flex align-items-center justify-content-center pb-4">
                       <p class="mb-0 me-2">Ya tienes una cuenta?</p>
                       <a href="/login" class="btn btn-outline-danger">Iniciar Sesión</a>
