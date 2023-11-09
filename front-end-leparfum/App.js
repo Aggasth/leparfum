@@ -123,6 +123,8 @@ app.get('/perfumeria', (req, res) => {
   });
 });
 
+
+
 app.get('/info-page', (req, res) => {
   res.render('info-page', { isLoggedIn: req.session.isLoggedIn });
 });
@@ -199,6 +201,9 @@ app.get('/account', (req, res) => {
 
 app.get('/suscripcion', (req, res) => {
   res.render('suscripcion');
+});
+app.get('/shopping-cart', (req, res) => {
+  res.render('shopping-cart');
 });
 app.get('/success-suscripcion', (req, res) => {
   res.render('success-suscripcion');

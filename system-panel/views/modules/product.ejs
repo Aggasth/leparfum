@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include ('../modules/head.ejs') %>
+    <script src="../public/product-load.js" ></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <%- include ('../modules/sidebar.ejs') %>
+        </div>
+        <div class="col-10">
+
+            <table class="table" id="productTable">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Marca</th>
+                    <th>Tags</th>
+                    <!-- Otras columnas de encabezado -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Filas de productos se agregarán aquí -->
+                </tbody>
+              </table>
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade" id="v-pills-product" role="tabpanel" aria-labelledby="v-pills-product">
+                    <table class="table" id="productTable">
+                        <thead>
+                          <tr>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Marca</th>
+                            <th>Tags</th>
+                            <!-- Otras columnas de encabezado -->
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- Filas de productos se agregarán aquí -->
+                        </tbody>
+                      </table>
+                </div>
+        </div>
+    </div>
+</body>
+</html>

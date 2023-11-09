@@ -5,8 +5,12 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const config = require('./config');
+const router = express.Router();
 const path = require('path');
 const flash = require('connect-flash');
+//Modelos
+const Product = require('./models/Product');
+const { appendFile } = require('fs/promises');
 
 const app = express();
 app.use(flash());
@@ -14,6 +18,7 @@ app.use(flash());
 // Define las rutas de archivo estaticos para utilizarlos
 app.use(express.static('views'));
 app.use('/public', express.static('public', { 'Content-Type': 'text/javascript' }));
+app.use('/modules', express.static('modules', { 'Content-Type': 'text/javascript' }));
 
 
 // Conecta a la base de datos MongoDB
@@ -64,30 +69,43 @@ passport.deserializeUser((id, done) => {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// Rutas
+// Rutas -------------
 app.get('/', (req, res) => {
   res.render('login');
 });
-
 app.get('/admin', (req, res) => {
   res.render('admin');
 });
-
-app.get('/adminCliente', (req, res) => {
-  res.render('adminCliente');
+app.get('/modules/product', (req, res) => {
+  res.render('modules/product');
+});
+app.get('/modules/user', (req, res) => {
+  res.render('modules/user');
 });
 
-app.get('/formularioProducto', (req, res) => {
-  res.render('formularioProducto'); 
+app.get('/modules/sales', (req, res) => {
+  res.render('modules/sales');
+});
+app.get('/modules/inventory', (req, res) => {
+  res.render('modules/inventory');
+});
+app.get('/modules/history', (req, res) => {
+  res.render('modules/history');
 });
 
-app.get('/adminProductos', (req, res) => {
-  res.render('adminProductos');
+
+
+app.get('/api/productos', async (req, res) => {
+  try {
+    const productos = await Product.find();
+    res.json({ productos });
+  } catch (error) {
+    console.error('Error al cargar productos desde la base de datos:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
 });
 
-app.get('/adminPedidos', (req, res) => {
-  res.render('adminPedidos');
-});
+
 
 app.get('/login', (req, res) => {
   res.render('login');
