@@ -36,6 +36,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use((req, res, next) => {
+  res.locals.isLoggedIn = req.session.isLoggedIn || false;
+  next();
+});
+
 // Configuración de Passport
 passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
   User.findOne({ email: email })
@@ -150,10 +155,7 @@ app.get('/', (req, res) => {
       res.status(500).send('Error interno del servidor');
     });
 });
-app.use((req, res, next) => {
-  res.locals.isLoggedIn = req.session.isLoggedIn || false;
-  next();
-});
+
 
 
 
