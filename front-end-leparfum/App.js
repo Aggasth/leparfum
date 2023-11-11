@@ -178,7 +178,7 @@ app.get('/', (req, res) => {
 
 // Registrarse
 app.post('/register', (req, res) => {
-  const { email, password, celular, name } = req.body;
+  const { email, password, celular, name, direccion } = req.body;
 
   // Verificar si el correo electrónico ya está registrado
   User.findOne({ email: email })
@@ -192,7 +192,8 @@ app.post('/register', (req, res) => {
           email: email,
           password: password,
           celular: celular,
-          name: name
+          name: name,
+          direccion: direccion
         });
 
         newUser.save()
@@ -229,7 +230,10 @@ app.get('/suscripcion', (req, res) => {
 
 //Carrito
 app.get('/shopping-cart', (req, res) => {
-  res.render('shopping-cart', { isLoggedIn: req.isAuthenticated() });
+  const userInfo = req.user ? req.user : null;
+  console.log("informacion del usuario: ", userInfo);
+  // Renderizar la vista y pasar la información del usuario
+  res.render('shopping-cart', { user: userInfo, isLoggedIn: req.isAuthenticated() });
 });
 
 app.get('/success-suscripcion', (req, res) => {
