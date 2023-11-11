@@ -35,9 +35,10 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 app.use((req, res, next) => {
-  res.locals.isLoggedIn = req.session.isLoggedIn || false;
+  res.locals.isLoggedIn = req.isAuthenticated();
   next();
 });
 
@@ -47,11 +48,12 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
     .then(user => {
       if (!user) return done(null, false, { message: 'Correo electrónico no registrado' });
 
-      bcrypt.compare(password, user.password, (err, isMatch) => {
-        if (err) throw err;
-        if (isMatch) return done(null, user);
-        else return done(null, false, { message: 'Contraseña incorrecta' });
-      });
+      // Comparar la contraseña sin encriptar
+      if (password === user.password) {
+        return done(null, user);
+      } else {
+        return done(null, false, { message: 'Contraseña incorrecta' });
+      }
     })
     .catch(err => console.error(err));
 }));
@@ -69,6 +71,7 @@ passport.deserializeUser((id, done) => {
       done(err);
     });
 });
+
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -106,7 +109,10 @@ app.get('/template-product/:productId', (req, res) => {
 
 
 app.get('/login', (req, res) => {
+  req.session.isLoggedIn = true;
   res.render('login', { isLoggedIn: req.session.isLoggedIn });
+  console.log("usuario autenticado", req.isAuthenticated());
+  console.log("usuario sesion", req.isAuthenticated());
 });
 
 app.get('/register', (req, res) => {
@@ -135,15 +141,20 @@ app.get('/info-page', (req, res) => {
 });
 
 
-app.get('/', (req, res) => {
+app.get('/', isAuthenticated, (req, res) => {
   const errorMessage = req.flash('error')[0]; // Recupera el mensaje de error flash
-  // Cargar 4 productos en la variable "oferta"
+  console.log("res.locals:", res.locals);
+  console.log("isLoggedIn en la ruta principal:", res.locals.isLoggedIn);
+  console.log("info sesion", req.session.passport.user);
+   // Agrega este log// Cargar 4 productos en la variable "oferta"
   Product.find().limit(4)
     .then(oferta => {
       // Luego, carga 10 productos en la variable "listado"
       Product.find().limit(10)
         .then(listado => {
-          res.render('landing', { oferta, listado, errorMessage, isLoggedIn: req.session.isLoggedIn }); // Pasa el mensaje de error a la vista
+          res.render('landing', { oferta, listado, errorMessage, isLoggedIn: req.isAuthenticated()});
+
+           // Pasa el mensaje de error a la vista
         })
         .catch(err => {
           console.error(err);
@@ -170,30 +181,29 @@ app.post('/register', (req, res) => {
         // El correo electrónico ya está registrado
         res.render('register', { message: 'El correo electrónico ya está registrado' });
       } else {
-        // Crear un nuevo usuario
-        bcrypt.hash(password, 10, (err, hash) => {
-          if (err) throw err;
-          const newUser = new User({
-            email: email,
-            password: hash,
-            celular: celular,
-            name: name
-          });
-          newUser.save()
-            .then(() => {
-              res.redirect('/login');
-            })
-            .catch(err => console.error(err));
+        // Crear un nuevo usuario sin encriptar la contraseña
+        const newUser = new User({
+          email: email,
+          password: password,
+          celular: celular,
+          name: name
         });
+
+        newUser.save()
+          .then(() => {
+            res.redirect('/login');
+          })
+          .catch(err => console.error(err));
       }
     })
     .catch(err => console.error(err));
 });
 
+
 // Cerrar sesión
 app.get('/logout', (req, res) => {
 req.logout();
-res.redirect('/');
+res.redirect('/login');
 });
 
 // Dashboard protegido
@@ -216,7 +226,11 @@ app.post('/login', passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/login-error',
   failureFlash: true
-}));
+}), (req, res) => {
+  console.log("usuario autenticado", req.user);
+  console.log("usuario sesion", req.session);
+  res.redirect('/'); // Redirige después de imprimir para verificar si la sesión persiste en otras rutas
+});
 
 
 // Ruta para cargar tipos
