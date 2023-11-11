@@ -93,7 +93,7 @@ app.get('/template-product/:productId', (req, res) => {
         Product.find({ tags: { $in: tagsArray }, _id: { $ne: productId } }) // Encuentra productos con etiquetas similares, excluyendo el producto actual
           .then(similarProducts => {
             // Renderiza la vista "template-product" y pasa los detalles del producto y productos similares
-            res.render('template-product', { product, similarProducts, isLoggedIn: req.session.isLoggedIn });
+            res.render('template-product', { product, similarProducts, isLoggedIn: req.isAuthenticated() });
           })
           .catch(err => {
             console.error(err);
@@ -116,17 +116,17 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  res.render('register');
+  res.render('register', { isLoggedIn: req.isAuthenticated() });
 });
 
 app.get('/login-error', (req, res) => {
-  res.render('login-error', { isLoggedIn: req.session.isLoggedIn });
+  res.render('login-error', { isLoggedIn: req.isAuthenticated() });
 });
 
 app.get('/perfumeria', (req, res) => {
   Product.find()
     .then(productos => {
-      res.render('perfumeria', { productos, isLoggedIn: req.session.isLoggedIn });
+      res.render('perfumeria', { productos, isLoggedIn: req.isAuthenticated() });
     })
   .catch(err => {
       console.error(err);
@@ -137,24 +137,29 @@ app.get('/perfumeria', (req, res) => {
 
 
 app.get('/info-page', (req, res) => {
-  res.render('info-page', { isLoggedIn: req.session.isLoggedIn });
+  res.render('info-page', { isLoggedIn: req.isAuthenticated() });
 });
 
 
-app.get('/', isAuthenticated, (req, res) => {
-  const errorMessage = req.flash('error')[0]; // Recupera el mensaje de error flash
+app.get('/', (req, res) => {
+  const errorMessage = req.flash('error')[0];
   console.log("res.locals:", res.locals);
   console.log("isLoggedIn en la ruta principal:", res.locals.isLoggedIn);
-  console.log("info sesion", req.session.passport.user);
-   // Agrega este log// Cargar 4 productos en la variable "oferta"
+  
+  // Verifica si el usuario está autenticado antes de acceder a req.session.passport.user
+  const userId = req.isAuthenticated() ? req.session.passport.user : null;
+
+  console.log("info sesion", userId);
+
+  // Cargar 4 productos en la variable "oferta"
   Product.find().limit(4)
     .then(oferta => {
       // Luego, carga 10 productos en la variable "listado"
       Product.find().limit(10)
         .then(listado => {
-          res.render('landing', { oferta, listado, errorMessage, isLoggedIn: req.isAuthenticated()});
+          res.render('landing', { oferta, listado, errorMessage, isLoggedIn: req.isAuthenticated(), userId });
 
-           // Pasa el mensaje de error a la vista
+          // Pasa el mensaje de error a la vista
         })
         .catch(err => {
           console.error(err);
@@ -170,6 +175,7 @@ app.get('/', isAuthenticated, (req, res) => {
 
 
 
+
 // Registrarse
 app.post('/register', (req, res) => {
   const { email, password, celular, name } = req.body;
@@ -179,7 +185,7 @@ app.post('/register', (req, res) => {
     .then(user => {
       if (user) {
         // El correo electrónico ya está registrado
-        res.render('register', { message: 'El correo electrónico ya está registrado' });
+        res.render('register', { message: 'El correo electrónico ya está registrado', isLoggedIn: req.isAuthenticated() });
       } else {
         // Crear un nuevo usuario sin encriptar la contraseña
         const newUser = new User({
@@ -191,7 +197,7 @@ app.post('/register', (req, res) => {
 
         newUser.save()
           .then(() => {
-            res.redirect('/login');
+            res.redirect('/login', { isLoggedIn: req.isAuthenticated() });
           })
           .catch(err => console.error(err));
       }
@@ -201,24 +207,33 @@ app.post('/register', (req, res) => {
 
 
 // Cerrar sesión
+// Cerrar sesión
 app.get('/logout', (req, res) => {
-req.logout();
-res.redirect('/login');
+  req.logout((err) => {
+    if (err) {
+      console.error(err);
+    }
+    res.redirect('/');
+  });
 });
 
+
 // Dashboard protegido
-app.get('/account', (req, res) => {
-  res.render('account');
+app.get('/account', isAuthenticated, (req, res) => {
+  res.render('account', { isLoggedIn: req.isAuthenticated() });
 });
 
 app.get('/suscripcion', (req, res) => {
-  res.render('suscripcion');
+  res.render('suscripcion', { isLoggedIn: req.isAuthenticated() });
 });
+
+//Carrito
 app.get('/shopping-cart', (req, res) => {
-  res.render('shopping-cart');
+  res.render('shopping-cart', { isLoggedIn: req.isAuthenticated() });
 });
+
 app.get('/success-suscripcion', (req, res) => {
-  res.render('success-suscripcion');
+  res.render('success-suscripcion', { isLoggedIn: req.isAuthenticated() });
 });
   
 // Iniciar sesión
@@ -260,10 +275,13 @@ app.get('/api/marcas', async (req, res) => {
 // Middleware para verificar la autenticación
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-    return next();
+    res.locals.isLoggedIn = true;
+  } else {
+    res.locals.isLoggedIn = false;
   }
-  res.redirect('/');
-  }
+  return next();
+}
+
 
 
 const PORT = process.env.PORT || 3000;
