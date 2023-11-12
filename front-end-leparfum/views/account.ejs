@@ -33,7 +33,7 @@
                                 </label>
                             </div>
                             <div class="col-auto">
-                                <input class="form-control" id="nameUser" placeholder="Juan Perez Castro" readonly>
+                                <input class="form-control" id="nameUser" placeholder="<%=user.name%>" readonly>
                                     <!--Traer el nombre del usuario logeado-->
                                 </input>
                             </div>
@@ -43,20 +43,11 @@
                                 </label>
                             </div>
                             <div class="col-auto">
-                                <input class="form-control" id="emailUser" placeholder="example@domain.cl" readonly>
+                                <input class="form-control" id="emailUser" placeholder="<%=user.email%>" readonly>
                                     <!--Traer el correo del usuario logeado-->
                                 </input>
                             </div>
-                            <div class="col-auto">
-                                <label for="paswordUser">
-                                    Contraseña
-                                </label>
-                            </div>
-                            <div class="col-auto">
-                                <input class="form-control" id="paswordUser" type="password" placeholder="************" readonly>
-                                    <!--Traer la password del usuario logeado todo cifrado-->
-                                </input>
-                            </div>
+                            
                             <div class="col-12 text-end pe-5">
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#generalModal">
                                     Editar
@@ -109,7 +100,7 @@
                                 </label>
                             </div>
                             <div class="col-auto">
-                                <input class="form-control" id="phoneUser" placeholder="+56991234567" readonly>
+                                <input class="form-control" id="phoneUser" placeholder="<%=user.celular%>" readonly>
                                     <!--Traer el celular del usuario logeado-->
                                 </input>
                             </div>
@@ -153,7 +144,7 @@
                                 </label>
                             </div>
                             <div class="col-auto">
-                                <input class="form-control" id="addressUser" placeholder="Los Alpes 01823, Temuco" readonly>
+                                <input class="form-control" id="addressUser" placeholder="<%=user.direccion%>" readonly>
                                     <!--Traer la direccion del usuario logeado-->
                                 </input>
                             </div>

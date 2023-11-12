@@ -135,24 +135,19 @@
         </div>
       </div>
       <div class="row mt-5 container">
-        <div class="col-12">
-          <p class="fs-5">PRODUCTOS SIMILARES</p>
-          <div>
-            <% similarProducts.forEach(producto => { %>
-              <div class="col-lg-3 col-md-6 col-sm-6 d-grid justify-content-center align-content-between">
-                <div class="card card-product border-0">
-                  <a href="/template-product/<%= producto._id %>"><img class="img img-product" src="<%= producto.imagen %>" alt="<%= producto.nombre %>"></a>
-                  <div class="card-header fw-bold" style="color: rgb(131, 103, 103)">
-                    $<%= producto.precio %>
-                  </div>
-                  <div class="card-body">
-                    <p class="card-text"><%= producto.nombreProducto %></p>
-                  </div>
-                </div>
+        <% similarProducts.forEach(producto => { %>
+          <div class="col-lg-3 col-md-6 col-sm-6 d-grid justify-content-center align-content-between">
+            <div class="card card-product border-0">
+              <a href="/template-product/<%= producto._id %>"><img class="img img-product" src="<%= producto.imagen %>" alt="<%= producto.nombre %>"></a>
+              <div class="card-header fw-bold" style="color: rgb(131, 103, 103)">
+                $<%= producto.precio %>
               </div>
-            <% }); %>
+              <div class="card-body">
+                <p class="card-text"><%= producto.nombreProducto %></p>
+              </div>
+            </div>
           </div>
-        </div>
+        <% }); %>
       </div>
     </div>
   </section>
