@@ -117,7 +117,8 @@
             <strong>Género:</strong>
             <%= product.sexo %>
           </p>
-          <form action="">
+          <form action="/addToCart" method="POST">
+            <input type="hidden" name="productId" value="<%= product._id %>">
             <div class="row">
               <div class="col-2">
                 <select class="form-select" name="cantidad" id="cantidad">
@@ -128,7 +129,7 @@
                 </select>
               </div>
               <div class="col-10">
-                <button onclick="" class="btn btn-danger w-100 rounded-0" value="<%= product._id %>">Añadir al carrito</button>
+                <button type="submit" class="btn btn-danger w-100 rounded-0" value="<%= product._id %>">Añadir al carrito</button>
               </div>
             </div>
           </form>

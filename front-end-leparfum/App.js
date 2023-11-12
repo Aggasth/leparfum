@@ -94,6 +94,7 @@ app.get('/template-product/:productId', (req, res) => {
           .then(similarProducts => {
             // Renderiza la vista "template-product" y pasa los detalles del producto y productos similares
             res.render('template-product', { product, similarProducts, isLoggedIn: req.isAuthenticated() });
+            console.log("idproducto", product);
           })
           .catch(err => {
             console.error(err);
@@ -232,8 +233,64 @@ app.get('/suscripcion', (req, res) => {
 app.get('/shopping-cart', (req, res) => {
   const userInfo = req.user ? req.user : null;
   console.log("informacion del usuario: ", userInfo);
-  // Renderizar la vista y pasar la información del usuario
-  res.render('shopping-cart', { user: userInfo, isLoggedIn: req.isAuthenticated() });
+
+  // Obtener productos del carrito desde la sesión
+  const cartProducts = req.session.cart || [];
+
+  console.log("Productos en el carrito", cartProducts);
+
+  // Verifica si hay productos en el carrito
+  if (cartProducts.length > 0) {
+    // Mapea los productos del carrito a un array de promesas para buscar la información del producto
+    const productPromises = cartProducts.map(cartProduct => {
+      return Product.findById(cartProduct.productId)
+        .then(product => {
+          if (!product) {
+            // Manejar el caso en que el producto no se encuentra
+            return Promise.reject('Producto no encontrado');
+          } else {
+            return {
+              product,
+              quantity: cartProduct.quantity
+            };
+          }
+        });
+    });
+
+    // Ejecuta todas las promesas en paralelo
+    Promise.all(productPromises)
+      .then(productsInfo => {
+        // Renderiza la vista y pasa la información del usuario y los productos en el carrito
+        res.render('shopping-cart', { user: userInfo, productsInfo, isLoggedIn: req.isAuthenticated() });
+      })
+      .catch(error => {
+        // Manejar errores
+        console.error(error);
+        res.status(500).send('Error interno del servidor');
+      });
+  } else {
+    // Renderiza la vista con un carrito vacío
+    res.render('shopping-cart', { user: userInfo, cartProducts, isLoggedIn: req.isAuthenticated() });
+  }
+});
+
+
+
+app.post('/addToCart', (req, res) => {
+  const productId = req.body.productId;
+  const quantity = req.body.cantidad;
+  if (!req.session.cart) {
+    // Si no hay carrito, crea uno vacío
+    req.session.cart = [];
+  }
+
+  // Agrega el producto al carrito
+  req.session.cart.push({ productId, quantity });
+ // let cartProducts = [productId, quantity];
+  //console.log("Productos a agregar al carrito", cartProducts);
+ // console.log("carrito actual", req.session.cart.push({ productId, quantity }));
+  // Redirige a la página del carrito o realiza alguna otra acción según tus necesidades.
+  res.redirect('/shopping-cart');
 });
 
 app.get('/success-suscripcion', (req, res) => {
