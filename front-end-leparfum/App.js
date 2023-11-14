@@ -260,8 +260,15 @@ app.get('/shopping-cart', (req, res) => {
     // Ejecuta todas las promesas en paralelo
     Promise.all(productPromises)
       .then(productsInfo => {
-        // Renderiza la vista y pasa la información del usuario y los productos en el carrito
-        res.render('shopping-cart', { user: userInfo, productsInfo, isLoggedIn: req.isAuthenticated() });
+        // Calcular el total
+        const total = productsInfo.reduce((acc, productInfo) => {
+          return acc + (productInfo.product.precio * productInfo.quantity);
+        }, 0);
+
+        console.log("Total de la compra:", total);
+
+        // Renderiza la vista y pasa la información del usuario, los productos en el carrito y el total
+        res.render('shopping-cart', { user: userInfo, productsInfo, total, isLoggedIn: req.isAuthenticated() });
       })
       .catch(error => {
         // Manejar errores
@@ -273,6 +280,7 @@ app.get('/shopping-cart', (req, res) => {
     res.render('shopping-cart', { user: userInfo, cartProducts, isLoggedIn: req.isAuthenticated() });
   }
 });
+
 
 
 
