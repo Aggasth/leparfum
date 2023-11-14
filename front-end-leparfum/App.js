@@ -13,6 +13,7 @@ const path = require('path');
 const flash = require('connect-flash');
 const { name } = require('ejs');
 const { MercadoPagoConfig, Payment } = require('mercadopago');
+const { float } = require('webidl-conversions');
 
 
 
@@ -299,7 +300,7 @@ app.get('/checkout', async (req, res) => {
       items: [
         {
           title: "Laptop", // Puedes cambiar esto al nombre de tu producto
-          unit_price: Number(total),
+          unit_price: float(total),
           currency_id: "CLP",
           quantity: 1,
         },
@@ -309,11 +310,11 @@ app.get('/checkout', async (req, res) => {
         failure: 'https://tu-web.com/failure',
         pending: 'https://tu-web.com/pending',
       },
-      transaction_amount: total,
+      transaction_amount: float(total),
        // Agrega el transaction_amount aquí
       auto_return: 'approved',
     };
-    console.log("transaccion amount es:", Number(total))
+    console.log("transaccion amount es:", float(total))
 
     const response = await payment.create(preference);
 
