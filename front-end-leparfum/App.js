@@ -5,6 +5,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const User = require('./models/User');
+const Preferences = require('./models/Preferences');
+const { getActivityLabel, getSeasonLabel, getEventLabel, getColorLabel } = require('./public/Preferencias');
 const Product = require('./models/Product');
 const Types = require('./models/Types');
 const Brand = require('./models/Brand');
@@ -158,35 +160,53 @@ app.use((req, res, next) => {
 
 
 // Registrarse
-app.post('/register', (req, res) => {
-  const { email, password, celular, name } = req.body;
+app.post('/register', async (req, res) => {
+  const { email, password, celular, name, sexo, actividad, estacion, evento, color } = req.body;
 
   // Verificar si el correo electrónico ya está registrado
-  User.findOne({ email: email })
-    .then(user => {
-      if (user) {
-        // El correo electrónico ya está registrado
-        res.render('register', { message: 'El correo electrónico ya está registrado' });
-      } else {
-        // Crear un nuevo usuario
-        bcrypt.hash(password, 10, (err, hash) => {
-          if (err) throw err;
-          const newUser = new User({
-            email: email,
-            password: hash,
-            celular: celular,
-            name: name
-          });
-          newUser.save()
-            .then(() => {
-              res.redirect('/login');
-            })
-            .catch(err => console.error(err));
-        });
-      }
-    })
-    .catch(err => console.error(err));
+  try {
+    const existingUser = await User.findOne({ email: email });
+
+    if (existingUser) {
+      // El correo electrónico ya está registrado
+      return res.render('register', { message: 'El correo electrónico ya está registrado' });
+    }
+
+    // Crear un nuevo usuario
+    const newUser = new User({
+      email: email,
+      password: await bcrypt.hash(password, 10),
+      celular: celular,
+      name: name
+    });
+
+    // Guardar el usuario para obtener su ID
+    await newUser.save();
+
+    // Crear un nuevo documento Preferences
+    const newPreferences = new Preferences({
+      usuario: newUser._id, // Asociar las preferencias con el usuario recién creado
+      sexo: sexo,
+      actividad: actividad,
+      estacion: estacion,
+      evento: evento,
+      color: color
+    });
+
+    // Guardar las preferencias
+    await newPreferences.save();
+
+    // Asociar las preferencias con el usuario
+    newUser.preferences = newPreferences._id;
+    await newUser.save();
+
+    res.redirect('/login');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error interno del servidor');
+  }
 });
+
 
 // Cerrar sesión
 app.get('/logout', (req, res) => {
@@ -195,8 +215,31 @@ res.redirect('/');
 });
 
 // Dashboard protegido
-app.get('/account', (req, res) => {
-  res.render('account');
+app.get('/account', async (req, res) => {
+  try {
+    // Verificar si el usuario está autenticado
+    if (!req.isAuthenticated()) {
+      // Si el usuario no está autenticado, redirige a la página de inicio de sesión
+      return res.redirect('/login');
+    }
+
+    // Obtén el usuario actual desde la sesión
+    const user = req.user;
+
+    // Verificar si el usuario tiene un ID antes de intentar acceder a sus preferencias
+    if (!user || !user._id) {
+      throw new Error('Usuario no válido');
+    }
+
+    // Obtén las preferencias del usuario si están disponibles
+    const preferences = await Preferences.findOne({ usuario: user._id });
+
+    // Renderiza la vista de cuentas y pasa el usuario y sus preferencias
+    res.render('account', { user, preferences, getActivityLabel, getSeasonLabel, getEventLabel, getColorLabel });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error interno del servidor');
+  }
 });
 
 app.get('/suscripcion', (req, res) => {
