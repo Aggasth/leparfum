@@ -12,6 +12,9 @@ const config = require('./config');
 const path = require('path');
 const flash = require('connect-flash');
 const { name } = require('ejs');
+const { MercadoPagoConfig, Payment } = require('mercadopago');
+
+
 
 const app = express();
 app.use(flash());
@@ -25,7 +28,8 @@ app.use('/public', express.static('public', { 'Content-Type': 'text/javascript' 
 mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB conectado'))
   .catch(err => console.error(err));
-
+  const client = new MercadoPagoConfig({ accessToken: 'TEST-6035887927031399-111415-7066aae8d2ae1ccb227f669af8cc6497-318354987', options: { timeout: 5000 }});
+  const payment = new Payment(client);
 // Configuración de Express
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
@@ -234,7 +238,7 @@ app.get('/shopping-cart', (req, res) => {
   const userInfo = req.user ? req.user : null;
   console.log("informacion del usuario: ", userInfo);
 
-  // Obtener productos del carrito desde la sesión
+  // Obtener productos de/l carrito desde la sesión
   const cartProducts = req.session.cart || [];
 
   console.log("Productos en el carrito", cartProducts);
@@ -266,7 +270,8 @@ app.get('/shopping-cart', (req, res) => {
         }, 0);
 
         console.log("Total de la compra:", total);
-
+       // req.session.cart.push = ({ productId, quantity, total });;
+       req.session.total = total;
         // Renderiza la vista y pasa la información del usuario, los productos en el carrito y el total
         res.render('shopping-cart', { user: userInfo, productsInfo, total, isLoggedIn: req.isAuthenticated() });
       })
@@ -281,6 +286,43 @@ app.get('/shopping-cart', (req, res) => {
   }
 });
 
+app.get('/checkout', async (req, res) => {
+  
+
+  try {
+    const total = req.session.total;
+
+  if (!total) {
+    return res.status(400).send('Total de compra no disponible');
+  }
+    const preference = {
+      items: [
+        {
+          title: "Laptop", // Puedes cambiar esto al nombre de tu producto
+          unit_price: Number(total),
+          currency_id: "CLP",
+          quantity: 1,
+        },
+      ],
+      back_urls: {
+        success: 'https://tu-web.com/success',
+        failure: 'https://tu-web.com/failure',
+        pending: 'https://tu-web.com/pending',
+      },
+      transaction_amount: total,
+       // Agrega el transaction_amount aquí
+      auto_return: 'approved',
+    };
+    console.log("transaccion amount es:", Number(total))
+
+    const response = await payment.create(preference);
+
+    res.redirect(response.body.init_point);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al procesar el pago');
+  }
+});
 
 
 
