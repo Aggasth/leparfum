@@ -279,7 +279,7 @@ app.get('/shopping-cart', (req, res) => {
   const userInfo = req.user ? req.user : null;
   console.log("informacion del usuario: ", userInfo);
 
-  // Obtener productos de/l carrito desde la sesión
+  // Obtener productos del carrito desde la sesión
   const cartProducts = req.session.cart || [];
 
   console.log("Productos en el carrito", cartProducts);
@@ -327,43 +327,54 @@ app.get('/shopping-cart', (req, res) => {
   }
 });
 
-app.get('/checkout', async (req, res) => {
+app.get('/checkout/:total/:carrito', async (req, res) => {
   
 
   try {
-    const total = req.session.total;
+    const total = req.params.total;
+    const cart = req.params.carrito;
+    
     const formattedTotal = total.toString().replace('.', ',');
+
+    if (!total || !cart) {
+      return res.status(400).send('Total de compra o carrito no disponibles');
+    }
+
+  
+    // Construir el array de items con los productos del carrito
+    const items = cart.map((producto, index) => {
+      return {
+        title: producto.nombreProducto,
+        description: producto.descripcion,
+        unit_price: producto.precio,
+        currency_id: "CLP",
+        quantity: producto.cantidad,
+      };
+    });
 
 
   if (!total) {
     return res.status(400).send('Total de compra no disponible');
   }
     let preference = {
-      items: [
-        {
-          id: 1,
-          title: "Laptop", // Puedes cambiar esto al nombre de tu producto
-          description: "aaa",
-          unit_price: 22000,
-          currency_id: "CLP",
-          quantity: 1,
-        },
-      ],
+      items: items,
       back_urls: {
         success: 'localhost:3000',
         failure: 'https://tu-web.com/failure',
         pending: 'https://tu-web.com/pending',
       },
        // Agrega el transaction_amount aquí
-      transaction_amount: 22000,
+      transaction_amount: formattedTotal,
       transaction_amount_currency: "CLP",
       auto_return: 'approved',
       binary_mode: true
     };
-    console.log("transaccion amount es:", total)
+    console.log("transaccion amount es:", formattedTotal);
     console.log("preferencia es : ", preference);
-    const response = await payment.create(preference);
+
+    const response = await mercadopago.preferences.create(preference);
     console.log("cuerpo de ", response.body);
+
     res.redirect(response.body.init_point);
   } catch (error) {
     console.error(error);
