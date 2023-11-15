@@ -50,19 +50,19 @@
                         <label for="name" class="col-form-label">Nombre:</label><br>
                     </div>
                     <div class="col-6 pe-4">
-                        <input type="text" id="name" class="form-control" placeholder="Juan Perez" disabled>
+                        <input type="text" id="name" class="form-control" placeholder="<%=user.name%>" disabled>
                     </div>
                     <div class="col-6">
                         <label for="contact" class="col-form-label">Contacto:</label>
                     </div>
                     <div class="col-6 pe-4">
-                        <input type="text" id="contact" class="form-control" placeholder="769-123-455" disabled>
+                        <input type="text" id="contact" class="form-control" placeholder="<%=user.celular%>" disabled>
                     </div>
                     <div class="col-6">
                         <label for="address" class="col-form-label">Dirección:</label>
                     </div>
                     <div class="col-6 pe-4">
-                        <input type="text" id="name" class="form-control" placeholder="Los Alpes 90101, Temuco" disabled>
+                        <input type="text" id="name" class="form-control" placeholder="<%=user.direccion%>" disabled>
                     </div>
                 </div>
                 <p class="fs-4">Productos seleccionados</p>
@@ -76,31 +76,22 @@
                     </thead>
                     <tbody>
                       <!-- Filas de productos se agregarán aquí -->
+                      <% productsInfo.forEach((productInfo, index) => { %>
                         <tr>
-                            <th scope="row">1</th>
-                            <td><img src="img/products/1.webp" alt="" width="100px"></td>
-                            <td>Producto de Testing</td>
-                            <td>$19.990 </td>
-                            <td>Cantidad: 1</td>
-                            <td>
-                                <button type="button" class="btn "><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 30 30">
-                                    <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z"></path>
-                                    </svg></button>
-                            </td>
+                          <th scope="row"><%= index + 1 %></th>
+                          <td><img src="<%= productInfo.product.imagen %>" alt="" width="50"></td>
+                          <td><%= productInfo.product.nombreProducto %></td>
+                          <td>$<%= productInfo.product.precio %></td>
+                          <td>Cantidad: <%= productInfo.quantity %></td>
+                          <td>
+                            <button type="button" class="btn ">
+                              <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 30 30">
+                                <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z"></path>
+                              </svg>
+                            </button>
+                          </td>
                         </tr>
-
-                        <tr>
-                            <th scope="row">1</th>
-                            <td><img src="img/products/1.webp" alt="" width="100px"></td>
-                            <td>Producto de Testing</td>
-                            <td>$19.990 </td>
-                            <td>Cantidad: 1</td>
-                            <td>
-                                <button type="button" class="btn "><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 30 30">
-                                    <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z"></path>
-                                    </svg></button>
-                            </td>
-                        </tr>
+                      <% }); %>                      
                     </tbody>
                   </table>
                   
@@ -114,7 +105,7 @@
                                 <p class="fs-6">Productos</p>
                             </div>
                             <div class="col-6 text-end">
-                                <p class="fs-6 text-secondary">$59.990</p>
+                                <p class="fs-6 text-secondary">$<%=total%></p>
                                 <!--Se suman los precios de los productos y se imprime aqui arriba-->
                             </div>
                         </div>
@@ -133,14 +124,16 @@
                                 <p class="fs-6">Total</p>
                             </div>
                             <div class="col-6 text-end">
-                                <p class="fs-6 text-success">$59.990</p>
+                                <p class="fs-6 text-success">$<%=total%></p>
                                 <!--Se debe cargar con la suma de los totales de los productos-->
                             </div>
                         </div>
                     </div>
+                    <form action="/checkout" method="GET">
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary rounded-1 shadow w-100">Ir a pagar</button>
                     </div>
+                  </form>
                     <div class="col-12 mt-4">
                         <ul class="list-group list-group-horizontal list-unstyled"> 
                             <li class="list-group-item">

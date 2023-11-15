@@ -117,7 +117,8 @@
             <strong>Género:</strong>
             <%= product.sexo %>
           </p>
-          <form action="">
+          <form action="/addToCart" method="POST">
+            <input type="hidden" name="productId" value="<%= product._id %>">
             <div class="row">
               <div class="col-2">
                 <select class="form-select" name="cantidad" id="cantidad">
@@ -128,31 +129,26 @@
                 </select>
               </div>
               <div class="col-10">
-                <button onclick="" class="btn btn-danger w-100 rounded-0" value="<%= product._id %>">Añadir al carrito</button>
+                <button type="submit" class="btn btn-danger w-100 rounded-0" value="<%= product._id %>">Añadir al carrito</button>
               </div>
             </div>
           </form>
         </div>
       </div>
       <div class="row mt-5 container">
-        <div class="col-12">
-          <p class="fs-5">PRODUCTOS SIMILARES</p>
-          <div>
-            <% similarProducts.forEach(producto => { %>
-              <div class="col-lg-3 col-md-6 col-sm-6 d-grid justify-content-center align-content-between">
-                <div class="card card-product border-0">
-                  <a href="/template-product/<%= producto._id %>"><img class="img img-product" src="<%= producto.imagen %>" alt="<%= producto.nombre %>"></a>
-                  <div class="card-header fw-bold" style="color: rgb(131, 103, 103)">
-                    $<%= producto.precio %>
-                  </div>
-                  <div class="card-body">
-                    <p class="card-text"><%= producto.nombreProducto %></p>
-                  </div>
-                </div>
+        <% similarProducts.forEach(producto => { %>
+          <div class="col-lg-3 col-md-6 col-sm-6 d-grid justify-content-center align-content-between">
+            <div class="card card-product border-0">
+              <a href="/template-product/<%= producto._id %>"><img class="img img-product" src="<%= producto.imagen %>" alt="<%= producto.nombre %>"></a>
+              <div class="card-header fw-bold" style="color: rgb(131, 103, 103)">
+                $<%= producto.precio %>
               </div>
-            <% }); %>
+              <div class="card-body">
+                <p class="card-text"><%= producto.nombreProducto %></p>
+              </div>
+            </div>
           </div>
-        </div>
+        <% }); %>
       </div>
     </div>
   </section>

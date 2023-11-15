@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
   preferences: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Preferences'
-  }
+  },
+  direccion: String,
 });
 
 module.exports = mongoose.model('User', userSchema);
