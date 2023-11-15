@@ -179,23 +179,76 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Contenido para la sección Preferencias -->
                     <div id="preferences" class="content col-12">
-                        <!-- Contenido para la sección Preferencias -->
+                        <p class="border-top">Por favor, seleccione sus preferencias</p>
+                    
+                        <div class="form-outline mb-3">
+                            <label for="q1">¿Cual es tu sexo?</label>
+                            <p>
+                                <%= preferences.sexo==='masculino' ? 'Masculino' : 'Femenino' %>
+                            </p>
+                        </div>
+                    
+                        <div class="form-outline mb-3">
+                            <label for="q2">¿Qué actividad disfrutas más en tu tiempo libre?</label>
+                            <p>
+                                <%= getActivityLabel(preferences.actividad) %>
+                            </p>
+                        </div>
+                    
+                        <div class="form-outline mb-3">
+                            <label for="q3">¿Cuál es tu estación del año favorita?</label>
+                            <p>
+                                <%= getSeasonLabel(preferences.estacion) %>
+                            </p>
+                        </div>
+                    
+                        <div class="form-outline mb-3">
+                            <label for="q4">¿Qué tipo de eventos sociales sueles asistir con frecuencia?</label>
+                            <p>
+                                <%= getEventLabel(preferences.evento) %>
+                            </p>
+                        </div>
+                    
+                        <div class="form-outline mb-3">
+                            <label for="q5">¿Gama de colores favoritos?</label>
+                            <p>
+                                <%= getColorLabel(preferences.color) %>
+                            </p>
+                        </div>
+                    
                         <p class="fs-5 border-bottom">Preferencias</p>
                         <div class="row g-2 align-items-center mb-5">
                             <div class="col-auto">
-                                <label for="addressUser">
-                                    Listado de Preferencias
-                                </label>
+                                <label for="addressUser">Listado de Preferencias</label>
                             </div>
                             <div id="tipoContainer" class="col-auto">
-                                <!--Se rellena automaticamente desde el filtro.js-->
+                                <% if (preferences && Object.keys(preferences).length> 0) { %>
+                                    <!-- Verifica si existen preferencias -->
+                                    <p><strong>Sexo:</strong>
+                                        <%= preferences.sexo %>
+                                    </p>
+                                    <p><strong>Actividad:</strong>
+                                        <%= getActivityLabel(preferences.actividad) %>
+                                    </p>
+                                    <p><strong>Estación:</strong>
+                                        <%= getSeasonLabel(preferences.estacion) %>
+                                    </p>
+                                    <p><strong>Evento:</strong>
+                                        <%= getEventLabel(preferences.evento) %>
+                                    </p>
+                                    <p><strong>Color:</strong>
+                                        <%= getColorLabel(preferences.color) %>
+                                    </p>
+                                    <% } else { %>
+                                        <!-- Si no hay preferencias, muestra un mensaje -->
+                                        <p>No se encontraron preferencias para este usuario.</p>
+                                        <% } %>
                             </div>
                             <div class="col-12 text-end pe-5">
-                                <!--Este boton debe guardar las preferencias, hacer un update a las preferencias del usuario-->
-                                <button class="btn btn-success">
-                                    Guardar
-                                </button>
+                                <!-- Este botón debe guardar las preferencias, hacer un update a las preferencias del usuario -->
+                                <button class="btn btn-success">Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -203,7 +256,7 @@
             </div>
         </div>
     </div>
-    
+   
   </section>
   
   <%- include ('../modules/footer.ejs') %>
