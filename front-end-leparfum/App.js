@@ -332,32 +332,38 @@ app.get('/checkout', async (req, res) => {
 
   try {
     const total = req.session.total;
+    const formattedTotal = total.toString().replace('.', ',');
+
 
   if (!total) {
     return res.status(400).send('Total de compra no disponible');
   }
-    const preference = {
+    let preference = {
       items: [
         {
+          id: 1,
           title: "Laptop", // Puedes cambiar esto al nombre de tu producto
-          unit_price: float(total),
+          description: "aaa",
+          unit_price: 22000,
           currency_id: "CLP",
           quantity: 1,
         },
       ],
       back_urls: {
-        success: 'https://tu-web.com/success',
+        success: 'localhost:3000',
         failure: 'https://tu-web.com/failure',
         pending: 'https://tu-web.com/pending',
       },
-      transaction_amount: float(total),
        // Agrega el transaction_amount aquí
+      transaction_amount: 22000,
+      transaction_amount_currency: "CLP",
       auto_return: 'approved',
+      binary_mode: true
     };
-    console.log("transaccion amount es:", float(total))
-
+    console.log("transaccion amount es:", total)
+    console.log("preferencia es : ", preference);
     const response = await payment.create(preference);
-
+    console.log("cuerpo de ", response.body);
     res.redirect(response.body.init_point);
   } catch (error) {
     console.error(error);
