@@ -235,7 +235,6 @@ app.post('/register', async (req, res) => {
 
 
 // Cerrar sesión
-// Cerrar sesión
 app.get('/logout', (req, res) => {
   req.logout((err) => {
     if (err) {
