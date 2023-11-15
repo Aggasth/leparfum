@@ -118,7 +118,7 @@ app.get('/template-product/:productId', (req, res) => {
 
 app.get('/login', (req, res) => {
   req.session.isLoggedIn = true;
-  res.render('login', { isLoggedIn: req.session.isLoggedIn });
+  res.render('login', { isLoggedIn: req.session.isLoggedIn, isLoggedIn: req.isAuthenticated() });
   console.log("usuario autenticado", req.isAuthenticated());
   console.log("usuario sesion", req.isAuthenticated());
 });
@@ -244,7 +244,7 @@ app.get('/logout', (req, res) => {
 
 
 // Dashboard protegido
-app.get('/account', async (req, res) => {
+app.get('/account', isAuthenticated, async (req, res) => {
   try {
     // Verificar si el usuario está autenticado
     if (!req.isAuthenticated()) {
@@ -269,7 +269,7 @@ app.get('/account', async (req, res) => {
     console.error(error);
     res.status(500).send('Error interno del servidor');
   }
-
+});
 app.get('/suscripcion', (req, res) => {
   res.render('suscripcion', { isLoggedIn: req.isAuthenticated() });
 });
@@ -432,7 +432,7 @@ function isAuthenticated(req, res, next) {
     res.locals.isLoggedIn = false;
   }
   return next();
-}
+};
 
 
 
