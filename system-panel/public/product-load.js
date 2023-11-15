@@ -18,8 +18,8 @@ async function cargarProductos() {
         marcaCell.textContent = producto.marca;
         const tagsCell = row.insertCell(3);
         tagsCell.textContent = producto.tipo.join(', ');
-  
-        // Crea una celda para el botón de editar con SVG
+        
+        // Crea una celda para el botón de editar
         const editarCell = row.insertCell(4);
         const editarButton = document.createElement("button");
         editarButton.className = "btn btn-warning";
@@ -28,13 +28,43 @@ async function cargarProductos() {
                 <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"/>
             </svg>
         `;
-        editarButton.addEventListener("click", () => {
-          // Lógica para manejar la edición, por ejemplo, abrir un formulario de edición
-          console.log(`Editar producto con ID ${producto.id}`);
-        });
+
+
+        function cargarDatosEnModal(producto) {
+          let descripcion = document.getElementById('descProductModal');
+          descripcion.value = producto.descripcion;
+          let stock = document.getElementById('stockProductModal');
+          stock.value = producto.cantidad;
+          
+          document.getElementById('idProductModal').value = producto._id;
+          document.getElementById('nameProductModal').value = producto.nombreProducto;
+          document.getElementById('imgProductModal').value = producto.imagen;
+          document.getElementById('sizeProductModal').value = producto.tamaño;
+          document.getElementById('priceProductModal').value = producto.precio;
+          document.getElementById('sexSelectModal').value = producto.sexo;
+        }
+
+        editarButton.setAttribute("data-bs-toggle", "modal");
+        editarButton.setAttribute("data-bs-target", "#editarModal");
+        editarButton.addEventListener("click", async () => {
+          try {
+             const response = await fetch(`/api/product-edit/${producto._id}`);
+             const data = await response.json();
+       
+             if (response.ok) {
+                cargarDatosEnModal(data.producto);
+                $('#editarModal').modal('show');
+             } else {
+                console.error('Error al obtener datos del producto para editar:', data.error);
+             }
+          } catch (error) {
+             console.error('Error de red:', error);
+          }
+       });
+       
         editarCell.appendChild(editarButton);
-  
-        // Crea una celda para el botón de eliminar con SVG
+
+        // Crea una celda para el botón de eliminar
         const eliminarCell = row.insertCell(5);
         const eliminarButton = document.createElement("button");
         eliminarButton.className = "btn btn-danger";
@@ -43,9 +73,9 @@ async function cargarProductos() {
                 <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
             </svg>
         `;
-        eliminarButton.addEventListener("click", () => {
+        eliminarButton.addEventListener("click", async () => {
           // Lógica para manejar la eliminación, por ejemplo, confirmar y luego enviar una solicitud de eliminación
-          console.log(`Eliminar producto con ID ${producto.id}`);
+          console.log(`Eliminar producto con ID ${producto._id}`);
         });
         eliminarCell.appendChild(eliminarButton);
       });
