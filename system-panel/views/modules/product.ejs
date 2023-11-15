@@ -3,47 +3,115 @@
 
 <head>
     <%- include ('../modules/head.ejs') %>
-    <script src="../public/product-load.js" ></script>
+    
+    
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <%- include ('../modules/sidebar.ejs') %>
-        </div>
-        <div class="col-10">
+  <%- include ('../modules/sidebar.ejs') %>
+    <div class="container ps-5 pt-5">
+        <div class="">
+          <div class="row">
+            <div class="col-12">
+              <div class="container text-start">
+                <div class="row align-items-start">
+                  <div class="col-6">
+                    <p class="fs-4 border-bottom mt-2">Agregar productos</p>
 
-            <table class="table" id="productTable">
-                <thead>
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Precio</th>
-                    <th>Marca</th>
-                    <th>Tags</th>
-                    <!-- Otras columnas de encabezado -->
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Filas de productos se agregarán aquí -->
-                </tbody>
-              </table>
-            <div class="tab-content" id="v-pills-tabContent">
-                <div class="tab-pane fade" id="v-pills-product" role="tabpanel" aria-labelledby="v-pills-product">
-                    <table class="table" id="productTable">
-                        <thead>
-                          <tr>
-                            <th>Nombre</th>
-                            <th>Precio</th>
-                            <th>Marca</th>
-                            <th>Tags</th>
-                            <!-- Otras columnas de encabezado -->
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <!-- Filas de productos se agregarán aquí -->
-                        </tbody>
-                      </table>
+                    <form method="POST" action="/api/product-add" class="border p-3" id="productForm">
+                      <div class="row">
+                        <div class="mb-3 col-12">
+                          <label for="nameProduct" class="form-label">Nombre del producto: </label>
+                          <input type="text" name="nameProduct" id="nameProduct" class="form-control" required/>
+                        </div>
+
+                        <div class="mb-3 col-6">
+                          <label for="imgProduct" class="form-label">URL de la imagen: </label>
+                          <input type="text" name="imgProduct" id="imgProduct" class="form-control" required/>
+                        </div>
+
+                        <div class="mb-3 col-6">
+                          <label for="imgProduct" class="form-label">Formato (Ml): </label>
+                          <select name="sizeProduct" id="sizeProduct" class="form-select">
+                            <option value="" selected disabled hidden>Seleccione el formato</option>
+                            <option value="10">10</option>
+                            <option value="100">100</option>
+                            <option value="125">125</option>
+                            <option value="200">200</option>
+                          </select>
+                        </div>
+ 
+                        <div class="mb-3 col-6">
+                          <label for="priceProduct" class="form-label">Precio: </label>
+                          <input type="text" name="priceProduct" id="priceProduct" class="form-control" required/>
+                        </div>
+
+                        <div class="mb-3 col-6">
+                          <label for="sexProduct" class="form-label">Sexo: </label>
+                          <select class="form-select" name="sexSelect" id="sexSelect" required>
+                            <option value="" selected disabled hidden>Seleccione el sexo</option>
+                            <option value="hombre">Masculino</option>
+                            <option value="mujer">Femenino</option>
+                          </select>
+                        </div>
+  
+                        <div class="mb-3 col-6">
+                          <label for="tagsProduct" class="form-label">Tags: </label>
+                          <div  id="tipoContainer" class="ms-3">
+  
+                          </div>
+                        </div>
+  
+                        <div class="mb-3 col-6">
+                          <label for="brandProduct" class="form-label">Marca: </label>
+                          <div id="marcaContainer" class="ms-3">
+  
+                          </div>
+                        </div>
+
+                        <div class="mb-3 col-12">
+                          <label for="descProduct" class="form-label">Descripción: </label>
+                          <textarea type="text" name="descProduct" id="descProduct" class="form-control" rows="3" required></textarea>
+                        </div>
+
+                        <div class="mb-3 col-6">
+                          <label for="stockProduct" class="form-label">Stock: </label>
+                          <input type="number" name="stockProduct" id="priceProduct" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3 col-6 pt-4">
+                          <input type="hidden" name="tagsProduct" id="tagsProduct" />
+                          <input type="hidden" name="brandProduct" id="brandProduct" />
+                          <button class="btn btn-success w-100" type="submit">Insertar</button>
+                        </div>
+
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col-6">
+                    <p class="fs-4 border-bottom mt-2">Listado de Productos</p>
+                    <table class="table table-secondary table-striped-columns" id="productTable">
+                      <thead>
+                        <tr>
+                          <th>Nombre</th>
+                          <th>Precio</th>
+                          <th>Marca</th>
+                          <th>Tags</th>
+                          <!-- Otras columnas de encabezado -->
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Filas de productos se agregarán aquí -->
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
+              </div>
+            </div>
+          </div>
         </div>
     </div>
+
+    <script src="../public/product-load.js" ></script>
+    <script src="../public/load-tags-brand.js" ></script>
 </body>
 </html>

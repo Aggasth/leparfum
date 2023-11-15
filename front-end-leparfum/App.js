@@ -14,6 +14,10 @@ const config = require('./config');
 const path = require('path');
 const flash = require('connect-flash');
 const { name } = require('ejs');
+//const { MercadoPagoConfig, Payment } = require('mercadopago');
+const { float } = require('webidl-conversions');
+
+
 
 const app = express();
 app.use(flash());
@@ -27,7 +31,8 @@ app.use('/public', express.static('public', { 'Content-Type': 'text/javascript' 
 mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB conectado'))
   .catch(err => console.error(err));
-
+  //const client = new MercadoPagoConfig({ accessToken: 'TEST-6035887927031399-111415-7066aae8d2ae1ccb227f669af8cc6497-318354987', options: { timeout: 5000 }});
+  //const payment = new Payment(client);
 // Configuración de Express
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
@@ -37,21 +42,33 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.isLoggedIn = req.isAuthenticated();
+  next();
+});
 
 // Configuración de Passport
 passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
   User.findOne({ email: email })
-    .then(user => {
-      if (!user) return done(null, false, { message: 'Correo electrónico no registrado' });
+     .then(user => {
+        if (!user) return done(null, false, { message: 'Correo electrónico no registrado' });
 
-      bcrypt.compare(password, user.password, (err, isMatch) => {
-        if (err) throw err;
-        if (isMatch) return done(null, user);
-        else return done(null, false, { message: 'Contraseña incorrecta' });
-      });
-    })
-    .catch(err => console.error(err));
+        // Comparar la contraseña encriptada con bcrypt
+        bcrypt.compare(password, user.password, (err, result) => {
+           if (err) throw err;
+
+           if (result) {
+              return done(null, user);
+           } else {
+              return done(null, false, { message: 'Contraseña incorrecta' });
+           }
+        });
+     })
+     .catch(err => console.error(err));
 }));
+
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -66,6 +83,7 @@ passport.deserializeUser((id, done) => {
       done(err);
     });
 });
+
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -87,7 +105,8 @@ app.get('/template-product/:productId', (req, res) => {
         Product.find({ tags: { $in: tagsArray }, _id: { $ne: productId } }) // Encuentra productos con etiquetas similares, excluyendo el producto actual
           .then(similarProducts => {
             // Renderiza la vista "template-product" y pasa los detalles del producto y productos similares
-            res.render('template-product', { product, similarProducts, isLoggedIn: req.session.isLoggedIn });
+            res.render('template-product', { product, similarProducts, isLoggedIn: req.isAuthenticated() });
+            console.log("idproducto", product);
           })
           .catch(err => {
             console.error(err);
@@ -104,20 +123,22 @@ app.get('/template-product/:productId', (req, res) => {
 
 app.get('/login', (req, res) => {
   res.render('login', { isLoggedIn: req.session.isLoggedIn });
+  console.log("usuario autenticado", req.isAuthenticated());
+  console.log("usuario sesion", req.isAuthenticated());
 });
 
 app.get('/register', (req, res) => {
-  res.render('register');
+  res.render('register', { isLoggedIn: req.isAuthenticated() });
 });
 
 app.get('/login-error', (req, res) => {
-  res.render('login-error', { isLoggedIn: req.session.isLoggedIn });
+  res.render('login-error', { isLoggedIn: req.isAuthenticated() });
 });
 
 app.get('/perfumeria', (req, res) => {
   Product.find()
     .then(productos => {
-      res.render('perfumeria', { productos, isLoggedIn: req.session.isLoggedIn });
+      res.render('perfumeria', { productos, isLoggedIn: req.isAuthenticated() });
     })
   .catch(err => {
       console.error(err);
@@ -128,19 +149,29 @@ app.get('/perfumeria', (req, res) => {
 
 
 app.get('/info-page', (req, res) => {
-  res.render('info-page', { isLoggedIn: req.session.isLoggedIn });
+  res.render('info-page', { isLoggedIn: req.isAuthenticated() });
 });
 
 
 app.get('/', (req, res) => {
-  const errorMessage = req.flash('error')[0]; // Recupera el mensaje de error flash
+  const errorMessage = req.flash('error')[0];
+  console.log("res.locals:", res.locals);
+  console.log("isLoggedIn en la ruta principal:", res.locals.isLoggedIn);
+  
+  // Verifica si el usuario está autenticado antes de acceder a req.session.passport.user
+  const userId = req.isAuthenticated() ? req.user._id : null;
+
+  console.log("info sesion", userId);
+
   // Cargar 4 productos en la variable "oferta"
   Product.find().limit(4)
     .then(oferta => {
       // Luego, carga 10 productos en la variable "listado"
       Product.find().limit(10)
         .then(listado => {
-          res.render('landing', { oferta, listado, errorMessage, isLoggedIn: req.session.isLoggedIn }); // Pasa el mensaje de error a la vista
+          res.render('landing', { oferta, listado, errorMessage, isLoggedIn: req.isAuthenticated(), userId });
+
+          // Pasa el mensaje de error a la vista
         })
         .catch(err => {
           console.error(err);
@@ -152,10 +183,8 @@ app.get('/', (req, res) => {
       res.status(500).send('Error interno del servidor');
     });
 });
-app.use((req, res, next) => {
-  res.locals.isLoggedIn = req.session.isLoggedIn || false;
-  next();
-});
+
+
 
 
 
@@ -193,29 +222,32 @@ app.post('/register', async (req, res) => {
       color: color
     });
 
-    // Guardar las preferencias
+    // Guardar las preferencias en la base de datos
     await newPreferences.save();
 
-    // Asociar las preferencias con el usuario
-    newUser.preferences = newPreferences._id;
-    await newUser.save();
+    res.redirect('/login?isLoggedIn=' + req.isAuthenticated());
 
-    res.redirect('/login');
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error interno del servidor');
+    res.status(500).send('Error en el registro');
   }
 });
 
 
 // Cerrar sesión
+// Cerrar sesión
 app.get('/logout', (req, res) => {
-req.logout();
-res.redirect('/');
+  req.logout((err) => {
+    if (err) {
+      console.error(err);
+    }
+    res.redirect('/');
+  });
 });
 
+
 // Dashboard protegido
-app.get('/account', async (req, res) => {
+app.get('/account', isAuthenticated, async (req, res) => {
   try {
     // Verificar si el usuario está autenticado
     if (!req.isAuthenticated()) {
@@ -243,13 +275,121 @@ app.get('/account', async (req, res) => {
 });
 
 app.get('/suscripcion', (req, res) => {
-  res.render('suscripcion');
+  res.render('suscripcion', { isLoggedIn: req.isAuthenticated() });
 });
+
+//Carrito
 app.get('/shopping-cart', (req, res) => {
-  res.render('shopping-cart');
+  const userInfo = req.user ? req.user : null;
+  console.log("informacion del usuario: ", userInfo);
+
+  // Obtener productos de/l carrito desde la sesión
+  const cartProducts = req.session.cart || [];
+
+  console.log("Productos en el carrito", cartProducts);
+
+  // Verifica si hay productos en el carrito
+  if (cartProducts.length > 0) {
+    // Mapea los productos del carrito a un array de promesas para buscar la información del producto
+    const productPromises = cartProducts.map(cartProduct => {
+      return Product.findById(cartProduct.productId)
+        .then(product => {
+          if (!product) {
+            // Manejar el caso en que el producto no se encuentra
+            return Promise.reject('Producto no encontrado');
+          } else {
+            return {
+              product,
+              quantity: cartProduct.quantity
+            };
+          }
+        });
+    });
+
+    // Ejecuta todas las promesas en paralelo
+    Promise.all(productPromises)
+      .then(productsInfo => {
+        // Calcular el total
+        const total = productsInfo.reduce((acc, productInfo) => {
+          return acc + (productInfo.product.precio * productInfo.quantity);
+        }, 0);
+
+        console.log("Total de la compra:", total);
+       // req.session.cart.push = ({ productId, quantity, total });;
+       req.session.total = total;
+        // Renderiza la vista y pasa la información del usuario, los productos en el carrito y el total
+        res.render('shopping-cart', { user: userInfo, productsInfo, total, isLoggedIn: req.isAuthenticated() });
+      })
+      .catch(error => {
+        // Manejar errores
+        console.error(error);
+        res.status(500).send('Error interno del servidor');
+      });
+  } else {
+    // Renderiza la vista con un carrito vacío
+    res.render('shopping-cart', { user: userInfo, cartProducts, isLoggedIn: req.isAuthenticated() });
+  }
 });
+
+app.get('/checkout', async (req, res) => {
+  
+
+  try {
+    const total = req.session.total;
+
+  if (!total) {
+    return res.status(400).send('Total de compra no disponible');
+  }
+    const preference = {
+      items: [
+        {
+          title: "Laptop", // Puedes cambiar esto al nombre de tu producto
+          unit_price: float(total),
+          currency_id: "CLP",
+          quantity: 1,
+        },
+      ],
+      back_urls: {
+        success: 'https://tu-web.com/success',
+        failure: 'https://tu-web.com/failure',
+        pending: 'https://tu-web.com/pending',
+      },
+      transaction_amount: float(total),
+       // Agrega el transaction_amount aquí
+      auto_return: 'approved',
+    };
+    console.log("transaccion amount es:", float(total))
+
+    const response = await payment.create(preference);
+
+    res.redirect(response.body.init_point);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al procesar el pago');
+  }
+});
+
+
+
+app.post('/addToCart', (req, res) => {
+  const productId = req.body.productId;
+  const quantity = req.body.cantidad;
+  if (!req.session.cart) {
+    // Si no hay carrito, crea uno vacío
+    req.session.cart = [];
+  }
+
+  // Agrega el producto al carrito
+  req.session.cart.push({ productId, quantity });
+ // let cartProducts = [productId, quantity];
+  //console.log("Productos a agregar al carrito", cartProducts);
+ // console.log("carrito actual", req.session.cart.push({ productId, quantity }));
+  // Redirige a la página del carrito o realiza alguna otra acción según tus necesidades.
+  res.redirect('/shopping-cart');
+});
+
 app.get('/success-suscripcion', (req, res) => {
-  res.render('success-suscripcion');
+  res.render('success-suscripcion', { isLoggedIn: req.isAuthenticated() });
 });
   
 // Iniciar sesión
@@ -257,7 +397,11 @@ app.post('/login', passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/login-error',
   failureFlash: true
-}));
+}), (req, res) => {
+  console.log("usuario autenticado", req.user);
+  console.log("usuario sesion", req.session);
+  res.redirect('/'); // Redirige después de imprimir para verificar si la sesión persiste en otras rutas
+});
 
 
 // Ruta para cargar tipos
@@ -287,10 +431,13 @@ app.get('/api/marcas', async (req, res) => {
 // Middleware para verificar la autenticación
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-    return next();
+    res.locals.isLoggedIn = true;
+  } else {
+    res.locals.isLoggedIn = false;
   }
-  res.redirect('/');
-  }
+  return next();
+}
+
 
 
 const PORT = process.env.PORT || 3000;
