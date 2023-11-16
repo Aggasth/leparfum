@@ -294,6 +294,7 @@ app.get('/suscripcion', (req, res) => {
   res.render('suscripcion', { isLoggedIn: req.isAuthenticated() });
 });
 
+
 //Carrito
 app.get('/shopping-cart', isAuthenticated, (req, res) => {
   
