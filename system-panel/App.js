@@ -14,6 +14,7 @@ const Admin = require('./models/Admin');
 const Product = require('./models/Product');
 const Types = require('./models/Types');
 const Brand = require('./models/Brand');
+const User = require('./models/User');
 
 const app = express();
 app.use(flash());
@@ -91,6 +92,7 @@ app.get('/admin', isAuthenticated, (req, res) => {
 });
 
 app.get('/modules/product', isAuthenticated, (req, res) => {
+
   res.render('modules/product', {isLoggedIn: req.isAuthenticated()} );
 });
 
@@ -119,6 +121,15 @@ app.get('/api/productos', isAuthenticated, async (req, res) => {
     res.json({ productos });
   } catch (error) {
     console.error('Error al cargar productos desde la base de datos:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+app.get('/api/usuarios', isAuthenticated, async (req, res) => {
+  try {
+    const usuarios = await User.find();
+    res.json({ usuarios });
+  } catch (error) {
+    console.error('Error al cargar usuarios desde la base de datos:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -202,6 +213,23 @@ app.post('/api/product-add', async (req, res) => {
     res.status(500).send('Error interno del servidor');
   }
 });
+
+app.get('/api/product-edit/:id', isAuthenticated, async (req, res) => {
+  const productId = req.params.id;
+
+  try {
+     const producto = await Product.findById(productId);
+     if (producto) {
+        res.json({ producto });
+     } else {
+        res.status(404).json({ error: 'Producto no encontrado' });
+     }
+  } catch (error) {
+     console.error('Error al obtener datos del producto para editar:', error);
+     res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
 
 
 

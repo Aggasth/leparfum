@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     ref: 'Preferences'
   },
   direccion: String,
-  suscrito:{
+  suscrito: {
     active: Boolean,
     type: String
   }

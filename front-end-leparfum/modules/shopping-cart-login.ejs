@@ -1,0 +1,121 @@
+<section class="h-100 gradient-form container-cart">
+    <div class="container h-100 container-cart">
+        <p class="fs-3 text-center">Tu carrito de compras</p>
+        <div class="row justify-content-center g-2 mt-5">
+            
+            <div class="col-8">
+                <!--Envios-->
+                <div class="row g-3 align-items-center pb-5">
+                    <p class="fs-4 border-top">Información de envío</p>
+                    <div class="col-6">
+                        <label for="name" class="col-form-label">Nombre:</label><br>
+                    </div>
+                    <div class="col-6 pe-4">
+                        <input type="text" id="name" class="form-control" placeholder="<%=user.name%>" disabled>
+                    </div>
+                    <div class="col-6">
+                        <label for="contact" class="col-form-label">Contacto:</label>
+                    </div>
+                    <div class="col-6 pe-4">
+                        <input type="text" id="contact" class="form-control" placeholder="<%=user.celular%>" disabled>
+                    </div>
+                    <div class="col-6">
+                        <label for="address" class="col-form-label">Dirección:</label>
+                    </div>
+                    <div class="col-6 pe-4">
+                        <input type="text" id="name" class="form-control" placeholder="<%=user.direccion%>" disabled>
+                    </div>
+                </div>
+                <p class="fs-4">Productos seleccionados</p>
+                <table class="table" id="productTable">
+                    <thead>
+                      <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Precio</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Filas de productos se agregarán aquí -->
+                      <% productsInfo.forEach((productInfo, index) => { %>
+                        <tr>
+                          <th scope="row"><%= index + 1 %></th>
+                          <td><img src="<%= productInfo.product.imagen %>" alt="" width="50"></td>
+                          <td><%= productInfo.product.nombreProducto %></td>
+                          <td>$<%= productInfo.product.precio %></td>
+                          <td>Cantidad: <%= productInfo.quantity %></td>
+                          <td>
+                            <button type="button" class="btn ">
+                              <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 30 30">
+                                <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z"></path>
+                              </svg>
+                            </button>
+                          </td>
+                        </tr>
+                      <% }); %>                      
+                    </tbody>
+                  </table>
+                  
+            </div>
+            <div class="col-4">
+                <p class="fs-4 border-bottom">Resumen de compra</p>
+                <div class="row justify-content-center align-items-center g-2">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="fs-6">Productos</p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="fs-6 text-secondary">$<%=total%></p>
+                                <!--Se suman los precios de los productos y se imprime aqui arriba-->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="fs-6">Envío</p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="fs-6 text-success">Gratis</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 border-top">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="fs-6">Total</p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="fs-6 text-success">$<%=total%></p>
+                                <!--Se debe cargar con la suma de los totales de los productos-->
+                            </div>
+                        </div>
+                    </div>
+                    <form action="/payment" method="GET">
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary rounded-1 shadow w-100">Ir a pagar</button>
+                    </div>
+                  </form>
+                    <div class="col-12 mt-4">
+                        <ul class="list-group list-group-horizontal list-unstyled"> 
+                            <li class="list-group-item">
+                              <img src="img/logos/visa.png" alt="" width="50px">
+                            </li>
+                            <li class="list-group-item">
+                              <img src="img/logos/mastercard.png" alt="" width="50px">
+                            </li>
+                            <li class="list-group-item">
+                              <img src="img/logos/dinnersclub.svg" alt="" width="50px">
+                            </li>
+                            <li class="list-group-item">
+                              <img src="img/logos/cmr.png" alt="" width="50px">
+                            </li>
+                            <li class="list-group-item">
+                              <img src="img/logos/magna.png" alt="" width="50px">
+                            </li>
+                          </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
