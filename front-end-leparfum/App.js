@@ -16,7 +16,7 @@ const config = require('./config');
 const path = require('path');
 const flash = require('connect-flash');
 const { name } = require('ejs');
-//const { MercadoPagoConfig, Payment } = require('mercadopago');
+const { MercadoPagoConfig, Payment } = require('mercadopago');
 const { float } = require('webidl-conversions');
 
 
@@ -33,8 +33,9 @@ app.use('/public', express.static('public', { 'Content-Type': 'text/javascript' 
 mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB conectado'))
   .catch(err => console.error(err));
-  //const client = new MercadoPagoConfig({ accessToken: 'TEST-6035887927031399-111415-7066aae8d2ae1ccb227f669af8cc6497-318354987', options: { timeout: 5000 }});
-  //const payment = new Payment(client);
+  const client = new MercadoPagoConfig({ accessToken: 'TEST-6035887927031399-111415-7066aae8d2ae1ccb227f669af8cc6497-318354987', options: { timeout: 5000 }});
+  const payment = new Payment(client);
+  
 // Configuración de Express
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
@@ -57,7 +58,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
      .then(user => {
         if (!user) return done(null, false, { message: 'Correo electrónico no registrado' });
 
-        // Comparar la contraseña encriptada con bcrypt
+        // Compara la contraseña encriptada con bcrypt
         bcrypt.compare(password, user.password, (err, result) => {
            if (err) throw err;
 
@@ -92,7 +93,8 @@ app.set('view engine', 'ejs');
 
 // Rutas
 app.get('/template-product/:productId', (req, res) => {
-  const productId = req.params.productId; // Captura el ID del producto desde la URL
+  const productId = req.params.productId;
+  const message = req.query.message || '';
 
   Product.findById(productId)
     .then(product => {
@@ -107,7 +109,7 @@ app.get('/template-product/:productId', (req, res) => {
         Product.find({ tags: { $in: tagsArray }, _id: { $ne: productId } }) // Encuentra productos con etiquetas similares, excluyendo el producto actual
           .then(similarProducts => {
             // Renderiza la vista "template-product" y pasa los detalles del producto y productos similares
-            res.render('template-product', { product, similarProducts, isLoggedIn: req.isAuthenticated() });
+            res.render('template-product', { message, product, similarProducts, isLoggedIn: req.isAuthenticated() });
             console.log("idproducto", product);
           })
           .catch(err => {
@@ -149,6 +151,13 @@ app.get('/perfumeria', (req, res) => {
   });
 });
 
+app.get('/payment-sucess', (req, res) => {
+  res.render('payment-sucess', { isLoggedIn: req.isAuthenticated() });
+});
+app.get('/payment-error', (req, res) => {
+  res.render('payment-error', { isLoggedIn: req.isAuthenticated() });
+});
+
 
 
 app.get('/info-page', (req, res) => {
@@ -157,6 +166,11 @@ app.get('/info-page', (req, res) => {
 
 
 app.get('/', (req, res) => {
+  if (!req.session.cart) {
+    req.session.cart = [];
+  }
+
+
   const errorMessage = req.flash('error')[0];
   console.log("res.locals:", res.locals);
   console.log("isLoggedIn en la ruta principal:", res.locals.isLoggedIn);
@@ -281,11 +295,12 @@ app.get('/suscripcion', (req, res) => {
 });
 
 //Carrito
-app.get('/shopping-cart', (req, res) => {
+app.get('/shopping-cart', isAuthenticated, (req, res) => {
+  
   const userInfo = req.user ? req.user : null;
   console.log("informacion del usuario: ", userInfo);
 
-  // Obtener productos de/l carrito desde la sesión
+  // Obtener productos del carrito desde la sesión
   const cartProducts = req.session.cart || [];
 
   console.log("Productos en el carrito", cartProducts);
@@ -294,18 +309,23 @@ app.get('/shopping-cart', (req, res) => {
   if (cartProducts.length > 0) {
     // Mapea los productos del carrito a un array de promesas para buscar la información del producto
     const productPromises = cartProducts.map(cartProduct => {
-      return Product.findById(cartProduct.productId)
-        .then(product => {
-          if (!product) {
-            // Manejar el caso en que el producto no se encuentra
-            return Promise.reject('Producto no encontrado');
-          } else {
-            return {
-              product,
-              quantity: cartProduct.quantity
-            };
-          }
-        });
+      if(cartProduct.productId.length > 0) {
+        return Product.findById(cartProduct.productId)
+                .then(product => {
+                  if (!product) {
+                    // Manejar el caso en que el producto no se encuentra
+                    return Promise.reject('Producto no encontrado');
+                  } else {
+                    return {
+                      product,
+                      quantity: cartProduct.quantity
+                    };
+                  }
+                });
+      }else{
+        return Promise.reject('Carrito vacío.');
+      }
+      
     });
 
     // Ejecuta todas las promesas en paralelo
@@ -320,7 +340,7 @@ app.get('/shopping-cart', (req, res) => {
        // req.session.cart.push = ({ productId, quantity, total });;
        req.session.total = total;
         // Renderiza la vista y pasa la información del usuario, los productos en el carrito y el total
-        res.render('shopping-cart', { user: userInfo, productsInfo, total, isLoggedIn: req.isAuthenticated() });
+        res.render('shopping-cart', { user: userInfo, productsInfo, cartProducts, total, isLoggedIn: req.isAuthenticated() });
       })
       .catch(error => {
         // Manejar errores
@@ -329,7 +349,9 @@ app.get('/shopping-cart', (req, res) => {
       });
   } else {
     // Renderiza la vista con un carrito vacío
-    res.render('shopping-cart', { user: userInfo, cartProducts, isLoggedIn: req.isAuthenticated() });
+    productsInfo = [];
+    total = 0;
+    res.render('shopping-cart', { user: userInfo, productsInfo, total, cartProducts, isLoggedIn: req.isAuthenticated() });
   }
 });
 
@@ -489,19 +511,18 @@ app.get('/checkout', async (req, res) => {
 app.post('/addToCart', (req, res) => {
   const productId = req.body.productId;
   const quantity = req.body.cantidad;
+
   if (!req.session.cart) {
-    // Si no hay carrito, crea uno vacío
     req.session.cart = [];
   }
 
-  // Agrega el producto al carrito
   req.session.cart.push({ productId, quantity });
- // let cartProducts = [productId, quantity];
-  //console.log("Productos a agregar al carrito", cartProducts);
- // console.log("carrito actual", req.session.cart.push({ productId, quantity }));
-  // Redirige a la página del carrito o realiza alguna otra acción según tus necesidades.
-  res.redirect('/shopping-cart');
+  const message = "Añadido al carro!"
+
+  // Utiliza comillas invertidas para la cadena y la interpolación de variables
+  res.redirect(`/template-product/${productId}?message=${message}`);
 });
+
 
 app.get('/success-suscripcion', (req, res) => {
   res.render('success-suscripcion', { isLoggedIn: req.isAuthenticated() });
