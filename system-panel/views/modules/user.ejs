@@ -6,13 +6,47 @@
 
 </head>
 <body>
-    <div class="container-fluid">
+    <%- include ('../modules/sidebar.ejs') %>
+    <div class="table-container">
         <div class="row">
-            <%- include ('../modules/sidebar.ejs') %>
-        </div>
-        <div class="col-10">
-
+            <div class="container">
+                <div class="col-3 text-start">
+                    <p class="fs-5 border-bottom">Buscar usuario</p>
+                    <form action="" method="GET">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                  </svg>
+                            </span>
+                            <input type="text" class="form-control" placeholder="Ingrese un nombre o correo electrónico..." aria-label="Buscar">
+                            <button class="btn btn-secondary" type="button" id="searchButton">Buscar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-3"></div>
+                <div class="col-3"></div>
+                <div class="col-12">
+                    <h4 class="border-top fs-5 pt-3 text-start">Usuarios registrados en el sistema:</h4>
+                    <table class="table table-secondary table-striped-columns" id="userTable">
+                        <thead>
+                          <tr>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Celular</th>
+                            <th>Dirección</th>
+                            <th>Suscrito</th>
+                            <!-- Otras columnas de encabezado -->
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- Filas de productos se agregarán aquí -->
+                        </tbody>
+                      </table>
+                </div>
+            </div>
         </div>
     </div>
+    <script src="../public/user-load.js"></script>
 </body>
 </html>
