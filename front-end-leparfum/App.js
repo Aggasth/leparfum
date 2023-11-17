@@ -151,8 +151,8 @@ app.get('/perfumeria', (req, res) => {
   });
 });
 
-app.get('/payment-sucess', (req, res) => {
-  res.render('payment-sucess', { isLoggedIn: req.isAuthenticated() });
+app.get('/payment-success', (req, res) => {
+  res.render('payment-success', { isLoggedIn: req.isAuthenticated() });
 });
 app.get('/payment-error', (req, res) => {
   res.render('payment-error', { isLoggedIn: req.isAuthenticated() });

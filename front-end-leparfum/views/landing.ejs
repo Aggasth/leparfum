@@ -19,7 +19,7 @@
   
   <section class="h-100 gradient-form landing-page">
     <!--Slider de imagenes banner-->
-    <div id="carouselExample" class="carousel slide">
+    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
           <img src="img/banners/banner-lp-1.png" class="d-block w-100" alt="...">
@@ -39,7 +39,16 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
+    
+      <script>
+        $(document).ready(function() {
+          $('#carouselExample').carousel({
+            interval: 2000
+          });
+        });
+      </script>
     </div>
+    
     <!--Nav Productos-->
     <ul class="nav justify-content-center tab-products">
       <li class="nav-item">
