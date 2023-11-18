@@ -1,11 +1,9 @@
-<!-- Mostrar mensajes flash de éxito (por ejemplo, al registrarse correctamente) -->
 <% if (typeof successFlash !== 'undefined') { %>
     <div class="alert alert-success">
       <%= successFlash %>
     </div>
   <% } %>
-  
-  <!-- Mostrar mensajes flash de error (por ejemplo, al ingresar credenciales incorrectas) -->
+
   <% if (typeof errorFlash !== 'undefined') { %>
     <div class="alert alert-danger">
       <%= errorFlash %>
@@ -17,7 +15,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inicio</title>
+  <title>LeParfum - Suscripción</title>
   <script src="../public/filtro.js"></script>
   <link rel="stylesheet" type="text/css" href="style-suscripcion.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito&display=swap">
@@ -59,36 +57,9 @@
                             - Perfume TravelSpray de 15ml.<br>
                             - Rango de perfumes hasta los <b>$80.000</b><br>
                           </p>
-                          <p class="card-text">
+                          <p class="card-text text-success fw-bold">
                             $10.520 iva inc.
                           </p>
-                          <a mp-mode="dftl" href="https://www.mercadopago.cl/subscriptions/checkout?preapproval_plan_id=2c9380848b2a4561018b3e330c6b0c02" name="MP-payButton" class='blue-ar-l-rn-none'>Suscribirme</a>
-                          <script type="text/javascript">
-                             (function() {
-                                function $MPC_load() {
-                                   window.$MPC_loaded !== true && (function() {
-                                   var s = document.createElement("script");
-                                   s.type = "text/javascript";
-                                   s.async = true;
-                                   s.src = document.location.protocol + "//secure.mlstatic.com/mptools/render.js";
-                                   var x = document.getElementsByTagName('script')[0];
-                                   x.parentNode.insertBefore(s, x);
-                                   window.$MPC_loaded = true;
-                                })();
-                             }
-                             window.$MPC_loaded !== true ? (window.attachEvent ? window.attachEvent('onload', $MPC_load) : window.addEventListener('load', $MPC_load, false)) : null;
-                             })();
-                            /*
-                                  // to receive event with message when closing modal from congrants back to site
-                                  function $MPC_message(event) {
-                                    // onclose modal ->CALLBACK FUNCTION
-                                   // !!!!!!!!FUNCTION_CALLBACK HERE Received message: {event.data} preapproval_id !!!!!!!!
-                                  }
-                                  window.$MPC_loaded !== true ? (window.addEventListener("message", $MPC_message)) : null; 
-                                  */
-                          </script>
-                          
-                          
                         </div>
                       </div>
                 </div>
@@ -103,36 +74,9 @@
                             - Perfume TravelSpray de 15ml.<br>
                             - Rango de perfumes hasta los <b>$150.000</b><br>
                           </p>
-                          <p class="card-text">
+                          <p class="card-text text-success fw-bold">
                             $18.850 iva inc.
-                          </p>
-                          <a href="https://www.mercadopago.cl/subscriptions/checkout?preapproval_plan_id=2c9380848bade29c018bb57b458f0690" name="MP-payButton" class='blue-ar-l-rn-none'>Suscribirme</a>
-                          <script type="text/javascript">
-                             (function() {
-                                function $MPC_load() {
-                                   window.$MPC_loaded !== true && (function() {
-                                   var s = document.createElement("script");
-                                   s.type = "text/javascript";
-                                   s.async = true;
-                                   s.src = document.location.protocol + "//secure.mlstatic.com/mptools/render.js";
-                                   var x = document.getElementsByTagName('script')[0];
-                                   x.parentNode.insertBefore(s, x);
-                                   window.$MPC_loaded = true;
-                                })();
-                             }
-                             window.$MPC_loaded !== true ? (window.attachEvent ? window.attachEvent('onload', $MPC_load) : window.addEventListener('load', $MPC_load, false)) : null;
-                             })();
-                            /*
-                                  // to receive event with message when closing modal from congrants back to site
-                                  function $MPC_message(event) {
-                                    // onclose modal ->CALLBACK FUNCTION
-                                   // !!!!!!!!FUNCTION_CALLBACK HERE Received message: {event.data} preapproval_id !!!!!!!!
-                                  }
-                                  window.$MPC_loaded !== true ? (window.addEventListener("message", $MPC_message)) : null; 
-                                  */
-                          </script>
-                          
-                          
+                          </p>                          
                         </div>
                       </div>
                 </div>
@@ -150,10 +94,16 @@
                             - Rango de perfumes hasta los <b>$200.000</b><br>
                             - Packaging Edicion Limitada.
                           </p>
-                          <p class="card-text">
+                          <p class="card-text text-success fw-bold">
                             $24.800 iva inc.
-                          </p>
-                          <a href="https://www.mercadopago.cl/subscriptions/checkout?preapproval_plan_id=2c9380848bade276018bb57e1b9906c8" name="MP-payButton" class='blue-ar-l-rn-none'>Suscribirme</a>
+                          </p>                          
+                        </div>
+                      </div>
+                </div>
+                <div class="col-12 text-center mt-3 mb-2 pb-3">
+                  <div class="row">
+                    <div class="col-4">
+                      <a mp-mode="dftl" href="https://www.mercadopago.cl/subscriptions/checkout?preapproval_plan_id=2c9380848b2a4561018b3e330c6b0c02" name="MP-payButton" class='btn btn-primary shadow'>Suscribirme</a>
                           <script type="text/javascript">
                              (function() {
                                 function $MPC_load() {
@@ -178,10 +128,62 @@
                                   window.$MPC_loaded !== true ? (window.addEventListener("message", $MPC_message)) : null; 
                                   */
                           </script>
-                          
-                          
-                        </div>
-                      </div>
+                    </div>
+                    <div class="col-4">
+                      <a href="https://www.mercadopago.cl/subscriptions/checkout?preapproval_plan_id=2c9380848bade29c018bb57b458f0690" name="MP-payButton" class='btn btn-primary shadow'>Suscribirme</a>
+                          <script type="text/javascript">
+                             (function() {
+                                function $MPC_load() {
+                                   window.$MPC_loaded !== true && (function() {
+                                   var s = document.createElement("script");
+                                   s.type = "text/javascript";
+                                   s.async = true;
+                                   s.src = document.location.protocol + "//secure.mlstatic.com/mptools/render.js";
+                                   var x = document.getElementsByTagName('script')[0];
+                                   x.parentNode.insertBefore(s, x);
+                                   window.$MPC_loaded = true;
+                                })();
+                             }
+                             window.$MPC_loaded !== true ? (window.attachEvent ? window.attachEvent('onload', $MPC_load) : window.addEventListener('load', $MPC_load, false)) : null;
+                             })();
+                            /*
+                                  // to receive event with message when closing modal from congrants back to site
+                                  function $MPC_message(event) {
+                                    // onclose modal ->CALLBACK FUNCTION
+                                   // !!!!!!!!FUNCTION_CALLBACK HERE Received message: {event.data} preapproval_id !!!!!!!!
+                                  }
+                                  window.$MPC_loaded !== true ? (window.addEventListener("message", $MPC_message)) : null; 
+                                  */
+                          </script>
+                    </div>
+                    <div class="col-4">
+                      <a href="https://www.mercadopago.cl/subscriptions/checkout?preapproval_plan_id=2c9380848bade276018bb57e1b9906c8" name="MP-payButton" class='btn btn-primary shadow'>Suscribirme</a>
+                          <script type="text/javascript">
+                             (function() {
+                                function $MPC_load() {
+                                   window.$MPC_loaded !== true && (function() {
+                                   var s = document.createElement("script");
+                                   s.type = "text/javascript";
+                                   s.async = true;
+                                   s.src = document.location.protocol + "//secure.mlstatic.com/mptools/render.js";
+                                   var x = document.getElementsByTagName('script')[0];
+                                   x.parentNode.insertBefore(s, x);
+                                   window.$MPC_loaded = true;
+                                })();
+                             }
+                             window.$MPC_loaded !== true ? (window.attachEvent ? window.attachEvent('onload', $MPC_load) : window.addEventListener('load', $MPC_load, false)) : null;
+                             })();
+                            /*
+                                  // to receive event with message when closing modal from congrants back to site
+                                  function $MPC_message(event) {
+                                    // onclose modal ->CALLBACK FUNCTION
+                                   // !!!!!!!!FUNCTION_CALLBACK HERE Received message: {event.data} preapproval_id !!!!!!!!
+                                  }
+                                  window.$MPC_loaded !== true ? (window.addEventListener("message", $MPC_message)) : null; 
+                                  */
+                          </script>
+                    </div>
+                  </div>
                 </div>
             </div>
           </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LeParfum - Pago Exitoso</title>
+    <title>LeParfum - Error en el proceso del pago</title>
     <link rel="shortcut icon" href="img/logos/logo.png">
     <link rel="stylesheet" type="text/css" href="/style-cart.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito&display=swap">
@@ -30,31 +30,27 @@
               <div class="col-12 col-xl-12 col-sm-6 px-5 text-center">
                   <div class="">
                     <span>
-                      <img src="./img/icons/exito.png" width="80" alt="">
+                      <img src="./img/icons/error-pago.png" width="80" alt="">
                     </span>
-                    <p class="fs-3">Pago realizado con éxito</p>
+                    <p class="fs-3">Ups... creo que ha sucedido algo</p>
                   </div>
               </div>
               <div class="col-12 col-xl-12 col-sm-6 px-5 text-center">
-                <p class="fs-5">Resumen de compra</p>
                 <div class="container border-3 rounded-2 border-black shadow">
-                  <table class="table" id="saleTable">
-                    <thead>
-                      <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Producto</th>
-                        <th scope="col">Precio</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <!-- Codigo para la tabla en carpeta: doc/reuse-code -->
-                    </tbody>
-                  </table>
-                  <p class="fs-6 text-center pt-5">
-                    Ya realizada la comprobación del pago, podrás ver la información de la compra en tu Perfil>Pedidos <br>
-                    En caso de no contar con una cuenta, podrás ver el detalle de la compra en tu correo electrónico <br>
+                 
+                  <p class="fs-5 text-center pt-5 pb-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#800404" class="bi bi-exclamation-lg" viewBox="0 0 16 16">
+                      <path d="M7.005 3.1a1 1 0 1 1 1.99 0l-.388 6.35a.61.61 0 0 1-1.214 0L7.005 3.1ZM7 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z"/>
+                    </svg>
+                    Ha sucedido un error en el procedimiento de pago del checkout. Por favor intentelo nuevamente o más tarde<br>
                     <strong>Muchas gracias por preferir la elegancia, por preferir LeParfum</strong>
                   </p>
+
+                  <a href="/" class="btn btn-secondary rounded-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                    </svg>
+                  </a>
                 </div>
               </div>
           </div>
