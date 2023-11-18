@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ('../modules/head.ejs') %>
+</head>
+<body>
+    <div class="row">
+        <div class="col-2">
+            <%- include ('../modules/sidebar.ejs') %>
+        </div>
+        <div class="col-10">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-block justify-content-start text-start h-100 pt-5 me-3">
+                        <p class="fs-4 fw-semibold border-bottom">Configuraciones adicionales</p>
+                    </div>
+                </div>
+                <div class="col-3"></div>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-12 mt-5 border rounded-2" style="background-color: rgb(241, 241, 241);">
+                            <p class="fs-5 pt-2 ps-2 border-bottom">
+                                Marcas
+                            </p>
+                            <form action="#" id="formMarcas" class="row m-3">
+                                <div class="col-6 mb-3">
+                                    <label for="nameBrand" class="form-label">Agregar Marca</label>
+                                    <input type="text" name="nameBrand" placeholder="Nombre" id="nameBrand" class="form-control">
+                                    <button class="btn btn-success mt-3" name="agregar" id="btnAgregar">Agregar</button>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label for="brands" class="form-label">Eliminar Marca</label>
+                                    <select name="brands" id="selectBrands" class="form-select">
+                                        <option value="" selected disabled hidden>Seleccione una marca</option>
+                                        <!-- Debe rellenarse con todas las marcas de la db -->
+                                    </select>
+                                    <button class="btn btn-danger mt-3" name="eliminar" id="btnEliminar">Eliminar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mt-5 border rounded-2" style="background-color: rgb(241, 241, 241);">
+                            <p class="fs-5 pt-2 ps-2 border-bottom">
+                                Tipos
+                            </p>
+                            <form action="#" id="formTipos" class="row m-3">
+                                <div class="col-6 mb-3">
+                                    <label for="nameBrand" class="form-label">Agregar Tipo</label>
+                                    <input type="text" name="nameTipo" placeholder="Tipo" id="nameTipo" class="form-control">
+                                    <button class="btn btn-success mt-3" name="agregar" id="btnAgregar">Agregar</button>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label for="types" class="form-label">Eliminar Tipo</label>
+                                    <select name="types" id="selectTypes" class="form-select">
+                                        <option value="" selected disabled hidden>Seleccione un tipo</option>
+                                        <!-- Debe rellenarse con todos los tipos de la db -->
+                                    </select>
+                                    <button class="btn btn-danger mt-3" name="eliminar" id="btnEliminar">Eliminar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-3"></div>
+            </div>
+            
+            
+        </div>
+    </div>
+
+    <script src="../public/load-config.js" ></script>
+</body>
+</html>

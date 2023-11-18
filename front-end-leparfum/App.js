@@ -273,10 +273,8 @@ app.get('/account', isAuthenticated, async (req, res) => {
       return res.redirect('/login');
     }
 
-    // Obtén el usuario actual desde la sesión
     const user = req.user;
 
-    // Verificar si el usuario tiene un ID antes de intentar acceder a sus preferencias
     if (!user || !user._id) {
       throw new Error('Usuario no válido');
     }
@@ -556,6 +554,10 @@ app.get('/api/marcas', async (req, res) => {
     console.error('Error al cargar marcas desde la base de datos:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
+});
+
+// Ruta para la carga de la venta para success payment page
+app.get('/api/payment-info', async (req, res) =>{
 });
 
 // Middleware para verificar la autenticación
