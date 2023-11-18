@@ -8,6 +8,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const User = require('./models/User');
 const Preferences = require('./models/Preferences');
+const Sale = require('./models/Sale');
 const { getActivityLabel, getSeasonLabel, getEventLabel, getColorLabel } = require('./public/Preferencias');
 const Product = require('./models/Product');
 const Types = require('./models/Types');
@@ -18,6 +19,7 @@ const flash = require('connect-flash');
 const { name } = require('ejs');
 const { MercadoPagoConfig, Payment } = require('mercadopago');
 const { float } = require('webidl-conversions');
+const bodyParser = require('body-parser');
 
 
 
@@ -367,6 +369,7 @@ class PaymentService {
           description: 'Productos de LeParfum',
           picture_url: 'http://www.myapp.com/myimage.jpg',
           category_id: 'category123',
+          currency_id: 'CLP',
           quantity: 1,
           unit_price: total,
         },
@@ -396,24 +399,23 @@ class PaymentService {
       auto_recurring: {
         frequency: 1,
         frequency_type: 'months',
-        transaction_amount: 10,
-        currency_id: 'ARS',
+        transaction_amount: 9000,
+        currency_id: 'CLP'
       },
-      back_url: 'https://google.com.ar',
-      payer_email: 'test_user_46945293@testuser.com',
+      back_url: 'https://google.com',
+      payer_email: 'TESTUSER471227152@testuser.com',
     };
 
     const subscription = await axios.post(url, body, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        Authorization: `Bearer ${process.env.ACCESS_TOKEN_SUB}`,
       },
     });
 
     return subscription.data;
   }
 }
-
 class PaymentController {
   constructor(subscriptionService) {
     this.subscriptionService = subscriptionService;
@@ -430,11 +432,25 @@ class PaymentController {
     }
   }
   
+  saveSale = async(userId, cart, total) => {
+    try {
+      const newSale = new Sale({
+        idUser: userId,
+        cart: cart,
+        total: total,
+        date: new Date() // Fecha actual
+      });
+      await newSale.save();
+    } catch (error) {
+      console.log(error);
+      throw new Error('Failed to save sale');
+    }
+  }
 
   async getSubscriptionLink(req, res) {
     try {
       const subscription = await this.subscriptionService.createSubscription();
-      return res.json(subscription);
+      return subscription.init_point;
     } catch (error) {
       console.log(error);
       return res.status(500).json({ error: true, msg: 'Failed to create subscription' });
@@ -449,7 +465,10 @@ app.get('/payment', async (req, res) => {
   try {
     // Obtiene el enlace de pago desde el controlador
     const initPoint = await PaymentControllerInstance.getPaymentLink(req, res);
-
+    const userId = req.isAuthenticated() ? req.user._id : null; // ID del usuario autenticado
+    const cart = req.session.cart; // Carrito de compras almacenado en la sesión
+    const total = req.session.total; // Total de la compra
+    await PaymentControllerInstance.saveSale(userId, cart, total)
     // Redirige al init_point obtenido
     res.redirect(initPoint);
   } catch (error) {
@@ -458,55 +477,29 @@ app.get('/payment', async (req, res) => {
   }
 });
 
-app.get('/subscription', (req, res) => {
-  PaymentControllerInstance.getSubscriptionLink(req, res);
+app.get('/subscription', async (req, res) => {
+  try{
+  const initPoint = await PaymentControllerInstance.getSubscriptionLink(req, res);
+  res.redirect(initPoint);
+} catch (error) {
+  console.error(error);
+  res.status(500).send('Error al procesar el pago');
+}
 });
-/* 
-app.get('/checkout', async (req, res) => {
-  
 
+
+/*
+app.post('/subscription', async (req, res) => {
+  const subscriptionType = req.body.subscriptionType;
+  const subscriptionValue = req.body.amount;
   try {
-    const total = req.session.total;
-    const formattedTotal = total.toString().replace(',', '.'); // Cambia la coma por un punto como separador decimal
-    let parsedTotal = parseFloat(formattedTotal);
-
-
-  if (!total) {
-    return res.status(400).send('Total de compra no disponible');
-  }
-  let preference = {
-    items: [
-      {
-        id: 1,
-        title: "Laptop",
-        description: "aaa",
-        unit_price: 100,
-        currency_id: "CLP",
-        quantity: 1,
-      },
-    ],
-    back_urls: {
-      success: 'localhost:3000',
-      failure: 'https://tu-web.com/failure',
-      pending: 'https://tu-web.com/pending',
-    },
-    transaction_amount: parsedTotal, // Usa el valor parseado como transaction_amount
-    transaction_amount_currency: "CLP",
-    auto_return: 'approved',
-    binary_mode: true
-  };
-  
-    console.log("transaccion amount es:", total)
-    console.log("preferencia es : ", preference);
-    const response = await payment.create(preference);
-    console.log("cuerpo de ", response.body);
-    res.redirect(response.body.init_point);
+    const subscriptionLink = await PaymentControllerInstance.createSubscription(subscriptionType, subscriptionValue);
+    res.redirect(subscriptionLink);
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Error al procesar el pago');
+    console.error('Error al procesar la suscripción:', error);
+    res.status(500).send('Error al procesar la suscripción');
   }
 });
-
 */
 
 app.post('/addToCart', (req, res) => {
