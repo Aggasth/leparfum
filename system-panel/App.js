@@ -87,6 +87,10 @@ app.get('/login-error', (req, res) => {
   res.render('login-error', {isLoggedIn: req.isAuthenticated()});
 });
 
+app.get('/modules/config', isAuthenticated, (req, res) => {
+  res.render('modules/config', {isLoggedIn: req.isAuthenticated()});
+});
+
 app.get('/admin', isAuthenticated, (req, res) => {
   res.render('admin', {isLoggedIn: req.isAuthenticated()});
 });
@@ -104,13 +108,10 @@ app.get('/modules/sales', isAuthenticated, (req, res) => {
   res.render('modules/sales', {isLoggedIn: req.isAuthenticated()});
 });
 
-app.get('/modules/inventory', isAuthenticated, (req, res) => {
-  res.render('modules/inventory', {isLoggedIn: req.isAuthenticated()});
+app.get('/modules/suscripciones', isAuthenticated, (req, res) => {
+  res.render('modules/suscripciones', {isLoggedIn: req.isAuthenticated()});
 });
 
-app.get('/modules/history', isAuthenticated, (req, res) => {
-  res.render('modules/history', {isLoggedIn: req.isAuthenticated()});
-});
 app.get('/register', (req, res) => {
   res.render('register', { isLoggedIn: req.isAuthenticated() });
 });
