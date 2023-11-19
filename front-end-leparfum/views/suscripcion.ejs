@@ -1,11 +1,9 @@
-<!-- Mostrar mensajes flash de éxito (por ejemplo, al registrarse correctamente) -->
 <% if (typeof successFlash !== 'undefined') { %>
     <div class="alert alert-success">
       <%= successFlash %>
     </div>
   <% } %>
-  
-  <!-- Mostrar mensajes flash de error (por ejemplo, al ingresar credenciales incorrectas) -->
+
   <% if (typeof errorFlash !== 'undefined') { %>
     <div class="alert alert-danger">
       <%= errorFlash %>
@@ -17,7 +15,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inicio</title>
+  <title>LeParfum - Suscripción</title>
   <script src="../public/filtro.js"></script>
   <link rel="stylesheet" type="text/css" href="style-suscripcion.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito&display=swap">
@@ -62,13 +60,16 @@
                             - Perfume TravelSpray de 15ml.<br>
                             - Rango de perfumes hasta los <b>$80.000</b><br>
                           </p>
-                          <p class="card-text">
+                          <p class="card-text text-success fw-bold">
                             $10.520 iva inc.
                           </p>
                           <div class="col-10">
                             <button type="submit" class="btn btn-danger w-100 rounded-0" >Suscribirme</button>
                           </div>
                         </div>
+                      </div>
+                      <div class="col-10">
+                        <button type="submit" class="btn btn-danger w-100 rounded-0">Suscribirme</button>
                       </div>
                 </div>
               </form>
@@ -86,9 +87,10 @@
                             - Perfume TravelSpray de 15ml.<br>
                             - Rango de perfumes hasta los <b>$150.000</b><br>
                           </p>
-                          <p class="card-text">
+                          <p class="card-text text-success fw-bold">
                             $18.850 iva inc.
                           </p>
+
                         </div>
                       </div>
                       <div class="col-10">
@@ -96,7 +98,8 @@
                       </div>
                 </div>
               </form>
-                <form action="/subsss" method="GET">
+              </form>
+                <form action="/subscription" method="POST">
                   <input type="hidden" id="subscriptionType" name="subscriptionType" value="Luxueux">
                 <div class="col-4">
                     <div class="card border-0" style="min-height: 400px;">
@@ -112,8 +115,9 @@
                             - Rango de perfumes hasta los <b>$200.000</b><br>
                             - Packaging Edicion Limitada.
                           </p>
-                          <p class="card-text">
+                          <p class="card-text text-success fw-bold">
                             $24.800 iva inc.
+
                           </p>
                         </div>
                       </div>

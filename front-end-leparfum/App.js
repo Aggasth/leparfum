@@ -20,6 +20,7 @@ const flash = require('connect-flash');
 const { name } = require('ejs');
 const { MercadoPagoConfig, Payment } = require('mercadopago');
 const { float } = require('webidl-conversions');
+const bodyParser = require('body-parser');
 
 
 
@@ -273,10 +274,8 @@ app.get('/account', isAuthenticated, async (req, res) => {
       return res.redirect('/login');
     }
 
-    // Obtén el usuario actual desde la sesión
     const user = req.user;
 
-    // Verificar si el usuario tiene un ID antes de intentar acceder a sus preferencias
     if (!user || !user._id) {
       throw new Error('Usuario no válido');
     }
@@ -369,6 +368,7 @@ class PaymentService {
           description: 'Productos de LeParfum',
           picture_url: 'http://www.myapp.com/myimage.jpg',
           category_id: 'category123',
+          currency_id: 'CLP',
           quantity: 1,
           unit_price: total,
         },
@@ -401,14 +401,14 @@ class PaymentService {
         transaction_amount: subscriptionValue,
         currency_id: 'CLP',
       },
-      back_url: 'https://google.com.ar',
-      payer_email: 'test_user_46945293@testuser.com',
+      back_url: 'https://google.com',
+      payer_email: 'TESTUSER471227152@testuser.com',
     };
 
     const subscription = await axios.post(url, body, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        Authorization: `Bearer ${process.env.ACCESS_TOKEN_SUB}`,
       },
     });
 
@@ -461,7 +461,7 @@ class PaymentController {
   async getSubscriptionLink(req, res) {
     try {
       const subscription = await this.subscriptionService.createSubscription();
-      return res.json(subscription);
+      return subscription.init_point;
     } catch (error) {
       console.log(error);
       return res.status(500).json({ error: true, msg: 'Failed to create subscription' });
@@ -502,8 +502,14 @@ app.get('/subscription', async (req, res) => {
     back_url: 'https://google.com.ar',
     payer_email: 'test_user_46945293@testuser.com',
     // Otros campos necesarios para crear la suscripción
-  };
+  }
+});
 
+
+
+app.post('/subscription', async (req, res) => {
+  const subscriptionType = req.body.subscriptionType;
+  const subscriptionValue = req.body.amount;
   try {
     // Llamar a la función getSubscriptionLink y pasar subscriptionData
     const subscriptionLink = await PaymentControllerInstance.getSubscriptionLink(subscriptionData);
@@ -577,7 +583,6 @@ app.post('/subscription', async (req, res) => {
   }
 });
 
-
 app.post('/addToCart', (req, res) => {
   const productId = req.body.productId;
   const quantity = req.body.cantidad;
@@ -632,6 +637,10 @@ app.get('/api/marcas', async (req, res) => {
     console.error('Error al cargar marcas desde la base de datos:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
+});
+
+// Ruta para la carga de la venta para success payment page
+app.get('/api/payment-info', async (req, res) =>{
 });
 
 // Middleware para verificar la autenticación
