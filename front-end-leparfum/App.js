@@ -7,7 +7,9 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const User = require('./models/User');
+const Subs = require('./models/Subs');
 const Preferences = require('./models/Preferences');
+const Sale = require('./models/Sale');
 const { getActivityLabel, getSeasonLabel, getEventLabel, getColorLabel } = require('./public/Preferencias');
 const Product = require('./models/Product');
 const Types = require('./models/Types');
@@ -396,8 +398,8 @@ class PaymentService {
       auto_recurring: {
         frequency: 1,
         frequency_type: 'months',
-        transaction_amount: 10,
-        currency_id: 'ARS',
+        transaction_amount: subscriptionValue,
+        currency_id: 'CLP',
       },
       back_url: 'https://google.com.ar',
       payer_email: 'test_user_46945293@testuser.com',
@@ -413,7 +415,6 @@ class PaymentService {
     return subscription.data;
   }
 }
-
 class PaymentController {
   constructor(subscriptionService) {
     this.subscriptionService = subscriptionService;
@@ -429,7 +430,33 @@ class PaymentController {
       throw new Error('Failed to create payment');
     }
   }
-  
+  saveSub = async (userId, Type) => {
+    try {
+      const newSub = new Subs({
+        idUser: userId,
+        Type: Type,
+        date: new Date()
+      });
+      await newSub.save();
+    }catch (error) {
+      console.log(error);
+      throw new Error('Failed to save Subs');
+    }
+  }
+  saveSale = async(userId, cart, total) => {
+    try {
+      const newSale = new Sale({
+        idUser: userId,
+        cart: cart,
+        total: total,
+        date: new Date() // Fecha actual
+      });
+      await newSale.save();
+    } catch (error) {
+      console.log(error);
+      throw new Error('Failed to save sale');
+    }
+  }
 
   async getSubscriptionLink(req, res) {
     try {
@@ -449,7 +476,10 @@ app.get('/payment', async (req, res) => {
   try {
     // Obtiene el enlace de pago desde el controlador
     const initPoint = await PaymentControllerInstance.getPaymentLink(req, res);
-
+    const userId = req.isAuthenticated() ? req.user._id : null; // ID del usuario autenticado
+    const cart = req.session.cart; // Carrito de compras almacenado en la sesión
+    const total = req.session.total; // Total de la compra
+    await PaymentControllerInstance.saveSale(userId, cart, total)
     // Redirige al init_point obtenido
     res.redirect(initPoint);
   } catch (error) {
@@ -458,56 +488,95 @@ app.get('/payment', async (req, res) => {
   }
 });
 
-app.get('/subscription', (req, res) => {
-  PaymentControllerInstance.getSubscriptionLink(req, res);
-});
-/* 
-app.get('/checkout', async (req, res) => {
-  
+app.get('/subscription', async (req, res) => {
+  const subscriptionValue = req.body.value; // Obtener el valor de suscripción desde el formulario
+  console.log("precio sub: es", subscriptionValue);
+  const subscriptionData = {
+    reason: 'Suscripción de ejemplo',
+    auto_recurring: {
+      frequency: 1,
+      frequency_type: 'months',
+      transaction_amount: subscriptionValue, // Usar el valor de suscripción obtenido del formulario
+      currency_id: 'CLP',
+    },
+    back_url: 'https://google.com.ar',
+    payer_email: 'test_user_46945293@testuser.com',
+    // Otros campos necesarios para crear la suscripción
+  };
 
   try {
-    const total = req.session.total;
-    const formattedTotal = total.toString().replace(',', '.'); // Cambia la coma por un punto como separador decimal
-    let parsedTotal = parseFloat(formattedTotal);
-
-
-  if (!total) {
-    return res.status(400).send('Total de compra no disponible');
-  }
-  let preference = {
-    items: [
-      {
-        id: 1,
-        title: "Laptop",
-        description: "aaa",
-        unit_price: 100,
-        currency_id: "CLP",
-        quantity: 1,
-      },
-    ],
-    back_urls: {
-      success: 'localhost:3000',
-      failure: 'https://tu-web.com/failure',
-      pending: 'https://tu-web.com/pending',
-    },
-    transaction_amount: parsedTotal, // Usa el valor parseado como transaction_amount
-    transaction_amount_currency: "CLP",
-    auto_return: 'approved',
-    binary_mode: true
-  };
-  
-    console.log("transaccion amount es:", total)
-    console.log("preferencia es : ", preference);
-    const response = await payment.create(preference);
-    console.log("cuerpo de ", response.body);
-    res.redirect(response.body.init_point);
+    // Llamar a la función getSubscriptionLink y pasar subscriptionData
+    const subscriptionLink = await PaymentControllerInstance.getSubscriptionLink(subscriptionData);
+    res.redirect(subscriptionLink);
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error al procesar el pago');
+    res.status(500).send('Error al procesar la suscripción');
   }
 });
 
-*/
+
+app.get('/subs', async (req, res) => {
+  try {
+    const userId = req.isAuthenticated() ? req.user._id : null;
+    const Type = req.query.subscriptionType;
+    console.log("tipo", Type);
+    await PaymentControllerInstance.saveSub(userId, Type)
+    res.redirect('https://www.mercadopago.cl/subscriptions/checkout?preapproval_plan_id=2c9380848bbab234018be480aa331c3d');
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al procesar la suscripción');
+  }
+});
+
+
+app.get('/subss', async (req, res) => {
+  try {
+    const userId = req.isAuthenticated() ? req.user._id : null;
+    const Type = req.query.subscriptionType;
+    console.log("tipo", Type);
+    await PaymentControllerInstance.saveSub(userId, Type)
+    res.redirect('https://www.mercadopago.cl/subscriptions/checkout?preapproval_plan_id=2c9380848bbab262018be4cfccb81d62');
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al procesar la suscripción');
+  }
+});
+
+
+app.get('/subsss', async (req, res) => {
+  try {
+    const userId = req.isAuthenticated() ? req.user._id : null;
+    const Type = req.query.subscriptionType;
+    console.log("tipo", Type);
+    await PaymentControllerInstance.saveSub(userId, Type)
+    res.redirect('https://www.mercadopago.cl/subscriptions/checkout?preapproval_plan_id=2c9380848bbab234018be4d1802e1c85');
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al procesar la suscripción');
+  }
+});
+
+
+
+
+
+
+
+app.post('/subscription', async (req, res) => {
+  const subscriptionType = req.body.subscriptionType;
+  const subscriptionValue = req.body.amount;
+  try {
+    const subscriptionLink = await PaymentControllerInstance.createSubscription(subscriptionType, subscriptionValue);
+    res.redirect(subscriptionLink);
+  } catch (error) {
+    console.error('Error al procesar la suscripción:', error);
+    res.status(500).send('Error al procesar la suscripción');
+  }
+});
+
 
 app.post('/addToCart', (req, res) => {
   const productId = req.body.productId;
