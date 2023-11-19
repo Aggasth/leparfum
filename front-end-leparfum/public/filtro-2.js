@@ -1,136 +1,162 @@
-// Función para cargar tipos desde la API
-async function cargarTipos() {
-  try {
-    const response = await fetch('/api/tipos');
-    const data = await response.json();
-    const tipos = data.tipos;
+// filtro-2.js
+document.addEventListener("DOMContentLoaded", function() {
+  // Obtén los contenedores de los filtros
+  const marcaContainer = document.getElementById('marcaContainer');
+  const tipoContainer = document.getElementById('tipoContainer');
+  
+  // Llama a la función cargarFiltros para obtener y mostrar las opciones de filtro
+  cargarFiltros();
 
-    const tipoContainer = document.getElementById("tipoContainer");
+  // Agrega un evento al botón "Aplicar Filtros"
+  const btnAplicarFiltros = document.getElementById('btnAplicarFiltros');
+  btnAplicarFiltros.addEventListener('click', aplicarFiltros);
+  
+  // Función para cargar las opciones de filtro desde la API
+  async function cargarFiltros() {
+    try {
+      // Obtén marcas desde la API
+      const marcasResponse = await fetch('/api/marcas');
+      const marcasData = await marcasResponse.json();
+      const marcas = marcasData.marcas;
 
-    tipos.forEach((tipo, index) => {
-      const checkbox = document.createElement("div");
-      checkbox.classList.add("form-check", "ms-3");
+      // Renderiza las opciones de marca
+      renderizarFiltros(marcas, marcaContainer);
 
+      // Obtén tipos desde la API
+      const tiposResponse = await fetch('/api/tipos');
+      const tiposData = await tiposResponse.json();
+      const tipos = tiposData.tipos;
+
+      // Renderiza las opciones de tipo
+      renderizarFiltros(tipos, tipoContainer);
+    } catch (error) {
+      console.error('Error al cargar filtros desde la API:', error);
+    }
+  }
+
+  // Función para renderizar opciones de filtro
+  function renderizarFiltros(opciones, contenedor) {
+    opciones.forEach((opcion) => {
+      const checkbox = document.createElement('div');
+      checkbox.classList.add('form-check', 'ms-3');
       checkbox.innerHTML = `
-        <input class="form-check-input filtro-checkbox" type="checkbox" id="${tipo}">
-        <label class="form-check-label" for="${tipo}">
-          ${tipo}
+        <input class="form-check-input filtro-checkbox" type="checkbox" id="${opcion}">
+        <label class="form-check-label" for="${opcion}">
+          ${opcion}
         </label>
       `;
-
-      tipoContainer.appendChild(checkbox);
+      contenedor.appendChild(checkbox);
     });
-  } catch (error) {
-    console.error('Error al cargar tipos desde la API:', error);
   }
-}
 
-// Función para cargar marcas desde la API
-async function cargarMarcas() {
+  // Función para cargar productos iniciales
+  async function cargarProductos() {
   try {
-    const response = await fetch('/api/marcas');
+    const response = await fetch('/api/productos');
     const data = await response.json();
-    const marcas = data.marcas;
-
-    const marcaContainer = document.getElementById("marcaContainer");
-
-    marcas.forEach((marca, index) => {
-      const checkbox = document.createElement("div");
-      checkbox.classList.add("form-check", "ms-3");
-
-      checkbox.innerHTML = `
-        <input class="form-check-input filtro-checkbox" type="checkbox" id="${marca}">
-        <label class="form-check-label" for="${marca}">
-          ${marca}
-        </label>
-      `;
-
-      marcaContainer.appendChild(checkbox);
-    });
+    consultaActual = {}; // Resetea la consulta actual
+    console.log('Productos cargados inicialmente:', data.productos);
+    actualizarVistaProductos(data.productos);
   } catch (error) {
-    console.error('Error al cargar tipos desde la API:', error);
+    console.error('Error al cargar productos:', error);
   }
 }
 
-// Estructura de un objeto perfume (puedes ajustarla según tus datos)
-class Perfume {
-  constructor(id, nombre, tipo, marca) {
-    this.id = id;
-    this.nombre = nombre;
-    this.tipo = tipo;
-    this.marca = marca;
-  }
-}
-
-// Lista de perfumes (simulación de tus datos)
-const listaPerfumes = [
-  new Perfume(1, 'Perfume 1', 'Floral', 'Marca A'),
-  new Perfume(2, 'Perfume 2', 'Cítrico', 'Marca B'),
-  // Agrega más perfumes según tu estructura de datos
-];
-
-// Función para filtrar perfumes según tipos y marcas
-async function filtrarPerfumes(tiposSeleccionados, marcasSeleccionadas) {
-  // Filtra la lista de perfumes según los tipos y marcas seleccionados
-  const resultadosFiltrados = listaPerfumes.filter(perfume => {
-    return (
-      (tiposSeleccionados.length === 0 || tiposSeleccionados.includes(perfume.tipo)) &&
-      (marcasSeleccionadas.length === 0 || marcasSeleccionadas.includes(perfume.marca))
-    );
-  });
-
-  // Simula una llamada al servidor o cualquier otra lógica necesaria
-  // Aquí podrías realizar una solicitud HTTP para obtener datos filtrados del servidor
-
-  return resultadosFiltrados;
-}
-
-
-// Función para aplicar filtros
-async function aplicarFiltros() {
-  console.log('Función aplicarFiltros llamada.');  // Agrega esta línea
-
-  console.log('Aplicando filtros...');
-  try {
-    // Obtenie checkboxs seleccionados de tipos
-    const tiposSeleccionados = Array.from(document.querySelectorAll('#tipoContainer input:checked')).map(checkbox => checkbox.id);
-
-    // Obtenie todos los checkboxs seleccionados de marcas
-    const marcasSeleccionadas = Array.from(document.querySelectorAll('#marcaContainer input:checked')).map(checkbox => checkbox.id);
-
-    // Aquí puedes realizar la lógica para filtrar los perfumes según los tipos y marcas seleccionados
-    // Por ejemplo, podrías enviar estos datos a tu servidor para obtener los resultados filtrados
-    const resultadosFiltrados = await filtrarPerfumes(tiposSeleccionados, marcasSeleccionadas);
-
-    // Luego, actualiza la vista con los resultados filtrados
-    // Por ejemplo, limpia la lista actual de perfumes y muestra los nuevos resultados
-    limpiarListaPerfumes();
-    mostrarResultados(resultadosFiltrados);
-
-    console.log('Tipos seleccionados:', tiposSeleccionados);
+  // Función para aplicar los filtros seleccionados
+  async function aplicarFiltros() {
+    // Obtén las marcas seleccionadas
+    const marcasSeleccionadas = obtenerFiltrosSeleccionados(marcaContainer);
     console.log('Marcas seleccionadas:', marcasSeleccionadas);
+
+    // Obtén los tipos seleccionados
+    const tiposSeleccionados = obtenerFiltrosSeleccionados(tipoContainer);
+    console.log('Tipos seleccionados:', tiposSeleccionados);
+
+    try {
+      const data = await obtenerProductosFiltrados(marcasSeleccionadas, tiposSeleccionados);
+      console.log('Respuesta del servidor:', data);
+      if (data && typeof data.productos !== 'undefined') {
+        console.log('Productos filtrados:', data.productos);
+        consultaActual = {}; // Resetea la consulta actual
+        actualizarVistaProductos(data.productos);
+      } else {
+        console.error('La respuesta del servidor no contiene la propiedad "productos" o es undefined.', data);
+      }
+    } catch (error) {
+      console.error('Error al obtener productos filtrados:', error);
+    }
+  }
+  
+  
+  
+
+  // Función para obtener los filtros seleccionados
+  function obtenerFiltrosSeleccionados(contenedor) {
+    const checkboxes = contenedor.querySelectorAll('.filtro-checkbox');
+    const seleccionados = Array.from(checkboxes)
+      .filter((checkbox) => checkbox.checked)
+      .map((checkbox) => checkbox.id);
+    return seleccionados;
+  }
+
+  // Función para actualizar la vista con productos filtrados
+function actualizarVistaProductos(productos) {
+  try {
+    // Obtén el contenedor donde deseas mostrar los productos en el DOM
+    const contenedorProductos = document.getElementById('contenedorProductos');
+
+    // Limpia el contenido actual del contenedor
+    contenedorProductos.innerHTML = '';
+
+    // Verifica si hay productos para mostrar
+    if (productos && productos.length > 0) {
+      // Itera sobre los productos y crea elementos para mostrarlos
+      productos.forEach((producto) => {
+        const productoElement = document.createElement('div');
+        productoElement.innerHTML = `
+          <div>
+            <img src="${producto.imagen}" alt="${producto.nombre}">
+            <p>${producto.nombreProducto}</p>
+            <p>Precio: $${producto.precio}</p>
+          </div>
+        `;
+        contenedorProductos.appendChild(productoElement);
+      });
+    } else {
+      // Muestra un mensaje indicando que no hay productos disponibles
+      const mensaje = document.createElement('p');
+      mensaje.textContent = 'No hay productos disponibles con los filtros seleccionados.';
+      contenedorProductos.appendChild(mensaje);
+    }
   } catch (error) {
-    console.error('Error al aplicar filtros:', error);
+    console.error('Error al actualizar la vista de productos:', error);
   }
 }
 
 
-// Llama a las funciones para cargar tipos y marcas al cargar la página
-document.addEventListener("DOMContentLoaded", () => {
-  cargarTipos();
-  cargarMarcas();
+ // Función para obtener productos filtrados desde el servidor
+async function obtenerProductosFiltrados(marcasSeleccionadas, tiposSeleccionados) {
+  try {
+    const response = await fetch('/api/productos-filtrados', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        marcasSeleccionadas,
+        tiposSeleccionados,
+      }),
+    });
 
-  const btnAplicarFiltros = document.getElementById("btnAplicarFiltros");
-  if (btnAplicarFiltros) {
-    btnAplicarFiltros.addEventListener("click", aplicarFiltros);
-  } else {
-    console.error("No se pudo encontrar el botón con el ID 'btnAplicarFiltros'.");
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error:', error);
   }
+}
+
 });
-
-
-
-
-// Llama a las funciones para cargar tipos y marcas al cargar la página
-window.addEventListener("load", cargarTipos);
-window.addEventListener("load", cargarMarcas);

@@ -21,8 +21,10 @@ const { float } = require('webidl-conversions');
 
 
 
+
 const app = express();
 app.use(flash());
+app.use(express.json());
 // Define las rutas de archivo estaticos para utilizarlos
 app.use(express.static('views'));
 app.use('/public', express.static('public', { 'Content-Type': 'text/javascript' }));
@@ -150,6 +152,49 @@ app.get('/perfumeria', (req, res) => {
       res.status(500).send('Error interno del servidor');
   });
 });
+
+// Ruta para obtener todos los productos
+app.get('/api/productos', async (req, res) => {
+  try {
+    // Obtén todos los productos según la consulta actual
+    const productos = await Product.find(consultaOriginal);
+    res.json({ productos });
+  } catch (error) {
+    console.error('Error al obtener productos:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+app.post('/api/productos-filtrados', async (req, res) => {
+  console.log(req.body); // Imprime los datos recibidos en la consola
+
+  const marcasSeleccionadas = req.body.marcasSeleccionadas || [];
+  const tiposSeleccionados = req.body.tiposSeleccionados || [];
+
+  // Construye la consulta para filtrar productos
+  const query = {};
+
+  if (marcasSeleccionadas.length > 0) {
+    query.marca = { $in: marcasSeleccionadas };
+  }
+
+  if (tiposSeleccionados.length > 0) {
+    query.tipo = { $all: tiposSeleccionados }; // Utiliza $all para el operador "AND"
+  }
+
+  try {
+    // Ejecuta la consulta en la base de datos
+    const productos = await Product.find(query);
+    console.log(productos); // Imprime los productos devueltos por la consulta
+    res.json({ productos });
+  } catch (error) {
+    console.error('Error al obtener productos filtrados:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+
+
 
 app.get('/payment-success', (req, res) => {
   res.render('payment-success', { isLoggedIn: req.isAuthenticated() });
