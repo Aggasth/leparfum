@@ -36,8 +36,8 @@ app.use('/public', express.static('public', { 'Content-Type': 'text/javascript' 
 mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB conectado'))
   .catch(err => console.error(err));
-  const client = new MercadoPagoConfig({ accessToken: 'TEST-6035887927031399-111415-7066aae8d2ae1ccb227f669af8cc6497-318354987', options: { timeout: 5000 }});
-  const payment = new Payment(client);
+  //const client = new MercadoPagoConfig({ accessToken: 'TEST-6035887927031399-111415-7066aae8d2ae1ccb227f669af8cc6497-318354987', options: { timeout: 5000 }});
+  //const payment = new Payment(client);
   
 // Configuración de Express
 app.use(express.urlencoded({ extended: false }));
@@ -361,13 +361,13 @@ class PaymentService {
   async createPayment(total) {
     const url = 'https://api.mercadopago.com/checkout/preferences';
     const body = {
-      payer_email: 'TESTUSER471227152@testuser.com',
+      payer_email: 'TESTUSER611643007@testuser.com',
       items: [
         {
           title: 'Carrito de compra',
           description: 'Productos de LeParfum',
           picture_url: 'http://www.myapp.com/myimage.jpg',
-          category_id: 'category123',
+          category_id: 'Perfumes',
           currency_id: 'CLP',
           quantity: 1,
           unit_price: total,
@@ -475,12 +475,14 @@ const PaymentControllerInstance = new PaymentController(PaymentServiceInstance);
 app.get('/payment', async (req, res) => {
   try {
     // Obtiene el enlace de pago desde el controlador
-    const initPoint = await PaymentControllerInstance.getPaymentLink(req, res);
     const userId = req.isAuthenticated() ? req.user._id : null; // ID del usuario autenticado
     const cart = req.session.cart; // Carrito de compras almacenado en la sesión
     const total = req.session.total; // Total de la compra
     await PaymentControllerInstance.saveSale(userId, cart, total)
+    const initPoint = await PaymentControllerInstance.getPaymentLink(req, res);
+    
     // Redirige al init_point obtenido
+    console.log("link de pago:", initPoint);
     res.redirect(initPoint);
   } catch (error) {
     console.error(error);
@@ -583,20 +585,55 @@ app.post('/subscription', async (req, res) => {
   }
 });
 
-app.post('/addToCart', (req, res) => {
+app.post('/addToCart', async (req, res) => {
   const productId = req.body.productId;
   const quantity = req.body.cantidad;
 
-  if (!req.session.cart) {
-    req.session.cart = [];
+  try {
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).send('Producto no encontrado');
+    }
+
+    // Verifica si hay disponibilidad de stock
+    if (!product.disponibilidad || product.cantidad < quantity || quantity <= 0) {
+      return res.redirect(`/template-product/${productId}?message=Producto sin stock`);
+    }
+
+    // Reduce la cantidad en stock basado en la cantidad seleccionada por el usuario
+    product.cantidad -= quantity;
+    await product.save();
+
+    // Lógica para agregar al carrito en la sesión
+    if (!req.session.cart) {
+      req.session.cart = [];
+    }
+
+    req.session.cart.push({ productId, quantity });
+    const message = "Añadido al carro!";
+    
+    // Redirecciona a la página del producto con un mensaje
+    res.redirect(`/template-product/${productId}?message=${message}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error interno del servidor');
   }
-
-  req.session.cart.push({ productId, quantity });
-  const message = "Añadido al carro!"
-
-  // Utiliza comillas invertidas para la cadena y la interpolación de variables
-  res.redirect(`/template-product/${productId}?message=${message}`);
 });
+
+// Endpoint para eliminar un producto del carrito
+app.delete('/eliminarProducto/:productId', (req, res) => {
+  const productId = req.params.productId;
+
+  // Encuentra el producto en el carrito y elimínalo de la sesión
+  if (req.session.cart) {
+      req.session.cart = req.session.cart.filter(item => item.productId !== productId);
+      res.sendStatus(204); // Envía una respuesta exitosa
+  } else {
+      res.status(404).send('Carrito no encontrado');
+  }
+});
+
 
 
 app.get('/success-suscripcion', (req, res) => {
