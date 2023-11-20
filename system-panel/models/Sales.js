@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const saleSchema = new mongoose.Schema({
     idUser:String,
     date:String,
-    cart:Array,
+    cart:Object,
     total:Number,
     status:Boolean
 });

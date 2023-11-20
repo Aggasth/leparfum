@@ -10,10 +10,7 @@ const userSchema = new mongoose.Schema({
     ref: 'Preferences'
   },
   direccion: String,
-  suscrito: {
-    active: Boolean,
-    type: String
-  }
+  suscrito: Object
 });
 
 module.exports = mongoose.model('User', userSchema);

@@ -1,24 +1,54 @@
-async function cargarTipos() {
+async function cargarMarcas() {
     try {
-        const response = await fetch('/api/tipos');
+        const selectContainer = document.getElementById("selectBrands");
+        const response = await fetch('/api/load-config');
         const data = await response.json();
-        const tipos = data.tipos;
+        const marcas = data.marcas;
 
-        const selectTipos = document.getElementById("selectTypes");
+        selectContainer.innerHTML = '';
+        const initialOption = document.createElement("option");
+        initialOption.value = "";
+        initialOption.text = "Seleccione una marca";
+        selectContainer.appendChild(initialOption);
 
-        // Limpiar las opciones existentes en el select
-        selectTipos.innerHTML = '<option value="" selected disabled hidden>Seleccione un tipo</option>';
-
-        // Iterar sobre los tipos y agregar opciones al select
-        tipos.forEach((tipo, index) => {
+        marcas.forEach((marca, index) => {
             const option = document.createElement("option");
-            option.value = tipo; // Asignar el valor del tipo
-            option.text = tipo; // Asignar el texto del tipo
-            selectTipos.appendChild(option);
+            option.value = marca.nombre;
+            option.textContent = marca.nombre;
+
+            selectContainer.appendChild(option);
         });
     } catch (error) {
         console.error('Error al cargar tipos desde la API:', error);
     }
 }
+
+async function cargarTipos() {
+    try {
+        const selectContainer = document.getElementById("selectTypes");
+        const response = await fetch('/api/load-config');
+        const data = await response.json();
+        const tipos = data.tipos;
+
+        selectContainer.innerHTML = '';
+        const initialOption = document.createElement("option");
+        initialOption.value = "";
+        initialOption.text = "Seleccione un tipo";
+        selectContainer.appendChild(initialOption);
+
+        tipos.forEach((tipo, index) => {
+            const option = document.createElement("option");
+            option.value = tipo.tipo;
+            option.textContent = tipo.tipo;
+
+            selectContainer.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error al cargar tipos desde la API:', error);
+    }
+}
+
+window.addEventListener("load", cargarTipos);
+window.addEventListener("load", cargarMarcas);
 
 

@@ -25,7 +25,7 @@
             <div class="row">
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                      <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Mis datos</button>
+                      <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Mis datos</button>
                       <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Pedidos</button>
                     </div>
                 </nav>
@@ -225,12 +225,22 @@
                     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
                         <div class="row">
                             <div class="col-12 pt-2">
-                                <p class="text-start fs-5 border-bottom">Pedidos pendientes</p>
-                                <p class="fs-6">La idea es que aqui se imprima una tabla con los datos de los pedidos pendientes de entrega</p>
-                            </div>
-                            <div class="col-12 pt-2">
-                                <p class="text-start fs-5 border-bottom">Pedidos anteriores</p>
-                                <p class="fs-6">La idea es que aqui se imprima una tabla con los datos de los pedidos ya finalizados</p>
+                                <p class="text-start fs-5 border-bottom"></p>
+                                <table id="salesTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Cliente</th>
+                                            <th scope="col">Producto(s)</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">Fecha</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                       <!-- Que se rellene con los items del dato "sales", según el esquema -->
+                                       <!-- El campo "Estado" debería ser un dropdown o spinner que permita cambiar de estado (pendiente - cancelado - completado) -->
+                                       <!-- Se puede hacer con un método script en esta misma vista, que al seleccionar un estado, vaya directo a la api a hacer el cambio -->
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

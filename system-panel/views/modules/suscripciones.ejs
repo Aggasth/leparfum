@@ -46,7 +46,7 @@
                                             <!-- Imprimir el ultimo envio realizado -->
                                         </div>
                                         <div class="col-12 pt-2">
-                                            <textarea class="form-control" name="commentArea" id="commentText" placeholder="Comentarios sobre el envio" rows="5"></textarea>
+                                            <textarea class="form-control" name="commentArea" id="commentText" placeholder="Comentarios sobre el envio: Producto - Cantidad - Descripción" rows="5"></textarea>
                                         </div>
                                         <div class="col-6"></div>
                                         <div class="col-6 pt-2">
@@ -60,15 +60,13 @@
                             </div>
                         </div>
                         <div class="col-6">
-                            <table id="users" class="table table-striped">
+                            <table id="subsTable" class="table table-striped text-center">
                                 <thead>
                                     <tr>
-                                        <th scope="col">#</th>
                                         <th scope="col">Cliente</th>
                                         <th scope="col">Dirección</th>
-                                        <th scope="col">Suscrito</th>
-                                        <th scope="col">Preferencias</th>
-                                        <th scope="col"></th>
+                                        <th scope="col">Celular</th>
+                                        <th scope="col">Suscripcion</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -79,9 +77,10 @@
                     </div>
                 </div>
             </div>
-            
-            
         </div>
     </div>
+
+    <script src="../public/subs-load.js"></script>
+
 </body>
 </html>
