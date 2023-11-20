@@ -10,10 +10,11 @@ const userSchema = new mongoose.Schema({
     ref: 'Preferences'
   },
   direccion: String,
-  suscrito:{
+  suscrito: {
     active: Boolean,
     type: String
-  }
+  },
+  idTipoPerfume: Number  // Añadir el campo idTipoPerfume al esquema de usuario
 });
 
 module.exports = mongoose.model('User', userSchema);

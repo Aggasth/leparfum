@@ -263,15 +263,19 @@ app.post('/register', async (req, res) => {
       return res.render('register', { message: 'El correo electrónico ya está registrado' });
     }
 
-    // Crear un nuevo usuario
+    // Asignar idTipoPerfume según las preferencias
+    const idTipoPerfume = asignarIdTipoPerfume(sexo, actividad, estacion, evento, color);
+
+    // Crear un nuevo usuario con el campo idTipoPerfume
     const newUser = new User({
       email: email,
       password: await bcrypt.hash(password, 10),
       celular: celular,
-      name: name
+      name: name,
+      idTipoPerfume: idTipoPerfume  // Añadir el campo idTipoPerfume al usuario
     });
 
-    // Guardar el usuario para obtener su ID
+    // Guardar el usuario en la base de datos
     await newUser.save();
 
     // Crear un nuevo documento Preferences
@@ -294,6 +298,26 @@ app.post('/register', async (req, res) => {
     res.status(500).send('Error en el registro');
   }
 });
+
+
+// Función para asignar idTipoPerfume según las preferencias
+function asignarIdTipoPerfume(sexo, actividad, estacion, evento, color) {
+  // Lógica para asignar el idTipoPerfume según las preferencias
+  // Puedes personalizar esta lógica según tus necesidades
+  if (sexo === 'Femenino' && actividad === 'Salir a cenar y socializar' && estacion === 'Verano') {
+    return 1;
+  } else if (sexo === 'Masculino' && actividad === 'Salir ocasionalmente a tomar algo' && color === 'Pasteles') {
+    return 2;
+  } else if (sexo === 'Femenino' && actividad === 'Juntas con amigos' && estacion === 'Primavera' && evento === 'Reuniones informales con amigos') {
+    return 4;
+  } else if (sexo === 'Masculino' && actividad === 'Juntas con amigos' && estacion === 'Invierno' && evento === 'Reuniones en ambientes cerrados') {
+    return 5;
+  } else {
+    // Si no se cumple ninguna condición, establece un valor predeterminado (puedes cambiar esto)
+    return 3; // O puedes aplicar alguna lógica adicional aquí
+  }
+}
+
 
 
 // Cerrar sesión
