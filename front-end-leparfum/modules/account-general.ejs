@@ -1,0 +1,190 @@
+<div id="general" class="content col-12">
+    <!-- Contenido para la sección General -->
+    <p class="fs-5 border-bottom">General</p>
+    <div class="row g-2 align-items-center mb-5">
+        <div class="col-auto">
+            <label for="nameUser">
+                Nombre
+            </label>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" id="nameUser" placeholder="<%=user.name%>" readonly>
+                <!--Traer el nombre del usuario logeado-->
+            </input>
+        </div>
+        <div class="col-auto">
+            <label for="emailUser">
+                Correo Electrónico
+            </label>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" id="emailUser" placeholder="<%=user.email%>" readonly>
+                <!--Traer el correo del usuario logeado-->
+            </input>
+        </div>
+        
+        <div class="col-12 text-end pe-5">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#generalModal">
+                Editar
+            </button>
+
+            <!-- Modal General-->
+            <div class="modal fade" id="generalModal" tabindex="-1" aria-labelledby="generalModal" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="generalModalLabel">General</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body container text-start">
+                        <form action="">
+                            <div class="mb-3">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" name="nombre" class="form-control" oninput="this.value = this.value.replace(/[^a-zA-Z- ]/g, '').slice(0, 40);">
+                            </div>
+                            <div class="mb-3">
+                                <label for="contraseña">Contraseña Actual</label>
+                                <input type="password" name="contraseña" class="form-control" oninput="this.value = this.value.replace(/[^a-zA-Z- ]/g, '').slice(0, 20);">
+                                <!--Se debe crear un script o validacion de que la contraseña actual corresponde a la actual
+                                esto se puede hacer en el mismo momento de enviar el update, se valida, si pasa se modifica
+                                y si no pasa, envia una alerta al usuario-->
+                                <label for="newPass">Contraseña Nueva</label>
+                                <input type="password" name="newPass" class="form-control" required>
+                                <label for="newPass2">Repita la Nueva Contraseña</label>
+                                <input type="password" name="newPass2" class="form-control" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="contact-info" class="content col-12">
+    <!-- Contenido para la sección Información de Contacto -->
+    <p class="fs-5 border-bottom">Información de Contacto</p>
+    <div class="row g-2 align-items-center mb-5">
+        <div class="col-auto">
+            <label for="phoneUser">
+                Celular de Contacto
+            </label>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" id="phoneUser" placeholder="<%=user.celular%>" readonly>
+                <!--Traer el celular del usuario logeado-->
+            </input>
+        </div>
+        <div class="col-12 text-end pe-5">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#contactoModal">
+                Editar
+            </button>
+            <!-- Modal Contacto-->
+            <div class="modal fade" id="contactoModal" tabindex="-1" aria-labelledby="generalModal" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="generalModalLabel">Contacto</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body container text-start">
+                        <form action="">
+                            <div class="mb-3">
+                                <label for="celular">Celular</label>
+                                <input placeholder="912345678" type="text" name="celular" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 9);">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addresses" class="content col-12">
+    <!-- Contenido para la sección Direcciones -->
+    <p class="fs-5 border-bottom">Direcciones</p>
+    <div class="row g-2 align-items-center mb-5">
+        <div class="col-auto">
+            <label for="addressUser">
+                Dirección
+            </label>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" id="addressUser" placeholder="<%=user.direccion%>" readonly>
+                <!--Traer la direccion del usuario logeado-->
+            </input>
+        </div>
+        <div class="col-12 text-end pe-5">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#direccionesModal">
+                Editar
+            </button>
+            <!-- Modal Direcciones-->
+            <div class="modal fade" id="direccionesModal" tabindex="-1" aria-labelledby="generalModal" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="generalModalLabel">Direcciones</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body container text-start">
+                        <form action="">
+                            <div class="mb-3">
+                                <label for="direccion">Direccion</label>
+                                <input type="text" name="direccion" class="form-control">
+                            </div>
+                        
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="preferences" class="content col-12">
+    <p class="fs-5 border-bottom">Preferencias</p>
+    <div class="row g-2 align-items-center mb-5">
+        <div id="tipoContainer" class="col-auto">
+            <% if (preferences && Object.keys(preferences).length> 0) { %>
+                <!-- Verifica si existen preferencias -->
+                <p><strong>Sexo:</strong>
+                    <%= preferences.sexo %>
+                </p>
+                <p><strong>Actividad:</strong>
+                    <%= getActivityLabel(preferences.actividad) %>
+                </p>
+                <p><strong>Estación:</strong>
+                    <%= getSeasonLabel(preferences.estacion) %>
+                </p>
+                <p><strong>Evento:</strong>
+                    <%= getEventLabel(preferences.evento) %>
+                </p>
+                <p><strong>Color:</strong>
+                    <%= getColorLabel(preferences.color) %>
+                </p>
+                <% } else { %>
+                    <!-- Si no hay preferencias, muestra un mensaje -->
+                    <p>No se encontraron preferencias para este usuario.</p>
+                    <% } %>
+        </div>
+        <div class="col-12 text-end pe-5">
+                <button class="btn btn-success">Guardar</button>
+        </div>
+    </div>
+</div>
