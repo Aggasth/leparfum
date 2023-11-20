@@ -627,6 +627,62 @@ app.get('/api/tipos', async (req, res) => {
   }
 });
 
+app.get('/api/sales', isAuthenticated, async (req, res) => {
+  const userId = req.isAuthenticated() ? req.user._id : null;
+  try {
+    // Obtener la lista de ventas asociadas al _id del usuario logueado
+    const salesList = await Sales.find({ idUser: userId });
+
+    // Obtener la lista de usuarios
+    const userList = await User.find();
+
+    // Obtener la lista de productos
+    const productList = await Product.find();
+
+    // Mapear ventas y agregar información adicional
+    const mappedSales = salesList.map((sale) => {
+
+      // Buscar el usuario asociado a la venta
+      const user = userList.find((user) => user._id.toString() === sale.idUser);
+
+      // Obtener el nombre del cliente
+      const nombreCliente = user ? user.name : 'Usuario no encontrado';
+
+      // Obtener los productos
+      const productos = sale.cart.map((item) => {
+        const product = productList.find((product) => product._id.toString() === item.productId);
+        const productName = product ? product.nombreProducto : 'Producto no encontrado';
+        return {
+          _id: item.productId,
+          nombre: productName,
+          cantidad: item.quantity,
+        };
+      });
+
+      // Obtener el total de la compra
+      const totalCompra = sale.total;
+
+      // Obtener la fecha
+      const fecha = sale.date;
+
+      // Crear un nuevo objeto con la información deseada
+      return {
+        nombreCliente,
+        productos,
+        totalCompra,
+        fecha,
+      };
+    });
+
+    // Enviar la lista generada como respuesta
+    res.json({ sales: mappedSales });
+  } catch (error) {
+    console.error('Error al cargar usuarios y suscripciones desde la base de datos:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+
 // Ruta para cargar marcas
 app.get('/api/marcas', async (req, res) => {
   Brand.find();
