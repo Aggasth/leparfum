@@ -631,7 +631,7 @@ app.get('/api/sales', isAuthenticated, async (req, res) => {
   const userId = req.isAuthenticated() ? req.user._id : null;
   try {
     // Obtener la lista de ventas asociadas al _id del usuario logueado
-    const salesList = await Sales.find({ idUser: userId });
+    const salesList = await Sale.find({ idUser: userId });
 
     // Obtener la lista de usuarios
     const userList = await User.find();
