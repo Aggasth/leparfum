@@ -120,4 +120,19 @@ footer{
 .checkbox-container {
     max-height: 200px; /* Establece la altura máxima que deseas mostrar sin desplazamiento */
     overflow-y: auto;  /* Activa la barra de desplazamiento vertical cuando se excede la altura máxima */
-  }
+}
+
+#btnAplicarFiltros {
+    margin-top: 20px; /* Ajusta la cantidad de espacio en la parte superior según sea necesario */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-aplicar-filtros {
+    margin-top: 20px; /* Ajusta la cantidad de espacio en la parte superior según sea necesario */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+  

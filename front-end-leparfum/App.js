@@ -21,11 +21,14 @@ const { name } = require('ejs');
 const { MercadoPagoConfig, Payment } = require('mercadopago');
 const { float } = require('webidl-conversions');
 const bodyParser = require('body-parser');
+const Recomendacion = require('./models/Recomendacion');
+
 
 
 
 const app = express();
 app.use(flash());
+app.use(express.json());
 // Define las rutas de archivo estaticos para utilizarlos
 app.use(express.static('views'));
 app.use('/public', express.static('public', { 'Content-Type': 'text/javascript' }));
@@ -154,6 +157,49 @@ app.get('/perfumeria', (req, res) => {
   });
 });
 
+// Ruta para obtener todos los productos
+app.get('/api/productos', async (req, res) => {
+  try {
+    // Obtén todos los productos según la consulta actual
+    const productos = await Product.find(consultaOriginal);
+    res.json({ productos });
+  } catch (error) {
+    console.error('Error al obtener productos:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+app.post('/api/productos-filtrados', async (req, res) => {
+  console.log(req.body); // Imprime los datos recibidos en la consola
+
+  const marcasSeleccionadas = req.body.marcasSeleccionadas || [];
+  const tiposSeleccionados = req.body.tiposSeleccionados || [];
+
+  // Construye la consulta para filtrar productos
+  const query = {};
+
+  if (marcasSeleccionadas.length > 0) {
+    query.marca = { $in: marcasSeleccionadas };
+  }
+
+  if (tiposSeleccionados.length > 0) {
+    query.tipo = { $all: tiposSeleccionados }; // Utiliza $all para el operador "AND"
+  }
+
+  try {
+    // Ejecuta la consulta en la base de datos
+    const productos = await Product.find(query);
+    console.log(productos); // Imprime los productos devueltos por la consulta
+    res.json({ productos });
+  } catch (error) {
+    console.error('Error al obtener productos filtrados:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+
+
+
 app.get('/payment-success', (req, res) => {
   res.render('payment-success', { isLoggedIn: req.isAuthenticated() });
 });
@@ -208,10 +254,9 @@ app.get('/', (req, res) => {
 
 
 
-// Registrarse
 app.post('/register', async (req, res) => {
-  const { email, password, celular, name, sexo, actividad, estacion, evento, color } = req.body;
-
+  const { email, password, celular, name, sexo, direccion, actividad, estacion, evento, color } = req.body;
+console.log("lo que viene del registro", req.body);
   // Verificar si el correo electrónico ya está registrado
   try {
     const existingUser = await User.findOne({ email: email });
@@ -226,6 +271,7 @@ app.post('/register', async (req, res) => {
       email: email,
       password: await bcrypt.hash(password, 10),
       celular: celular,
+      direccion: direccion,
       name: name
     });
 
@@ -245,13 +291,101 @@ app.post('/register', async (req, res) => {
     // Guardar las preferencias en la base de datos
     await newPreferences.save();
 
-    res.redirect('/login?isLoggedIn=' + req.isAuthenticated());
+    
+function recomendarPerfume(sexo, actividad, estacion, evento, color) {
+  let recomendacion = "";
+
+  // Lógica de recomendación basada en las preferencias
+  if (sexo === 'masculino') {
+    if (actividad === '1' && estacion === '1' && evento === '1' && color === '1') {
+      recomendacion = 'Perfumes citricos';
+    } else if (actividad === '2' && estacion === '2' && evento === '3' && color === '3') {
+      recomendacion = 'Perfumes Chipres Románticos';
+    } else if (actividad === '1' && estacion === '1' && evento === '2' && color === '2') {
+      recomendacion = 'Perfumes Amaderados';
+    } else if (actividad === '3' && estacion === '2' && evento === '3' && color === '3') {
+      recomendacion = 'Perfumes Acaramelados';
+    } else if (actividad === '2' && estacion === '3' && evento === '1' && color === '3') {
+      recomendacion = 'Perfumes Florales';
+    } else if (actividad === '1' && estacion === '3' && evento === '3' && color === '2') {
+      recomendacion = 'Perfumes Dulces';
+    } else if (actividad === '1' && estacion === '1' && evento === '1' && color === '1') {
+      recomendacion = 'Perfumes Arabes';
+    } else {
+      recomendacion = 'Perfumes Sport';
+    }
+  
+  } else if (sexo === 'femenino') {
+    if (actividad === '1' && estacion === '1' && evento === '1' && color === '1') {
+      recomendacion = 'Perfumes Arabes';
+    } else if (actividad === '2' && estacion === '2' && evento === '3' && color === '3') {
+      recomendacion = 'Perfumes Chipres Románticos';
+    } else if (actividad === '1' && estacion === '1' && evento === '2' && color === '2') {
+      recomendacion = 'Perfumes Amaderados';
+    } else if (actividad === '3' && estacion === '2' && evento === '3' && color === '3') {
+      recomendacion = 'Perfumes Acaramelados';
+    } else if (actividad === '2' && estacion === '3' && evento === '1' && color === '3') {
+      recomendacion = 'Perfumes Florales';
+    } else if (actividad === '1' && estacion === '3' && evento === '3' && color === '2') {
+      recomendacion = 'Perfumes Dulces';
+    } else if (actividad === '1' && estacion === '1' && evento === '1' && color === '1') {
+      recomendacion = 'Perfumes citricos';
+    } else {
+      recomendacion = 'Perfumes Sport';
+    }
+  } else {
+    // Otras combinaciones de preferencias o condiciones
+    recomendacion = 'Perfumes acidos';
+  }
+
+  return recomendacion;
+
+}
+const recomendacionUsuario = recomendarPerfume(sexo, actividad, estacion, evento, color);
+
+// Crear una instancia de Recomendacion y guardarla en la base de datos
+const nuevaRecomendacion = new Recomendacion({
+    idUser: newUser._id, // Asignar el ID del usuario
+    preferencia: recomendacionUsuario // Guardar la recomendación de perfume
+});
+
+await nuevaRecomendacion.save();
+    res.redirect(`/login?isLoggedIn=${req.isAuthenticated()}&recomendacion=${recomendacionUsuario}`);
+
 
   } catch (error) {
     console.error(error);
     res.status(500).send('Error en el registro');
   }
 });
+
+
+/*function asignarIdTipoPerfume(sexo, actividad, estacion, evento, color) {
+  // Imprime los valores para depuración
+  console.log(`Sexo: ${sexo}, Actividad: ${actividad}, Estación: ${estacion}, Evento: ${evento}, Color: ${color}`);
+
+  // Lógica para asignar el idTipoPerfume según las preferencias
+  if (sexo === 'Masculino' && actividad === 1 && estacion === 1 && evento === 1 && color === 1) {
+    console.log('Condición 1');
+    return 1;
+  } else if (sexo === 'Masculino' && actividad === 'Salir ocasionalmente a tomar algo' && color === 'Pasteles') {
+    // Resto de condiciones
+    // ...
+  } else if (sexo === 'Femenino' && actividad === 'Juntas con amigos' && estacion === 'Primavera' && evento === 'Reuniones informales con amigos') {
+    // Resto de condiciones
+    // ...
+  } else if (sexo === 'Masculino' && actividad === 'Juntas con amigos' && estacion === 'Invierno' && evento === 'Reuniones en ambientes cerrados') {
+    // Resto de condiciones
+    // ...
+  } else {
+    // Si no se cumple ninguna condición, establece un valor predeterminado
+    console.log('Condición predeterminada');
+    return 3; // O puedes aplicar alguna lógica adicional aquí
+  }
+}*/
+
+
+
 
 
 // Cerrar sesión
@@ -283,17 +417,17 @@ app.get('/account', isAuthenticated, async (req, res) => {
     // Obtén las preferencias del usuario si están disponibles
     const preferences = await Preferences.findOne({ usuario: user._id });
 
-    // Renderiza la vista de cuentas y pasa el usuario y sus preferencias
-    res.render('account', { user, preferences, getActivityLabel, getSeasonLabel, getEventLabel, getColorLabel });
+    // Obtén la recomendación del usuario si está disponible
+    const recomendacion = await Recomendacion.findOne({ idUser: user._id });
+
+    // Renderiza la vista de cuentas y pasa el usuario, sus preferencias y la recomendación
+    res.render('account', { user, preferences, recomendacion, getActivityLabel, getSeasonLabel, getEventLabel, getColorLabel });
   } catch (error) {
     console.error(error);
     res.status(500).send('Error interno del servidor');
   }
 });
 
-app.get('/suscripcion', (req, res) => {
-  res.render('suscripcion', { isLoggedIn: req.isAuthenticated() });
-});
 
 
 //Carrito
