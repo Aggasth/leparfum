@@ -221,6 +221,56 @@
                                 </div>
                             </div>
                         </div>
+
+                        
+                        <!-- Sección para mostrar la recomendación -->
+                        <div id="recomendacion" class="content col-12">
+                            <p class="fs-5 border-bottom">Recomendación de Perfume</p>
+                            <% if (recomendacion) { %>
+                                <p><strong>Recomendación:</strong>
+                            <%= recomendacion.preferencia %>
+                                </p>
+                            <% } else { %>
+                                <p>No hay recomendación disponible.</p>
+                            <% } %>
+                            <div class="col-12 text-end pe-5">
+                            <!-- Puedes agregar aquí cualquier botón o enlace adicional relacionado con la recomendación -->
+                            </div>
+                        </div>
+                        
+                        <!-- perfumes Recomendados -->
+                        <div id="perfumesRecomendados" class="content col-12">
+                            <p class="fs-5 border-bottom">Perfumes Recomendados</p>
+                            <ul>
+                            <% if (recomendacion && recomendacion.preferencia === 'Perfumes citricos') { %>
+                                <li>Acqua di Gioia by Giorgio Armani</li>
+                                <li>Light Blue by Dolce & Gabbana</li>
+                            <% } else if (recomendacion && recomendacion.preferencia === 'Perfumes Amaderados') { %>
+                                <li>Dior Sauvage</li>
+                                <li>Tom Ford Tobacco Vanille</li>
+                            <% } else if (recomendacion && recomendacion.preferencia === 'Perfumes Arabes') { %>
+                                <li>Montale Black Aoud</li>
+                                <li>Tom Ford Oud Wood</li>
+                            <% } else if (recomendacion && recomendacion.preferencia === 'Perfumes Acaramelados') { %>
+                                <li>Prada Candy</li>
+                                <li>Ariana Grande Cloud</li>
+                            <% } else if (recomendacion && recomendacion.preferencia === 'Perfumes Florales') { %>
+                                <li>Chanel No. 5</li>
+                                <li>Gucci Bloom</li>
+                            <% } else if (recomendacion && recomendacion.preferencia === 'Perfumes Dulces') { %>
+                                <li>Gourmand Coquin by Guerlain</li>
+                                <li>Viktor & Rolf Bonbon</li>
+                            <% } else if (recomendacion && recomendacion.preferencia === 'Perfumes Chipres Románticos') { %>
+                                <li>Yves Saint Laurent Yvresse (Champagne)</li>
+                                <li>Chanel No. 19</li>
+                            <% } else if (recomendacion && recomendacion.preferencia === 'Perfumes Sport') { %>
+                                <li>Dior Homme Sport</li>
+                                <li>Adidas Moves for Him</li>
+                            <% } else { %>
+                            <% } %>
+                            </ul>
+                        </div> 
+
                     </div>
                     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
                         <div class="row">
