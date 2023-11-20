@@ -437,7 +437,7 @@ app.post('/update-profile', isAuthenticated,
     // Agrega reglas de validación aquí según tus requisitos
     body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
     body('contraseña').optional().notEmpty().withMessage('La contraseña actual es obligatoria'),
-    body('newPass').optional().isLength({ min: 6 }).withMessage('La nueva contraseña debe tener al menos 6 caracteres'),
+    body('newPass').optional().isLength({ min: 2 }).withMessage('La nueva contraseña debe tener al menos 6 caracteres'),
     body('newPass2').optional().custom((value, { req }) => {
       if (value !== req.body.newPass) {
         throw new Error('Las contraseñas no coinciden');
