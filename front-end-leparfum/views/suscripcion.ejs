@@ -1,141 +1,141 @@
 <% if (typeof successFlash !== 'undefined') { %>
-    <div class="alert alert-success">
-      <%= successFlash %>
-    </div>
-  <% } %>
+  <div class="alert alert-success">
+    <%= successFlash %>
+  </div>
+<% } %>
 
-  <% if (typeof errorFlash !== 'undefined') { %>
-    <div class="alert alert-danger">
-      <%= errorFlash %>
-    </div>
-  <% } %>
+<% if (typeof errorFlash !== 'undefined') { %>
+  <div class="alert alert-danger">
+    <%= errorFlash %>
+  </div>
+<% } %>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LeParfum - Suscripción</title>
-  <script src="../public/filtro.js"></script>
-  <link rel="stylesheet" type="text/css" href="style-suscripcion.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather+Sans&display=swap">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeParfum - Suscripción</title>
+<script src="../public/filtro.js"></script>
+<link rel="stylesheet" type="text/css" href="style-suscripcion.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather+Sans&display=swap">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
-  <% if(isLoggedIn){ %>
-    <%- include ('../modules/header-login.ejs') %>
-  <%} else{ %>
-    <%- include ('../modules/header-logout.ejs') %>
-  <%} %>
-  
-  
-  <section class="h-100 gradient-form suscripcion-back">
-    <div class="container py-5 h-100">
-      <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col-xl-10">
-          <div class="card rounded-3 text-black">
-            <div class="row g-0">
-                <div class="col-12 text-center mt-3">
-                    <p class="fs-3 fw-medium titulo"> SUSCRIPCIONES LEPARFUM</p>
-                </div>
-                <div class="col-12 text-center mt-3 ms-3">
-                    <p class="fs-5 fw-medium me-5">
-                        Suscríbete para recibir mensualmente una muestra de perfumes según tus preferencias en la puerta de tu casa. Dependiendo
-                        de la suscripcion podrás recibir drops exclusivos sorpresa, packaging limitado, fragancias únicas.
-                    </p>
-                </div>
-                <div class="col-12">
-                  <div class="row">
-                    <form class="col-4" action="/subs" method="GET">
-                      <input type="hidden" id="subscriptionType" name="subscriptionType" value="Essentiel">
-                      <input type="hidden" name="amount" value="10520">  
-                      <div class="">
-                        <div class="card border-0" style="min-height: 500px;">
-                            <div class="card-body text-center d-grid justify-content-center align-items-between" >
-                              <h5 class="card-title mb-3">Essentiel</h5>
-                              <p class="card-text">
-                                <img class="card-img-top" src="img/icons/essentiel.png" alt="" style="height: 100px; width: 100px;"><br>
-                                - Entrega en 5 días hábiles. <br>
-                                - Atención al cliente en horario laboral.<br>
-                                - Perfume TravelSpray de 15ml.<br>
-                                - Rango de perfumes hasta los <b>$80.000</b><br>
-                              </p>
-                              <p class="card-text text-success fw-bold">
-                                $10.520 iva inc.
-                              </p>
-                            </div>
-                          </div>
-                          <div class="m-3">
-                            <button type="submit" class="btn btn-danger w-100 rounded-0">Suscribirme</button>
-                          </div>
-                      </div>
-                    </form>
-                    <form class="col-4 pb-4" action="/subs" method="GET">
-                      <input type="hidden" id="subscriptionType" name="subscriptionType" value="Elite">
-                      <input type="hidden" name="amount" value="18850"> 
-                        <div class="card border-0" style="min-height: 500px;">
-                          <div class="card-body text-center d-grid justify-content-center align-items-center">
-                            <h5 class="card-title mb-3">Elite</h5>
+<% if(isLoggedIn){ %>
+  <%- include ('../modules/header-login.ejs') %>
+<%} else{ %>
+  <%- include ('../modules/header-logout.ejs') %>
+<%} %>
+
+
+<section class="h-100 gradient-form suscripcion-back">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-xl-10">
+        <div class="card rounded-3 text-black">
+          <div class="row g-0">
+              <div class="col-12 text-center mt-3">
+                  <p class="fs-3 fw-medium titulo"> SUSCRIPCIONES LEPARFUM</p>
+              </div>
+              <div class="col-12 text-center mt-3 ms-3">
+                  <p class="fs-5 fw-medium me-5">
+                      Suscríbete para recibir mensualmente una muestra de perfumes según tus preferencias en la puerta de tu casa. Dependiendo
+                      de la suscripcion podrás recibir drops exclusivos sorpresa, packaging limitado, fragancias únicas.
+                  </p>
+              </div>
+              <div class="col-12">
+                <div class="row">
+                  <form class="col-4" action="/subs" method="GET">
+                    <input type="hidden" id="subscriptionType" name="subscriptionType" value="Essentiel">
+                    <input type="hidden" name="amount" value="10520">  
+                    <div class="">
+                      <div class="card border-0" style="min-height: 500px;">
+                          <div class="card-body text-center d-grid justify-content-center align-items-between" >
+                            <h5 class="card-title mb-3">Essentiel</h5>
                             <p class="card-text">
-                              <img class="card-img-top" src="img/icons/elite.png" alt="" style="height: 100px; width: 100px;"><br>
-                              - Entrega en 48 horas. <br>
-                              - Prioridad en Atencion al Cliente.<br>
+                              <img class="card-img-top" src="img/icons/essentiel.png" alt="" style="height: 100px; width: 100px;"><br>
+                              - Entrega en 5 días hábiles. <br>
+                              - Atención al cliente en horario laboral.<br>
                               - Perfume TravelSpray de 15ml.<br>
-                              - Rango de perfumes hasta los <b>$150.000</b><br>
+                              - Rango de perfumes hasta los <b>$80.000</b><br>
                             </p>
                             <p class="card-text text-success fw-bold">
-                              $18.850 iva inc.
+                              $10.520 iva inc.
                             </p>
-  
                           </div>
                         </div>
-                      </div>
-                      <div class="col-10">
-                        <button type="submit" class="btn btn-danger w-100 rounded-0" >Suscribirme</button>
-                      </div>
-                </div>
-              </form>
-              </form>
-                <form action="/subsss" method="GET">
-                  <input type="hidden" id="subscriptionType" name="subscriptionType" value="Luxueux">
-                <div class="col-4">
-                    <div class="card border-0" style="min-height: 400px;">
+                        <div class="m-3">
+                          <button type="submit" class="btn btn-danger w-100 rounded-0">Suscribirme</button>
+                        </div>
+                    </div>
+                  </form>
+                  <form class="col-4 pb-4" action="/subs" method="GET">
+                    <input type="hidden" id="subscriptionType" name="subscriptionType" value="Elite">
+                    <input type="hidden" name="amount" value="18850"> 
+                      <div class="card border-0" style="min-height: 500px;">
                         <div class="card-body text-center d-grid justify-content-center align-items-center">
-                          <h5 class="card-title mb-3">Luxueux</h5>
+                          <h5 class="card-title mb-3">Elite</h5>
                           <p class="card-text">
-                            <img class="card-img-top" src="img/icons/luxueux.png" alt="" style="height: 100px; width: 100px;"><br>
-                            - Entrega en 24 horas. <br>
-                            - Atencion al Cliente Inmediata<br>
-                            - Resolucion de problemas en 24 horas.<br>
+                            <img class="card-img-top" src="img/icons/elite.png" alt="" style="height: 100px; width: 100px;"><br>
+                            - Entrega en 48 horas. <br>
+                            - Prioridad en Atencion al Cliente.<br>
                             - Perfume TravelSpray de 15ml.<br>
-                            - Mini Gel de Ducha de regalo cada 3 meses.<br>
-                            - Rango de perfumes hasta los <b>$200.000</b><br>
-                            - Packaging Edicion Limitada.
+                            - Rango de perfumes hasta los <b>$150.000</b><br>
                           </p>
                           <p class="card-text text-success fw-bold">
-                            $24.800 iva inc.
-
+                            $18.850 iva inc.
                           </p>
+
                         </div>
-                        <div class="m-3">
-                          <button type="submit" class="btn btn-danger w-100 rounded-0" name="Luxueux" value="24800">Suscribirme</button>
-                        </div>
-                    </form>
-                  </div>
+                      </div>
+                    </div>
+                    <div class="col-10">
+                      <button type="submit" class="btn btn-danger w-100 rounded-0" >Suscribirme</button>
+                    </div>
+              </div>
+            </form>
+            </form>
+              <form action="/subsss" method="GET">
+                <input type="hidden" id="subscriptionType" name="subscriptionType" value="Luxueux">
+              <div class="col-4">
+                  <div class="card border-0" style="min-height: 400px;">
+                      <div class="card-body text-center d-grid justify-content-center align-items-center">
+                        <h5 class="card-title mb-3">Luxueux</h5>
+                        <p class="card-text">
+                          <img class="card-img-top" src="img/icons/luxueux.png" alt="" style="height: 100px; width: 100px;"><br>
+                          - Entrega en 24 horas. <br>
+                          - Atencion al Cliente Inmediata<br>
+                          - Resolucion de problemas en 24 horas.<br>
+                          - Perfume TravelSpray de 15ml.<br>
+                          - Mini Gel de Ducha de regalo cada 3 meses.<br>
+                          - Rango de perfumes hasta los <b>$200.000</b><br>
+                          - Packaging Edicion Limitada.
+                        </p>
+                        <p class="card-text text-success fw-bold">
+                          $24.800 iva inc.
+
+                        </p>
+                      </div>
+                      <div class="m-3">
+                        <button type="submit" class="btn btn-danger w-100 rounded-0" name="Luxueux" value="24800">Suscribirme</button>
+                      </div>
+                  </form>
                 </div>
-            </div>
+              </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
-  
-  
-  <!-- Pie de Página -->
-  <%- include ('../modules/footer.ejs') %>
+  </div>
+</section>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+<!-- Pie de Página -->
+<%- include ('../modules/footer.ejs') %>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
