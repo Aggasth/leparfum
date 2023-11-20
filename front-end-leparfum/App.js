@@ -145,6 +145,9 @@ app.get('/register', (req, res) => {
 app.get('/login-error', (req, res) => {
   res.render('login-error', { isLoggedIn: req.isAuthenticated() });
 });
+app.get('/suscripcion', (req, res) => {
+  res.render('suscripcion', { isLoggedIn: req.isAuthenticated() });
+});
 
 app.get('/perfumeria', (req, res) => {
   Product.find()
