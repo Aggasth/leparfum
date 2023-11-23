@@ -117,4 +117,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error al enviar el formulario:', error);
         }
     });
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> bb47f7448ca4b51343a5f367b8d2c24b93db7eec

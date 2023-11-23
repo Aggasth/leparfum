@@ -23,6 +23,10 @@ const { float } = require('webidl-conversions');
 const bodyParser = require('body-parser');
 const Recomendacion = require('./models/Recomendacion');
 const { validationResult, body } = require('express-validator');
+<<<<<<< HEAD
+=======
+
+>>>>>>> bb47f7448ca4b51343a5f367b8d2c24b93db7eec
 
 
 
@@ -429,6 +433,102 @@ app.get('/account', isAuthenticated, async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send('Error interno del servidor');
+  }
+});
+
+app.post('/update-profile', isAuthenticated,
+  [
+    // Agrega reglas de validación aquí según tus requisitos
+    body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
+    body('contraseña').optional().notEmpty().withMessage('La contraseña actual es obligatoria'),
+    body('newPass').optional().isLength({ min: 2 }).withMessage('La nueva contraseña debe tener al menos 6 caracteres'),
+    body('newPass2').optional().custom((value, { req }) => {
+      if (value !== req.body.newPass) {
+        throw new Error('Las contraseñas no coinciden');
+      }
+      return true;
+    }),
+  ],
+  async (req, res) => {
+    try {
+      // Manejo de errores de validación
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      // Obtén los datos del formulario del cuerpo de la solicitud
+      const { nombre, contraseña, newPass, newPass2 } = req.body;
+
+      // Actualiza la información del usuario en la base de datos
+      const user = req.user; // Asumiendo que `req.user` contiene la información del usuario autenticado
+      user.name = nombre;
+
+      // Lógica para verificar y actualizar la contraseña si es necesario
+      if (contraseña) {
+        const passwordMatch = await bcrypt.compare(contraseña, user.password);
+
+        if (!passwordMatch) {
+          return res.status(401).send('Contraseña actual incorrecta');
+        }
+
+        // Hash de la nueva contraseña antes de guardarla en la base de datos
+        const hashedNewPassword = await bcrypt.hash(newPass, 10);
+        user.password = hashedNewPassword;
+      }
+
+      // Guarda los cambios en la base de datos
+      await user.save();
+
+      // Redirige a la página de cuenta o envía una respuesta de éxito
+      res.redirect('/account');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error interno del servidor: ' + error.message);
+    }
+  }
+);
+
+// Ruta para actualizar la información de contacto
+app.post('/update-contact', isAuthenticated, async (req, res) => {
+  try {
+      // Asegúrate de que req.user está definido
+      if (!req.user) {
+          return res.status(401).send('Usuario no autenticado');
+      }
+
+      // Lógica para actualizar la información de contacto
+      const user = req.user;
+      user.celular = req.body.celular;
+      await user.save();
+
+      // Redirige a la página de cuenta o envía una respuesta de éxito
+      res.redirect('/account');
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Error interno del servidor');
+  }
+});
+
+
+// Ruta para actualizar la información de direcciones
+app.post('/update-address', isAuthenticated, async (req, res) => {
+  try {
+      // Asegúrate de que req.user está definido
+      if (!req.user) {
+          return res.status(401).send('Usuario no autenticado');
+      }
+
+      // Lógica para actualizar la dirección
+      const user = req.user;
+      user.direccion = req.body.direccion;
+      await user.save();
+
+      // Redirige a la página de cuenta o envía una respuesta de éxito
+      res.redirect('/account');
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Error interno del servidor');
   }
 });
 

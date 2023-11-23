@@ -110,18 +110,34 @@ function actualizarVistaProductos(productos) {
 
     // Verifica si hay productos para mostrar
     if (productos && productos.length > 0) {
+      // Crea un elemento div con la clase 'row'
+      const rowElement = document.createElement('div');
+      rowElement.classList.add('row');
+
       // Itera sobre los productos y crea elementos para mostrarlos
       productos.forEach((producto) => {
         const productoElement = document.createElement('div');
+        productoElement.classList.add('col-lg-3', 'col-md-6', 'col-sm-6', 'mb-4'); // Añade clases Bootstrap para la disposición
         productoElement.innerHTML = `
-          <div>
-            <img src="${producto.imagen}" alt="${producto.nombre}">
-            <p>${producto.nombreProducto}</p>
-            <p>Precio: $${producto.precio}</p>
+          <div class="card card-product border-0">
+            <a href="/template-product/${producto._id}">
+              <img class="img img-product" src="${producto.imagen}" alt="${producto.nombre}">
+            </a>
+            <div class="card-header fw-bold" style="color: rgb(131, 103, 103)">
+              $${producto.precio}
+            </div>
+            <div class="card-body">
+              <p class="card-text">
+                ${producto.nombreProducto}
+              </p>
+            </div>
           </div>
         `;
-        contenedorProductos.appendChild(productoElement);
+        rowElement.appendChild(productoElement);
       });
+
+      // Agrega el elemento 'row' al contenedor principal
+      contenedorProductos.appendChild(rowElement);
     } else {
       // Muestra un mensaje indicando que no hay productos disponibles
       const mensaje = document.createElement('p');
@@ -132,6 +148,7 @@ function actualizarVistaProductos(productos) {
     console.error('Error al actualizar la vista de productos:', error);
   }
 }
+
 
 
  // Función para obtener productos filtrados desde el servidor
