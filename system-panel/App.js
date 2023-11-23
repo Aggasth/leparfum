@@ -8,6 +8,7 @@ const config = require('./config');
 const path = require('path');
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');
+const nodemailer = require('nodemailer');
 
 // Modelos
 const Admin = require('./models/Admin');
@@ -578,6 +579,50 @@ app.post('/login', passport.authenticate('local', {
   res.redirect('/');
 });
 
+
+app.post('/enviarContrasenaPorCorreo', async (req, res) => {
+  try {
+    const { email } = req.body; // Supongamos que recibes el email del cliente en la solicitud
+
+    // Buscar al usuario por su correo electrónico
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).send('Usuario no encontrado');
+    }
+
+    // Configurar nodemailer
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: 'christopherhndez3@gmail.com', // Coloca aquí tu dirección de correo electrónico
+        pass: '16122000' // Coloca aquí tu contraseña
+      }
+    });
+
+    // Crear el mensaje
+    const mailOptions = {
+      from: 'christopherhndez3@gmail.com', // Dirección de correo electrónico remitente
+      to: 'thoferoz@gmail.com', // Dirección de correo electrónico del destinatario
+      subject: 'Contraseña de tu cuenta',
+      text: `Tu contraseña es: prueba` // ${user.password} Suponiendo que la contraseña está almacenada en la propiedad 'password' del modelo de usuario
+    };
+
+    // Enviar el correo electrónico
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error al enviar el correo:', error);
+        res.status(500).send('Error al enviar el correo');
+      } else {
+        console.log('Correo enviado:', info.response);
+        res.send('Correo enviado exitosamente');
+      }
+    });
+  } catch (error) {
+    console.error('Error al enviar la contraseña por correo:', error);
+    res.status(500).send('Error al enviar la contraseña por correo');
+  }
+});
 
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => console.log(`Servidor en ejecución en el puerto ${PORT}`));

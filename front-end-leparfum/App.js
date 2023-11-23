@@ -4,6 +4,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
+const nodemailer = require('nodemailer');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const User = require('./models/User');
@@ -23,11 +24,6 @@ const { float } = require('webidl-conversions');
 const bodyParser = require('body-parser');
 const Recomendacion = require('./models/Recomendacion');
 const { validationResult, body } = require('express-validator');
-<<<<<<< HEAD
-=======
-
->>>>>>> bb47f7448ca4b51343a5f367b8d2c24b93db7eec
-
 
 
 const app = express();
@@ -878,6 +874,50 @@ app.get('/success-suscripcion', (req, res) => {
   res.render('success-suscripcion', { isLoggedIn: req.isAuthenticated() });
 });
   
+app.post('/enviarPass', async (req, res) => {
+  try {
+    const { email } = req.body; // Supongamos que recibes el email del cliente en la solicitud
+
+    // Buscar al usuario por su correo electrónico
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).send('Usuario no encontrado');
+    }
+
+    // Configurar nodemailer
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: 'christopherhndez3@gmail.com', // Coloca aquí tu dirección de correo electrónico
+        pass: '16122000' // Coloca aquí tu contraseña
+      }
+    });
+
+    // Crear el mensaje
+    const mailOptions = {
+      from: 'christopherhndez3@gmail.com', // Dirección de correo electrónico remitente
+      to: 'thoferoz@gmail.com', // Dirección de correo electrónico del destinatario
+      subject: 'Contraseña de tu cuenta',
+      text: `Tu contraseña es: prueba` // ${user.password} Suponiendo que la contraseña está almacenada en la propiedad 'password' del modelo de usuario
+    };
+
+    // Enviar el correo electrónico
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error al enviar el correo:', error);
+        res.status(500).send('Error al enviar el correo');
+      } else {
+        console.log('Correo enviado:', info.response);
+        res.send('Correo enviado exitosamente');
+      }
+    });
+  } catch (error) {
+    console.error('Error al enviar la contraseña por correo:', error);
+    res.status(500).send('Error al enviar la contraseña por correo');
+  }
+});
+
 // Iniciar sesión
 app.post('/login', passport.authenticate('local', {
   successRedirect: '/',
