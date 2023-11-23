@@ -83,6 +83,14 @@ passport.deserializeUser((id, done) => {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// Middleware para permitir la descarga de archivos PDF
+app.use('/generarPDF', (req, res, next) => {
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', 'attachment; filename=usuarios.pdf');
+  next();
+});
+
+
 // Rutas -------------
 app.get('/', (req, res) => {
   res.render('login', {isLoggedIn: req.isAuthenticated()});
@@ -448,51 +456,82 @@ app.post('/register', async (req, res) => {
   }
 });
 
+
+
 app.get('/generarPDF', async (req, res) => {
   try {
     const users = await User.find(); // Obtener todos los usuarios
     const doc = new PDFDocument();
 
-    const tableTop = 50; // Posición superior de la tabla
-    const tableLeft = 50; // Posición izquierda de la tabla
-    const cellPadding = 10; // Espaciado de celda
-    const columnWidth = 150; // Ancho de columna
+    const tableTop = 50;
+    const tableLeft = 50;
+    const cellPadding = 10;
+    const columnWidth = 150;
+    const maxPageHeight = doc.page.height - 50;
 
-    const tableHeaders = ['Nombre', 'Email', 'Celular', 'Dirección'];
-
-    // Definir la posición inicial de la tabla
-    let currentY = tableTop;
-
-    // Encabezados de la tabla
-    doc.fontSize(12).text('Listado de Usuarios', { align: 'center' });
-    currentY += 20;
-
-    doc.font('Helvetica-Bold');
-    tableHeaders.forEach((header, i) => {
-      doc.text(header, tableLeft + i * columnWidth, currentY);
-    });
-    doc.font('Helvetica');
-
-    // Datos de usuarios
-    users.forEach((user, index) => {
-      currentY += 20;
-      doc.text(user.name, tableLeft + 0 * columnWidth, currentY);
-      doc.text(user.email, tableLeft + 1 * columnWidth, currentY);
-      doc.text(user.celular, tableLeft + 2 * columnWidth, currentY);
-      doc.text(user.direccion, tableLeft + 3 * columnWidth, currentY);
-    });
-    // Enviar el PDF al cliente como respuesta HTTP
-    res.setHeader('Content-Disposition', 'attachment; filename=usuarios.pdf');
+    // Configurar encabezados para la descarga del PDF
     res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=usuarios.pdf');
 
     // Pipe el PDF directamente hacia la respuesta HTTP
     doc.pipe(res);
+
+    // Generar la tabla de usuarios
+    generateUserTable(doc, users, tableTop, tableLeft, cellPadding, columnWidth, maxPageHeight);
+
+    // Finalizar el PDF
     doc.end();
   } catch (error) {
     console.error('Error al obtener usuarios:', error);
     res.status(500).send('Error al generar el PDF');
   }
 });
+
+function generateUserTable(doc, users, tableTop, tableLeft, cellPadding, columnWidth, maxPageHeight) {
+  const tableHeaders = ['Nombre', 'Email', 'Celular', 'Dirección'];
+
+  let currentY = tableTop;
+  let currentPageHeight = 10;
+
+  // Encabezados de la tabla
+  doc.fontSize(8).text('Listado de Usuarios', { align: 'center' });
+  currentY += 50;
+
+  doc.font('Helvetica-Bold');
+  tableHeaders.forEach((header, i) => {
+    doc.text(header, tableLeft + i * columnWidth, currentY);
+  });
+  doc.font('Helvetica');
+
+  // Datos de usuarios
+  users.forEach((user, index) => {
+    const rowHeight = 20;
+
+    // Verificar si la próxima línea superará el final de la página
+    if (currentY + rowHeight + cellPadding > maxPageHeight) {
+      doc.addPage();
+      currentY = tableTop;
+      currentPageHeight = 0;
+
+      // Volver a dibujar los encabezados en la nueva página
+      doc.fontSize(8).text('Listado de Usuarios', { align: 'center' });
+      currentY += 50;
+      doc.font('Helvetica-Bold');
+      tableHeaders.forEach((header, i) => {
+        doc.text(header, tableLeft + i * columnWidth, currentY);
+      });
+      doc.font('Helvetica');
+    }
+
+    doc.text(user.name, tableLeft + 0 * columnWidth, currentY);
+    doc.text(user.email, tableLeft + 1 * columnWidth, currentY);
+    doc.text(user.celular, tableLeft + 2 * columnWidth, currentY);
+    doc.text(user.direccion, tableLeft + 3 * columnWidth, currentY);
+
+    currentY += rowHeight + cellPadding;
+    currentPageHeight += rowHeight + cellPadding;
+  });
+}
 
 app.get('/generarPDFVentas', async (req, res) => {
   try {
@@ -531,39 +570,100 @@ app.get('/generarPDFVentas', async (req, res) => {
   }
 });
 
+// Ruta para generar PDF de usuarios suscritos desde la vista de suscripciones
 app.get('/generarPDFUsuariosSuscritos', async (req, res) => {
   try {
-    const users = await User.find(); // Obtener todos los usuarios
+    // Obtener todos los usuarios
+    const users = await User.find();
+
+    // Crear un nuevo documento PDF
     const doc = new PDFDocument();
 
-    // Encabezado del PDF
-    doc.fontSize(12).text('Listado de Usuarios Suscritos', { align: 'center' });
-    doc.moveDown(); // Mover hacia abajo para separar el título
-
-    // Datos de los usuarios suscritos
-    users.forEach((user, index) => {
-      doc.fontSize(10).text(`Nombre: ${user.name}`);
-      doc.text(`Email: ${user.email}`);
-      doc.text(`Celular: ${user.celular}`);
-      doc.text(`Dirección: ${user.direccion}`);
-      doc.text(`Suscrito: ${user.suscrito.active ? 'Activo' : 'Inactivo'}`);
-      doc.moveDown(); // Mover hacia abajo para separar los usuarios
-    });
-
-    // Finalizar el PDF
-    doc.end();
-
-    // Enviar el PDF al cliente como respuesta HTTP
-    res.setHeader('Content-Disposition', 'attachment; filename=usuarios_suscritos.pdf');
+    // Configurar encabezados para la descarga del PDF
     res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=usuarios_suscritos.pdf');
 
     // Pipe el PDF directamente hacia la respuesta HTTP
     doc.pipe(res);
+
+    // Generar la tabla de usuarios
+    const tableTop = 50;
+    const tableLeft = 50;
+    const cellPadding = 10;
+    const columnWidth = 150;
+    const maxPageHeight = doc.page.height - 50;
+    const maxUsersPerPage = Math.floor((maxPageHeight - tableTop) / 30); // Ajusta según sea necesario
+
+    // Datos de usuarios suscritos
+let currentY = tableTop; // Iniciar en la posición superior de la tabla
+let currentPage = 1; // Página actual
+let totalPages = 1; // Número total de páginas
+
+// Encabezados de la tabla
+doc.fontSize(8).text('Listado de Usuarios Suscritos', { align: 'center' });
+currentY += 50;// Mover hacia abajo para separar el título de los encabezados
+
+doc.font('Helvetica-Bold');
+const tableHeaders = ['Nombre', 'Dirección', 'Celular', 'Suscrito'];
+tableHeaders.forEach((header, i) => {
+  doc.text(header, tableLeft + i * columnWidth, currentY);
+});
+doc.font('Helvetica');
+
+users.forEach((user, index) => {
+  const rowHeight = 20;
+
+  // Verificar si la próxima línea superará el final de la página
+  if (currentY + rowHeight + cellPadding > maxPageHeight) {
+    doc.addPage();
+    currentY = tableTop; // Reiniciar la posición Y en la nueva página
+
+    // Volver a dibujar el título en la nueva página
+    doc.fontSize(8).text('Listado de Usuarios Suscritos', { align: 'center' });
+    doc.moveDown(0.5); // Mover hacia abajo para separar el título de los encabezados
+
+    doc.font('Helvetica-Bold');
+    tableHeaders.forEach((header, i) => {
+      doc.text(header, tableLeft + i * columnWidth, currentY);
+    });
+    doc.font('Helvetica');
+
+    currentPage += 1;
+    totalPages += 1;
+  }
+
+  doc.text(user.name, tableLeft + 0 * columnWidth, currentY);
+  doc.text(user.direccion, tableLeft + 1 * columnWidth, currentY);
+  doc.text(user.celular, tableLeft + 2 * columnWidth, currentY);
+
+  // Verificar si 'suscrito' está definido antes de acceder a 'active'
+  const suscritoStatus = user.suscrito ? (user.suscrito.active ? 'Activo' : 'Inactivo') : 'No definido';
+  doc.text(suscritoStatus, tableLeft + 3 * columnWidth, currentY);
+
+  currentY += rowHeight + cellPadding;
+});
+
+// Añadir el número total de páginas en el pie de página
+doc.fontSize(8).text(`Página ${currentPage} de ${totalPages}`, { align: 'right', width: 500, margin: { bottom: 30 } });
+
+// Restablecer el margen inferior para la última página
+doc.page.margins.bottom = 50;
+
+
+
+
+    // Finalizar el PDF
+    doc.end();
   } catch (error) {
     console.error('Error al obtener usuarios suscritos:', error);
     res.status(500).send('Error al generar el PDF');
   }
 });
+
+
+
+
+
 
 
 // Iniciar sesión

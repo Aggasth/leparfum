@@ -23,10 +23,6 @@ const { float } = require('webidl-conversions');
 const bodyParser = require('body-parser');
 const Recomendacion = require('./models/Recomendacion');
 const { validationResult, body } = require('express-validator');
-<<<<<<< HEAD
-=======
-
->>>>>>> bb47f7448ca4b51343a5f367b8d2c24b93db7eec
 
 
 
