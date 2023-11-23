@@ -12,6 +12,7 @@
 
 1. $cd system-panel
 2. $npm init -y
-3. $npm install express mongoose@latest express-session passport passport-local bcrypt connect-flash ejs
-4. node App.js
-5. En un navegador, abrir http://localhost:3002/
+3. $npm install express mongoose@latest express-session passport passport-local bcrypt connect-flash ejs 
+4. $npm install pdfkit
+5. node App.js
+6. En un navegador, abrir http://localhost:3002/

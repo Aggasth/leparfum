@@ -18,7 +18,8 @@ const Brand = require('./models/Brand');
 const User = require('./models/User');
 const Subs = require('./models/Subs');
 const { type } = require('os');
-
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
 const app = express();
 app.use(flash());
 
@@ -446,6 +447,124 @@ app.post('/register', async (req, res) => {
     res.status(500).send('Error interno del servidor');
   }
 });
+
+app.get('/generarPDF', async (req, res) => {
+  try {
+    const users = await User.find(); // Obtener todos los usuarios
+    const doc = new PDFDocument();
+
+    const tableTop = 50; // Posición superior de la tabla
+    const tableLeft = 50; // Posición izquierda de la tabla
+    const cellPadding = 10; // Espaciado de celda
+    const columnWidth = 150; // Ancho de columna
+
+    const tableHeaders = ['Nombre', 'Email', 'Celular', 'Dirección'];
+
+    // Definir la posición inicial de la tabla
+    let currentY = tableTop;
+
+    // Encabezados de la tabla
+    doc.fontSize(12).text('Listado de Usuarios', { align: 'center' });
+    currentY += 20;
+
+    doc.font('Helvetica-Bold');
+    tableHeaders.forEach((header, i) => {
+      doc.text(header, tableLeft + i * columnWidth, currentY);
+    });
+    doc.font('Helvetica');
+
+    // Datos de usuarios
+    users.forEach((user, index) => {
+      currentY += 20;
+      doc.text(user.name, tableLeft + 0 * columnWidth, currentY);
+      doc.text(user.email, tableLeft + 1 * columnWidth, currentY);
+      doc.text(user.celular, tableLeft + 2 * columnWidth, currentY);
+      doc.text(user.direccion, tableLeft + 3 * columnWidth, currentY);
+    });
+    // Enviar el PDF al cliente como respuesta HTTP
+    res.setHeader('Content-Disposition', 'attachment; filename=usuarios.pdf');
+    res.setHeader('Content-Type', 'application/pdf');
+
+    // Pipe el PDF directamente hacia la respuesta HTTP
+    doc.pipe(res);
+    doc.end();
+  } catch (error) {
+    console.error('Error al obtener usuarios:', error);
+    res.status(500).send('Error al generar el PDF');
+  }
+});
+
+app.get('/generarPDFVentas', async (req, res) => {
+  try {
+    const ventas = await Sales.find(); // Obtener todas las ventas
+
+    const doc = new PDFDocument();
+
+    // Establecer el nombre del archivo para la descarga
+    res.setHeader('Content-Disposition', 'attachment; filename=ventas.pdf');
+    res.setHeader('Content-Type', 'application/pdf');
+
+    // Pipe el PDF directamente hacia la respuesta HTTP para la descarga
+    doc.pipe(res);
+
+    // Encabezado del PDF
+    doc.fontSize(16).text('Reporte de Ventas', { align: 'center' });
+
+    // Datos de las ventas en el PDF
+    ventas.forEach((venta, index) => {
+      doc.fontSize(12).text(`Venta #${index + 1}`, { underline: true });
+      doc.text(`ID de Usuario: ${venta.idUser}`);
+      doc.text(`Total: ${venta.total}`);
+      doc.text(`Fecha: ${venta.date}`);
+      doc.text('Productos en el carrito:');
+      venta.cart.forEach((producto, i) => {
+        doc.text(`  - Nombre: ${producto.nombre} - Precio: ${producto.precio}`);
+      });
+      doc.moveDown();
+    });
+
+    // Finalizar y cerrar el PDF
+    doc.end();
+  } catch (error) {
+    console.error('Error al obtener las ventas:', error);
+    res.status(500).send('Error al generar el PDF de las ventas');
+  }
+});
+
+app.get('/generarPDFUsuariosSuscritos', async (req, res) => {
+  try {
+    const users = await User.find(); // Obtener todos los usuarios
+    const doc = new PDFDocument();
+
+    // Encabezado del PDF
+    doc.fontSize(12).text('Listado de Usuarios Suscritos', { align: 'center' });
+    doc.moveDown(); // Mover hacia abajo para separar el título
+
+    // Datos de los usuarios suscritos
+    users.forEach((user, index) => {
+      doc.fontSize(10).text(`Nombre: ${user.name}`);
+      doc.text(`Email: ${user.email}`);
+      doc.text(`Celular: ${user.celular}`);
+      doc.text(`Dirección: ${user.direccion}`);
+      doc.text(`Suscrito: ${user.suscrito.active ? 'Activo' : 'Inactivo'}`);
+      doc.moveDown(); // Mover hacia abajo para separar los usuarios
+    });
+
+    // Finalizar el PDF
+    doc.end();
+
+    // Enviar el PDF al cliente como respuesta HTTP
+    res.setHeader('Content-Disposition', 'attachment; filename=usuarios_suscritos.pdf');
+    res.setHeader('Content-Type', 'application/pdf');
+
+    // Pipe el PDF directamente hacia la respuesta HTTP
+    doc.pipe(res);
+  } catch (error) {
+    console.error('Error al obtener usuarios suscritos:', error);
+    res.status(500).send('Error al generar el PDF');
+  }
+});
+
 
 // Iniciar sesión
 app.post('/login', passport.authenticate('local', {

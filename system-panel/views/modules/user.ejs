@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
 <head>
     <%- include ('../modules/head.ejs') %>
 </head>
@@ -27,6 +27,28 @@
                 <div class="col-3"></div>
                 <div class="col-12">
                     <h4 class="border-top fs-5 pt-3 text-start">Usuarios registrados en el sistema:</h4>
+                    <button id="descargarPDF">Descargar como PDF</button>
+
+                    <script>
+                      document.getElementById('descargarPDF').addEventListener('click', function() {
+                        fetch('/generarPDF', {
+                          method: 'GET'
+                        })
+                        .then(response => response.blob())
+                        .then(blob => {
+                          const blobUrl = URL.createObjectURL(blob);
+                          const link = document.createElement('a');
+                          link.href = blobUrl;
+                          link.download = 'usuarios.pdf'; // Nombre del archivo a descargar
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link); // Limpiar el enlace después de la descarga
+                        })
+                        .catch(error => {
+                          console.error('Error:', error);
+                        });
+                      });
+                    </script>
                     <table class="table table-secondary table-striped-columns" id="userTable">
                         <thead>
                           <tr>
@@ -47,5 +69,7 @@
         </div>
     </div>
     <script src="../public/user-load.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
+
 </body>
 </html>
