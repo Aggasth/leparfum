@@ -26,6 +26,7 @@ const Recomendacion = require('./models/Recomendacion');
 const { validationResult, body } = require('express-validator');
 
 
+
 const app = express();
 app.use(flash());
 app.use(express.json());
@@ -873,6 +874,10 @@ app.delete('/eliminarProducto/:productId', (req, res) => {
 app.get('/success-suscripcion', (req, res) => {
   res.render('success-suscripcion', { isLoggedIn: req.isAuthenticated() });
 });
+
+app.get('/forget-password', (req, res) => {
+  res.render('forget-password', { isLoggedIn: req.isAuthenticated() });
+});
   
 app.post('/enviarPass', async (req, res) => {
   try {
@@ -884,22 +889,25 @@ app.post('/enviarPass', async (req, res) => {
     if (!user) {
       return res.status(404).send('Usuario no encontrado');
     }
-
     // Configurar nodemailer
     const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
       service: 'Gmail',
       auth: {
         user: 'christopherhndez3@gmail.com', // Coloca aquí tu dirección de correo electrónico
-        pass: '16122000' // Coloca aquí tu contraseña
+        pass: 'yqhi svks wgso urbk'
       }
     });
 
+    const password = user.password; 
     // Crear el mensaje
     const mailOptions = {
       from: 'christopherhndez3@gmail.com', // Dirección de correo electrónico remitente
-      to: 'thoferoz@gmail.com', // Dirección de correo electrónico del destinatario
+      to: user.email, // Dirección de correo electrónico del destinatario
       subject: 'Contraseña de tu cuenta',
-      text: `Tu contraseña es: prueba` // ${user.password} Suponiendo que la contraseña está almacenada en la propiedad 'password' del modelo de usuario
+      text: `Tu contraseña es: ${password}` // ${user.password} Suponiendo que la contraseña está almacenada en la propiedad 'password' del modelo de usuario
     };
 
     // Enviar el correo electrónico
@@ -909,7 +917,6 @@ app.post('/enviarPass', async (req, res) => {
         res.status(500).send('Error al enviar el correo');
       } else {
         console.log('Correo enviado:', info.response);
-        res.send('Correo enviado exitosamente');
       }
     });
   } catch (error) {

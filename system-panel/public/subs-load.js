@@ -85,5 +85,32 @@ async function cargarSuscritos() {
     function obtenerInformacionSuscripcion(usuario) {
         return 'Información de suscripción';
     }
+    
+async function generarPDFEnvios() {
+    try {
+      const response = await fetch('/generarPDFEnvios');
+      const blob = await response.blob();
+
+      // Crear un enlace de descarga y simular un clic en él para iniciar la descarga del PDF
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'detalles_envios.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Error al generar el PDF de detalles de envío:', error);
+      // Puedes mostrar un mensaje de error o realizar otras acciones según tus necesidades
+    }
+  }
+
+  document.getElementById('btnGenerar').addEventListener('click', async function(event) {
+    event.preventDefault();
+    console.log('Botón Generar clickeado');  // Agrega este console.log
+
+    await generarPDFEnvios();
+});
+
   
   window.addEventListener("load", cargarSuscritos);
