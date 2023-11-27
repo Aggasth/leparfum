@@ -885,7 +885,7 @@ app.post('/enviarPass', async (req, res) => {
       service: 'Gmail',
       auth: {
         user: 'christopherhndez3@gmail.com', // Coloca aquí tu dirección de correo electrónico
-        pass: 'yqhi svks wgso urbk'
+        pass: ''
       }
     });
 
