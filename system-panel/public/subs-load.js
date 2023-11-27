@@ -85,12 +85,13 @@ async function cargarSuscritos() {
     function obtenerInformacionSuscripcion(usuario) {
         return 'Información de suscripción';
     }
-    
+
+    // La función que genera el PDF de detalles de envío
 async function generarPDFEnvios() {
     try {
       const response = await fetch('/generarPDFEnvios');
       const blob = await response.blob();
-
+  
       // Crear un enlace de descarga y simular un clic en él para iniciar la descarga del PDF
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -104,7 +105,7 @@ async function generarPDFEnvios() {
       // Puedes mostrar un mensaje de error o realizar otras acciones según tus necesidades
     }
   }
-
+  
   document.getElementById('btnGenerar').addEventListener('click', async function(event) {
     event.preventDefault();
     console.log('Botón Generar clickeado');  // Agrega este console.log

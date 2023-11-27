@@ -20,11 +20,9 @@
                         <div class="col-6">
                             <div class="row">
                                 <div class="col-12 mb-2 rounded-2 border" style="background-color: rgb(241, 241, 241);">
-                                    <form id="pdfForm" action="/generarPDFUsuariosSuscritos" method="GET">
-                                        <button type="submit" class="btn btn-primary">Descargar PDF de Ventas</button>
-                                    </form>
+                                    
                                     <p class="fs-5 pt-2 pb-0 ps-3">Generar orden de envio</p>
-                                    <div class="form-text pb-3 ps-3">Solo se cargarán los usuarios que tengan pendiente el envio del producto segun su suscripción.</div>
+                                    <div class="form-text pb-3 ps-3">Solo se cargarán los usuarios que tengan pendiente el envío del producto según su suscripción.</div>
                                     <form class="row pb-3 m-2" action="" >
                                         <div class="col-6">
                                             <select class="form-select" name="selectUser" id="selectUser">
@@ -35,7 +33,7 @@
                                         <div class="col-6 ps-5 pe-5">
                                             <input class="form-control text-center" name="lastDateInput" id="lastDate" placeholder="14-11-2023" type="text" readonly>
                                             <div class="form-text text-center">Última entrega</div>
-                                            <!-- Imprimir el ultimo envio realizado -->
+                                            <!-- Imprimir el ultimo envío realizado -->
                                         </div>
                                         <div class="col-6">
                                             <select class="form-select" name="productListSelect" id="productList">
@@ -46,10 +44,12 @@
                                         <div class="col-6 ps-5 pe-5">
                                             <input class="form-control text-center" name="lastDateInput" id="lastDate" placeholder="Luxueux" type="text" readonly>
                                             <div class="form-text text-center">Suscripción</div>
-                                            <!-- Imprimir el ultimo envio realizado -->
+                                            <!-- Mostrar información sobre la suscripción del usuario -->
+                                            <!-- Puedes agregar un nuevo elemento aquí para mostrar el estado de la suscripción -->
+                                            <div id="suscripcionInfo"></div>
                                         </div>
                                         <div class="col-12 pt-2">
-                                            <textarea class="form-control" name="commentArea" id="commentText" placeholder="Comentarios sobre el envio: Producto - Cantidad - Descripción" rows="5"></textarea>
+                                            <textarea class="form-control" name="commentArea" id="commentText" placeholder="Comentarios sobre el envío: Producto - Cantidad - Descripción" rows="5"></textarea>
                                         </div>
                                         <div class="col-6"></div>
                                         <div class="col-6 pt-2">
@@ -57,6 +57,9 @@
                                         </div>
                                     </form>
                                 </div>
+
+                                
+
                                 <div class="col-12">
                                     
                                 </div>
@@ -70,6 +73,7 @@
                                     </form> 
                                 </div>
                             </div>
+                            
                             <table id="subsTable" class="table table-striped text-center">
                                 <thead>
                                     <tr>
@@ -80,7 +84,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <!-- Que se rellene con los datos del usuario solicitados arriba. -->
+                                    <!-- Que se rellene con los datos del usuario solicitados arriba. -->
                                 </tbody>
                             </table>
                         </div>

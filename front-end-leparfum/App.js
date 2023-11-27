@@ -12,7 +12,7 @@ const Subs = require('./models/Subs');
 const Preferences = require('./models/Preferences');
 const Sale = require('./models/Sale');
 const { getActivityLabel, getSeasonLabel, getEventLabel, getColorLabel } = require('./public/Preferencias');
-const Product = require('./models/Product');
+const Product = require('./models/Product.js');
 const Types = require('./models/Types');
 const Brand = require('./models/Brand');
 const config = require('./config');
@@ -296,55 +296,33 @@ console.log("lo que viene del registro", req.body);
     await newPreferences.save();
 
     
-function recomendarPerfume(sexo, actividad, estacion, evento, color) {
-  let recomendacion = "";
-
-  // Lógica de recomendación basada en las preferencias
-  if (sexo === 'masculino') {
-    if (actividad === '1' && estacion === '1' && evento === '1' && color === '1') {
-      recomendacion = 'Perfumes citricos';
-    } else if (actividad === '2' && estacion === '2' && evento === '3' && color === '3') {
-      recomendacion = 'Perfumes Chipres Románticos';
-    } else if (actividad === '1' && estacion === '1' && evento === '2' && color === '2') {
-      recomendacion = 'Perfumes Amaderados';
-    } else if (actividad === '3' && estacion === '2' && evento === '3' && color === '3') {
-      recomendacion = 'Perfumes Acaramelados';
-    } else if (actividad === '2' && estacion === '3' && evento === '1' && color === '3') {
-      recomendacion = 'Perfumes Florales';
-    } else if (actividad === '1' && estacion === '3' && evento === '3' && color === '2') {
-      recomendacion = 'Perfumes Dulces';
-    } else if (actividad === '1' && estacion === '1' && evento === '1' && color === '1') {
-      recomendacion = 'Perfumes Arabes';
-    } else {
-      recomendacion = 'Perfumes Sport';
+    function recomendarPerfume(sexo, actividad, estacion, evento, color) {
+      let recomendacion = "";
+    
+      const esMasculino = sexo === 'masculino';
+      const esFemenino = sexo === 'femenino';
+    
+      if ((esMasculino || esFemenino) && actividad === '1' && estacion === '1' && evento === '1' && color === '1') {
+        recomendacion = esMasculino ? 'Perfumes citricos' : 'Perfumes Arabes';
+      } else if ((esMasculino || esFemenino) && actividad === '2' && estacion === '2' && evento === '3' && color === '3') {
+        recomendacion = esMasculino ? 'Perfumes Chipres Románticos' : 'Perfumes Chipres Románticos';
+      } else if ((esMasculino || esFemenino) && actividad === '1' && estacion === '1' && evento === '2' && color === '2') {
+        recomendacion = esMasculino ? 'Perfumes Amaderados' : 'Perfumes Amaderados';
+      } else if ((esMasculino || esFemenino) && actividad === '3' && estacion === '2' && evento === '3' && color === '3') {
+        recomendacion = esMasculino ? 'Perfumes Acaramelados' : 'Perfumes Acaramelados';
+      } else if ((esMasculino || esFemenino) && actividad === '2' && estacion === '3' && evento === '1' && color === '3') {
+        recomendacion = esMasculino ? 'Perfumes Florales' : 'Perfumes Florales';
+      } else if ((esMasculino || esFemenino) && actividad === '1' && estacion === '3' && evento === '3' && color === '2') {
+        recomendacion = esMasculino ? 'Perfumes Dulces' : 'Perfumes Dulces';
+      } else if ((esMasculino || esFemenino) && actividad === '1' && estacion === '1' && evento === '1' && color === '1') {
+        recomendacion = esMasculino ? 'Perfumes Arabes' : 'Perfumes citricos';
+      } else {
+        recomendacion = 'Perfumes Sport';
+      }
+    
+      return recomendacion;
     }
-  
-  } else if (sexo === 'femenino') {
-    if (actividad === '1' && estacion === '1' && evento === '1' && color === '1') {
-      recomendacion = 'Perfumes Arabes';
-    } else if (actividad === '2' && estacion === '2' && evento === '3' && color === '3') {
-      recomendacion = 'Perfumes Chipres Románticos';
-    } else if (actividad === '1' && estacion === '1' && evento === '2' && color === '2') {
-      recomendacion = 'Perfumes Amaderados';
-    } else if (actividad === '3' && estacion === '2' && evento === '3' && color === '3') {
-      recomendacion = 'Perfumes Acaramelados';
-    } else if (actividad === '2' && estacion === '3' && evento === '1' && color === '3') {
-      recomendacion = 'Perfumes Florales';
-    } else if (actividad === '1' && estacion === '3' && evento === '3' && color === '2') {
-      recomendacion = 'Perfumes Dulces';
-    } else if (actividad === '1' && estacion === '1' && evento === '1' && color === '1') {
-      recomendacion = 'Perfumes citricos';
-    } else {
-      recomendacion = 'Perfumes Sport';
-    }
-  } else {
-    // Otras combinaciones de preferencias o condiciones
-    recomendacion = 'Perfumes acidos';
-  }
 
-  return recomendacion;
-
-}
 const recomendacionUsuario = recomendarPerfume(sexo, actividad, estacion, evento, color);
 
 // Crear una instancia de Recomendacion y guardarla en la base de datos
@@ -406,7 +384,6 @@ app.get('/logout', (req, res) => {
 // Dashboard protegido
 app.get('/account', isAuthenticated, async (req, res) => {
   try {
-    const userId = req.isAuthenticated() ? req.user._id : null;
     // Verificar si el usuario está autenticado
     if (!req.isAuthenticated()) {
       // Si el usuario no está autenticado, redirige a la página de inicio de sesión
@@ -425,13 +402,24 @@ app.get('/account', isAuthenticated, async (req, res) => {
     // Obtén la recomendación del usuario si está disponible
     const recomendacion = await Recomendacion.findOne({ idUser: user._id });
 
-    // Renderiza la vista de cuentas y pasa el usuario, sus preferencias y la recomendación
-    res.render('account', { userId, user, preferences, recomendacion, getActivityLabel, getSeasonLabel, getEventLabel, getColorLabel });
+    // Obtén productos recomendados
+
+    // Renderiza la vista de cuentas y pasa el usuario, sus preferencias, la recomendación y los productos recomendados
+    res.render('account', {
+      user,
+      preferences,
+      recomendacion,
+      getActivityLabel,
+      getSeasonLabel,
+      getEventLabel,
+      getColorLabel
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send('Error interno del servidor');
   }
 });
+
 
 app.post('/update-profile', isAuthenticated,
   [

@@ -660,9 +660,6 @@ doc.fontSize(8).text(`Página ${currentPage} de ${totalPages}`, { align: 'right'
 // Restablecer el margen inferior para la última página
 doc.page.margins.bottom = 50;
 
-
-
-
     // Finalizar el PDF
     doc.end();
   } catch (error) {
@@ -671,6 +668,45 @@ doc.page.margins.bottom = 50;
   }
 });
 
+
+// Ruta para generar PDF de detalles de envío desde la vista de envíos
+app.get('/generarPDFEnvios', async (req, res) => {
+  console.log('Se ha alcanzado la ruta /generarPDFEnvios');
+  try {
+    const detallesEnvios = await DetalleEnvio.find().populate('suscripcion'); // Utilizamos populate para obtener la información de la suscripción
+
+    const doc = new PDFDocument();
+
+    // Establecer el nombre del archivo para la descarga
+    res.setHeader('Content-Disposition', 'attachment; filename=detalles_envios.pdf');
+    res.setHeader('Content-Type', 'application/pdf');
+
+    // Pipe el PDF directamente hacia la respuesta HTTP para la descarga
+    doc.pipe(res);
+
+    // Encabezado del PDF
+    doc.fontSize(16).text('Reporte de Detalles de Envíos', { align: 'center' });
+
+    // Datos de los detalles de envío en el PDF
+    detallesEnvios.forEach((detalleEnvio, index) => {
+      console.log(`Añadiendo detalle de envío #${index + 1}`);
+      console.log(`ID de Usuario: ${detalleEnvio.idUser}`);
+      doc.fontSize(12).text(`Detalle de Envío #${index + 1}`, { underline: true });
+      doc.text(`ID de Usuario: ${detalleEnvio.idUser}`);
+      doc.text(`Fecha de Última Entrega: ${detalleEnvio.ultimaEntrega}`);
+      doc.text(`Producto: ${detalleEnvio.producto}`);
+      doc.text(`Suscripción: ${detalleEnvio.suscripcion ? 'Activa' : 'No activa'}`);
+      doc.text(`Comentarios: ${detalleEnvio.comentarios}`);
+      doc.moveDown();
+    });
+
+    // Finalizar y cerrar el PDF
+    doc.end();
+  } catch (error) {
+    console.error('Error en /generarPDFEnvios:', error);
+    res.status(500).send('Error al generar el PDF de los detalles de envío');
+  }
+});
 
 // Ruta para generar PDF de detalles de envío desde la vista de envíos
 app.get('/generarPDFEnvios', async (req, res) => {
@@ -743,7 +779,7 @@ app.post('/enviarContrasenaPorCorreo', async (req, res) => {
       service: 'Gmail',
       auth: {
         user: 'christopherhndez3@gmail.com', // Coloca aquí tu dirección de correo electrónico
-        pass: '16122000' // Coloca aquí tu contraseña
+        pass: '' // Coloca aquí tu contraseña
       }
     });
 
